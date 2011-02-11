@@ -67,12 +67,24 @@ var SIMPLATE = (function(simplate) {
 					template = defaultTemplate.cloneNode(true);
 				}
 
+				// Content
 				template.innerHTML = template.innerHTML.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
 					return eval('item.' + variable);
 				});
-				template.className = template.className.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
-					return eval('item.' + variable);
-				});
+				
+				// Template class attribute
+				if (template.hasAttribute('class')) {
+					template.className = template.className.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
+						return eval('item.' + variable);
+					});
+				}
+				
+				// Template id
+				if (template.hasAttribute('id')) {
+					template.id = template.id.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
+						return eval('item.' + variable);
+					});
+				}
 				this.container.appendChild(template);
 			}
 

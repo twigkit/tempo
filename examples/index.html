@@ -23,7 +23,7 @@
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
 			
 			// Multiple templates
-			SIMPLATE.prepare('multiple-marx-brothers').render(data);
+			SIMPLATE.prepare('more-marx-brothers').render(data);
 		}
 	</script>
 </head>
@@ -72,46 +72,48 @@
 <h4>HTML</h4>
 <pre name="code" class="xhtml:nocontrols:nogutter">
 	&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
-		&lt;li data-template&gt;{{name.first}} {{name.last}} ({{nickname}})&lt;/li&gt;
+		&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
 	&lt;/ol&gt;
 </pre>
 
 <h4>Output</h4>
 
 <ol id="simple-marx-brothers">
-	<li data-template>{{name.first}} {{name.last}} ({{nickname}})</li>
+	<li data-template>{{nickname}} {{name.last}}</li>
 </ol>
 
-<h3>Multiple templates</h3>
+<h3>Template selectors</h3>
 
 <h4>JavaScript</h4>
 <pre name="code" class="js:nocontrols:nogutter">
-	SIMPLATE.prepare('multiple-marx-brothers').render(data);
+	SIMPLATE.prepare('more-marx-brothers').render(data);
 </pre>
 
 <h4>HTML</h4>
 <pre name="code" class="xhtml:nocontrols:nogutter">
 	&lt;style&gt;
-		li.person.Groucho { color: red; }
+		li.brother.Groucho { color: red; }
+		li#Gummo {text-decoration: line-through;}
 	&lt;/style&gt;
 
-	&lt;ul id=&quot;multiple-marx-brothers&quot;&gt;
-		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;person {{nickname}}&quot;&gt;{{nickname}} was grumpy!&lt;/li&gt;
-		&lt;li data-template data-if-actor class=&quot;person&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
-		&lt;li data-template class=&quot;person&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
+	&lt;ul id=&quot;more-marx-brothers&quot;&gt;
+		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;brother {{nickname}}&quot;&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
+		&lt;li data-template data-if-actor class=&quot;brother&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
+		&lt;li data-template id=&quot;{{nickname}}&quot; class=&quot;brother&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
 	&lt;/ul&gt;
 </pre>
 
 <h4>Output</h4>
 
 <style>
-	li.person.Groucho { color: red; }
+	li.brother.Groucho { color: red; }
+	li#Gummo {text-decoration: line-through;}
 </style>
 
-<ul id="multiple-marx-brothers">
-	<li data-template data-if-nickname="Groucho" class="person {{nickname}}">{{nickname}} was grumpy!</li>
-	<li data-template data-if-actor class="person">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
-	<li data-template class="person">{{name.first}} {{name.last}} was not in any movies!</li>
+<ul id="more-marx-brothers">
+	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
+	<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
+	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
 </ul>
 
 </body>
