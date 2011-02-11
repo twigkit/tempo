@@ -7,20 +7,23 @@
 	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushJScript.js"></script>
 	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushXml.js"></script>
 	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css" charset="utf-8">
-	
 	<script>
 		window.onload = function() {
 			dp.SyntaxHighlighter.HighlightAll('code');
 
-			var template = SIMPLATE.prepare('marx-brothers');
-
-			template.render([
+			var data = [
 					{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 					{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
 					{'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born': 'October 2, 1890', 'actor': true},
 					{'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born': 'October 23, 1892'},
 					{'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born': 'February 25, 1901', 'actor': true}
-				]);
+				];
+
+			// Simple template
+			SIMPLATE.prepare('simple-marx-brothers').render(data);
+			
+			// Multiple templates
+			SIMPLATE.prepare('more-marx-brothers').render(data);
 		}
 	</script>
 </head>
@@ -45,48 +48,72 @@
 	&lt;/div&gt;
 </pre>
 
-<h2>Simple Example (static array of items)</h2>
+<h2>Examples</h2>
 
-<h3>JavaScript</h3>
+<p>The following examples will use this sample data</p>
+
 <pre name="code" class="js:nocontrols:nogutter">
-	var template = SIMPLATE.prepare('marx-brothers');
-	
-	template.render([
+	var data = [
 			{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 			{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
 			{'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born': 'October 2, 1890', 'actor': true},
 			{'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born': 'October 23, 1892'},
 			{'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born': 'February 25, 1901', 'actor': true}
-		]);
+		];
 </pre>
 
-<h3>HTML</h3>
+<h3>Simple template</h3>
+
+<h4>JavaScript</h4>
+<pre name="code" class="js:nocontrols:nogutter">
+	SIMPLATE.prepare('simple-marx-brothers').render(data);
+</pre>
+
+<h4>HTML</h4>
+<pre name="code" class="xhtml:nocontrols:nogutter">
+	&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
+		&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+	&lt;/ol&gt;
+</pre>
+
+<h4>Output</h4>
+
+<ol id="simple-marx-brothers">
+	<li data-template>{{nickname}} {{name.last}}</li>
+</ol>
+
+<h3>Template selectors</h3>
+
+<h4>JavaScript</h4>
+<pre name="code" class="js:nocontrols:nogutter">
+	SIMPLATE.prepare('more-marx-brothers').render(data);
+</pre>
+
+<h4>HTML</h4>
 <pre name="code" class="xhtml:nocontrols:nogutter">
 	&lt;style&gt;
-		ul#marx-brothers li.person { margin-left: 25px; }
-		ul#marx-brothers li.person.grumpy { color: red; }
+		li.brother.Groucho { color: red; }
+		li#Gummo {text-decoration: line-through;}
 	&lt;/style&gt;
 
-	&lt;ul id=&quot;marx-brothers&quot;&gt;
-		&lt;li style=&quot;list-style: none; font-weight: bold; border-bottom: 1px solid #000;&quot;&gt;Marx Brothers (this element is not removed)&lt;/li&gt;
-		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;person grumpy&quot;&gt;{{nickname}} was grumpy!&lt;/li&gt;
-		&lt;li data-template data-if-actor class=&quot;person&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
-		&lt;li data-template class=&quot;person&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
+	&lt;ul id=&quot;more-marx-brothers&quot;&gt;
+		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;brother {{nickname}}&quot;&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
+		&lt;li data-template data-if-actor class=&quot;brother&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
+		&lt;li data-template id=&quot;{{nickname}}&quot; class=&quot;brother&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
 	&lt;/ul&gt;
 </pre>
 
-<h3>Output</h3>
+<h4>Output</h4>
 
 <style>
-	ul#marx-brothers li.person { margin-left: 25px; }
-	ul#marx-brothers li.person.grumpy { color: red; }
+	li.brother.Groucho { color: red; }
+	li#Gummo {text-decoration: line-through;}
 </style>
 
-<ul id="marx-brothers">
-	<li style="list-style: none; font-weight: bold; border-bottom: 1px solid #000;">Marx Brothers (this element is not removed)</li>
-	<li data-template data-if-nickname="Groucho" class="person grumpy">{{nickname}} was grumpy!</li>
-	<li data-template data-if-actor class="person">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
-	<li data-template class="person">{{name.first}} {{name.last}} was not in any movies!</li>
+<ul id="more-marx-brothers">
+	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
+	<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
+	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
 </ul>
 
 </body>
