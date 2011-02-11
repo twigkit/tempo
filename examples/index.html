@@ -1,37 +1,76 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<title>Simplate</title>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="../src/simplate.js"></script>
+	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shCore.js"></script>
+	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushXml.js"></script>
+	<link rel="stylesheet" href="style.css" type="text/css" charset="utf-8">
 </head>
 <body>
 
-<h1>Simplate Examples</h1>
+<h1>Simplate</h1>
 
-<h2>Simple</h2>
+<h2>Usage</h2>
+<h3>JavaScript</h3>
+<pre name="code" class="js:nocontrols:nogutter">
+	SIMPLATE.prepare(/* 'id' or HTMLElement */).render(/* data as [array] of object */);
+</pre>
+<h3>HTML</h3>
+<p>Any tag with data-template attribute will be considered a template</p>
+<pre name="code" class="html:nocontrols:nogutter">
+	&lt;div id=&quot;container&quot;&gt;
+		&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
+	&lt;/div&gt;
+</pre>
 
+<h2>Simple Example (static array of items)</h2>
+	
 <script>
-	$().ready(function() {
-		console.profile('Preparing and Rendering');
-
+	window.onload = function() {
+		dp.SyntaxHighlighter.HighlightAll('code');
+		
 		var template = SIMPLATE.prepare('people');
 		
 		template.render([
-				{'owner':{'first':'Hjortur', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'nice': true},
+				{'owner':{'first':'Stefan', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'tired': true},
 				{'owner':{'first':'Tyler', 'last':'Tate'}, 'nationality': 'American'},
-				{'owner':{'first':'Bjarki', 'last':'Holm'}, 'nationality': 'Icelandic', 'type':'Academic'},
+				{'owner':{'first':'Bjarki', 'last':'Holm'}, 'nationality': 'Icelandic', 'type':'Academic'}
 			]);
-			
-		console.profileEnd('Preparing and Rendering');
-	});
+	}
 </script>
 
+<h3>Code</h3>
+<pre name="code" class="js:nocontrols:nogutter">
+	var template = SIMPLATE.prepare('people');
+
+	template.render([
+			{'owner':{'first':'Stefan', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'nice': true},
+			{'owner':{'first':'Tyler', 'last':'Tate'}, 'nationality': 'American'},
+			{'owner':{'first':'Bjarki', 'last':'Holm'}, 'nationality': 'Icelandic', 'type':'Academic'},
+		]);
+</pre>
+<pre name="code" class="html:nocontrols:nogutter">
+	&lt;ul id=&quot;people&quot;&gt;
+		&lt;li style=&quot;list-style: none; font-weight: bold; border-bottom: 1px solid #000;&quot;&gt;List of people (stays here)&lt;/li&gt;
+		&lt;li data-template data-where-tired class=&quot;person&quot;&gt;Nice guy that {{owner.first}}&lt;/li&gt;
+		&lt;li data-template data-where-type=&quot;Academic&quot; class=&quot;person&quot;&gt;Greetings Dr. {{owner.last}} ({{nationality}})&lt;/li&gt;
+		&lt;li data-template class=&quot;person&quot;&gt;Hi {{owner.first}} {{owner.last}}&lt;/li&gt;
+	&lt;/ul&gt;
+</pre>
+
+<h3>Output</h3>
+
+<style>
+	ul#people li.person { margin-left: 25px; }
+</style>
+
 <ul id="people">
-	<li>Anonymous guys</li>
-	<li data-template data-where-nice="true">Nice guy that Mr. {{owner.first}}</li>
-	<li data-template data-where-type="Academic">Greetings Dr. {{owner.last}} ({{nationality}})</li>
-	<li data-template>Hi {{owner.first}} {{owner.last}}</li>
+	<li style="list-style: none; font-weight: bold; border-bottom: 1px solid #000;">List of people (stays here)</li>
+	<li data-template data-where-tired class="person">Tired guy that {{owner.first}}</li>
+	<li data-template data-where-type="Academic" class="person">Greetings Dr. {{owner.last}} ({{nationality}})</li>
+	<li data-template class="person">Hi {{owner.first}} {{owner.last}}</li>
 </ul>
 
 </body>

@@ -19,8 +19,8 @@ var SIMPLATE = (function(simplate) {
 					var attr = element.attributes[a];
 					if (utils.startsWith(attr.name, 'data-where-')) {
 						var val;
-						if (attr.value == 'true' || attr.value == 'false') {
-							val = attr.value;
+						if (attr.value == '') {
+							val = true;
 						} else {
 							val = '\'' + attr.value + '\'';
 						}
