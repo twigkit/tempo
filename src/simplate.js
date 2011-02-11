@@ -70,6 +70,9 @@ var SIMPLATE = (function(simplate) {
 				template.innerHTML = template.innerHTML.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
 					return eval('item.' + variable);
 				});
+				template.className = template.className.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
+					return eval('item.' + variable);
+				});
 				this.container.appendChild(template);
 			}
 
