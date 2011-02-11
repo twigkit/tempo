@@ -17,14 +17,14 @@ var SIMPLATE = (function(simplate) {
 			if (element.hasAttribute('data-template')) {
 				for (var a = 0; a < element.attributes.length; a++) {
 					var attr = element.attributes[a];
-					if (utils.startsWith(attr.name, 'data-where-')) {
+					if (utils.startsWith(attr.name, 'data-if-')) {
 						var val;
 						if (attr.value == '') {
 							val = true;
 						} else {
 							val = '\'' + attr.value + '\'';
 						}
-						namedTemplates[attr.name.substring(11, attr.name.length) + '==' + val] = element;
+						namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
 					}
 				}
 
