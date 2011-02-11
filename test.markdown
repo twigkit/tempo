@@ -13,15 +13,16 @@ title: This will be used as the title-tag of the page head
 	 * element : ID or an instance of an HTMLElement
 	 * data    : An array of objects
 	 */
+	
 	SIMPLATE.prepare( element ).render( data );
 	
 ### HTML
 
 Any tag with data-template attribute will be considered a template
 
-	&lt;div id=&quot;container&quot;&gt;
-		&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
-	&lt;/div&gt;
+	<div id="container">
+		<span data-template>{{foo.bar}}</span>
+	</div>
 
 ## Simple Example (static array of items)
 
@@ -39,20 +40,6 @@ Any tag with data-template attribute will be considered a template
 
 ### HTML
 
-	&lt;style&gt;
-		ul#marx-brothers li.person { margin-left: 25px; }
-		ul#marx-brothers li.person.grumpy { color: red; }
-	&lt;/style&gt;
-
-	&lt;ul id=&quot;marx-brothers&quot;&gt;
-		&lt;li style=&quot;list-style: none; font-weight: bold; border-bottom: 1px solid #000;&quot;&gt;Marx Brothers (this element is not removed)&lt;/li&gt;
-		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;person grumpy&quot;&gt;{{nickname}} was grumpy!&lt;/li&gt;
-		&lt;li data-template data-if-actor class=&quot;person&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
-		&lt;li data-template class=&quot;person&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
-	&lt;/ul&gt;
-
-### Output
-
 	<style>
 		ul#marx-brothers li.person { margin-left: 25px; }
 		ul#marx-brothers li.person.grumpy { color: red; }
@@ -64,3 +51,5 @@ Any tag with data-template attribute will be considered a template
 		<li data-template data-if-actor class="person">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
 		<li data-template class="person">{{name.first}} {{name.last}} was not in any movies!</li>
 	</ul>
+
+### Output
