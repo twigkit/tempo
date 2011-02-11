@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Simplate</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+	<script type="text/javascript" src="../src/simplate.js"></script>
+</head>
+<body>
+
+<h1>Simplate Examples</h1>
+
+<h2>Simple</h2>
+
+<script>
+	$().ready(function() {
+		console.profile('Preparing and Rendering');
+
+		var template = SIMPLATE.prepare('people');
+		
+		template.render([
+				{'owner':{'first':'Hjortur', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'nice': true},
+				{'owner':{'first':'Tyler', 'last':'Tate'}, 'nationality': 'American'},
+				{'owner':{'first':'Bjarki', 'last':'Holm'}, 'nationality': 'Icelandic', 'type':'Academic'},
+			]);
+			
+		console.profileEnd('Preparing and Rendering');
+	});
+</script>
+
+<ul id="people">
+	<li>Anonymous guys</li>
+	<li data-template data-where-nice="true">Nice guy that Mr. {{owner.first}}</li>
+	<li data-template data-where-type="Academic">Greetings Dr. {{owner.last}} ({{nationality}})</li>
+	<li data-template>Hi {{owner.first}} {{owner.last}}</li>
+</ul>
+
+</body>
+</html>
