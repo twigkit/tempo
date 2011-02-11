@@ -15,11 +15,15 @@
 <h2>Usage</h2>
 <h3>JavaScript</h3>
 <pre name="code" class="js:nocontrols:nogutter">
-	SIMPLATE.prepare(/* 'id' or HTMLElement */).render(/* data as [array] of object */);
+	/*
+	 * element : ID or an instance of an HTMLElement
+	 * data    : An array of objects
+	 */
+	SIMPLATE.prepare( element ).render( data );
 </pre>
 <h3>HTML</h3>
 <p>Any tag with data-template attribute will be considered a template</p>
-<pre name="code" class="html:nocontrols:nogutter">
+<pre name="code" class="xhtml:nocontrols:nogutter">
 	&lt;div id=&quot;container&quot;&gt;
 		&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
 	&lt;/div&gt;
@@ -46,12 +50,12 @@
 	var template = SIMPLATE.prepare('people');
 
 	template.render([
-			{'owner':{'first':'Stefan', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'nice': true},
+			{'owner':{'first':'Stefan', 'last':'Olafsson'}, 'nationality': 'Icelandic', 'tired': true},
 			{'owner':{'first':'Tyler', 'last':'Tate'}, 'nationality': 'American'},
 			{'owner':{'first':'Bjarki', 'last':'Holm'}, 'nationality': 'Icelandic', 'type':'Academic'},
 		]);
 </pre>
-<pre name="code" class="html:nocontrols:nogutter">
+<pre name="code" class="xhtml:nocontrols:nogutter">
 	&lt;ul id=&quot;people&quot;&gt;
 		&lt;li style=&quot;list-style: none; font-weight: bold; border-bottom: 1px solid #000;&quot;&gt;List of people (stays here)&lt;/li&gt;
 		&lt;li data-template data-where-tired class=&quot;person&quot;&gt;Tired guy that {{owner.first}}&lt;/li&gt;
