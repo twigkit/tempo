@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Simplate</title>
-	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
+	<script type="text/javascript" src="../src/simplate.js"></script>
 	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shCore.js"></script>
 	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushJScript.js"></script>
 	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushXml.js"></script>
@@ -99,6 +99,7 @@
 	&lt;ul id=&quot;more-marx-brothers&quot;&gt;
 		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;brother {{nickname}}&quot;&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
 		&lt;li data-template data-if-actor class=&quot;brother&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
+		&lt;!-- Default template --&gt;
 		&lt;li data-template id=&quot;{{nickname}}&quot; class=&quot;brother&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
 	&lt;/ul&gt;
 </pre>
@@ -113,6 +114,7 @@
 <ul id="more-marx-brothers">
 	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
 	<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
+	<!-- Default template -->
 	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
 </ul>
 
