@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Simplate</title>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shCore.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushJScript.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushXml.js"></script>
-	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css" charset="utf-8">
+	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css">
+	<style>
+		li.brother.Groucho { color: red; }
+		li#Gummo {text-decoration: line-through;}
+	</style>
 	<script>
 		window.onload = function() {
-			dp.SyntaxHighlighter.HighlightAll('code');
-
 			var data = [
 					{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 					{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
@@ -33,7 +33,7 @@
 
 <h2>Usage</h2>
 <h3>JavaScript</h3>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	/*
 	 * element : ID or an instance of an HTMLElement
 	 * data    : An array of objects
@@ -52,7 +52,7 @@
 
 <p>The following examples will use this sample data</p>
 
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	var data = [
 			{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 			{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
@@ -65,12 +65,12 @@
 <h3>Simple template</h3>
 
 <h4>JavaScript</h4>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	SIMPLATE.prepare('simple-marx-brothers').render(data);
 </pre>
 
 <h4>HTML</h4>
-<pre name="code" class="xhtml:nocontrols:nogutter">
+<pre>
 	&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
 		&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
 	&lt;/ol&gt;
@@ -85,12 +85,12 @@
 <h3>Template selectors</h3>
 
 <h4>JavaScript</h4>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	SIMPLATE.prepare('more-marx-brothers').render(data);
 </pre>
 
 <h4>HTML</h4>
-<pre name="code" class="xhtml:nocontrols:nogutter">
+<pre>
 	&lt;style&gt;
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
@@ -105,11 +105,6 @@
 </pre>
 
 <h4>Output</h4>
-
-<style>
-	li.brother.Groucho { color: red; }
-	li#Gummo {text-decoration: line-through;}
-</style>
 
 <ul id="more-marx-brothers">
 	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
