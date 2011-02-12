@@ -68,22 +68,16 @@ var SIMPLATE = (function(simplate) {
 				}
 
 				// Content
-				template.innerHTML = template.innerHTML.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
-					return eval('item.' + variable);
-				});
+				template.innerHTML = utils.replaceVariable(item, template.innerHTML);
 				
 				// Template class attribute
 				if (template.hasAttribute('class')) {
-					template.className = template.className.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
-						return eval('item.' + variable);
-					});
+					template.className = utils.replaceVariable(item, template.className);
 				}
 				
 				// Template id
 				if (template.hasAttribute('id')) {
-					template.id = template.id.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
-						return eval('item.' + variable);
-					});
+					template.id = utils.replaceVariable(item, template.id);
 				}
 				this.container.appendChild(template);
 			}
@@ -99,6 +93,12 @@ var SIMPLATE = (function(simplate) {
 	var utils = {
 		startsWith : function(str, prefix) {
 			return (str.indexOf(prefix) === 0);
+		},
+		
+		replaceVariable : function(item, str) {
+			return str.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
+				return eval('item.' + variable);
+			});
 		},
 
 		clearContainer : function (el) {
