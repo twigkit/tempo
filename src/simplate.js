@@ -15,8 +15,10 @@ var SIMPLATE = (function(simplate) {
 		for (var i = 0; i < children.length; i++) {
 			var element = children[i].cloneNode(true);
 			if (element.hasAttribute('data-template')) {
+				// Element is a template
 				for (var a = 0; a < element.attributes.length; a++) {
 					var attr = element.attributes[a];
+					// If attribute
 					if (utils.startsWith(attr.name, 'data-if-')) {
 						var val;
 						if (attr.value == '') {
@@ -111,6 +113,7 @@ var SIMPLATE = (function(simplate) {
 		}
 	}
 	utils.startsWith.displayName = 'startsWith';
+	utils.replaceVariable.displayName = 'replaceVariable';
 	utils.clearContainer.displayName = 'clearContainer';
 
 	return simplate;
