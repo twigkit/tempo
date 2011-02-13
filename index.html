@@ -8,7 +8,7 @@
 	<style>
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
-
+		
 		a.from { display: block; font-size: 1.1em; font-weight: bold;}
 	</style>
 	<script>
@@ -23,24 +23,18 @@
 
 			// Simple template
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
-
+			
 			// Multiple templates
 			SIMPLATE.prepare('more-marx-brothers').render(data);
-
+			
 			// Complex templates
 			SIMPLATE.prepare('complex-marx-brothers').render(data);
-
+			
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.ajax({
-					url: 'http://search.twitter.com/search.json?q=marx brothers',
-					type: 'GET',
-					dataType: 'json',
-					success: function(data) {
+			$.post("http://search.twitter.com/search.json?q=marx brothers", function(data) {
 						twitter.render(data.results);
-					}
-				});
-
+					});
 		}
 	</script>
 </head>
@@ -181,14 +175,9 @@
 <h4>JavaScript</h4>
 <pre>
 	var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-	$.ajax({
-			url: 'http://search.twitter.com/search.json?q=marx brothers',
-			type: 'GET',
-			dataType: 'json',
-			success: function(data) {
+	$.post("http://search.twitter.com/search.json?q=marx brothers", function(data) {
 				twitter.render(data.results);
-			}
-		});
+			});
 </pre>
 
 <h4>HTML</h4>
