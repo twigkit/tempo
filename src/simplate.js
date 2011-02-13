@@ -15,6 +15,9 @@ var SIMPLATE = (function(simplate) {
 		for (var i = 0; i < children.length; i++) {
 			var element = children[i].cloneNode(true);
 			if (element.hasAttribute('data-template')) {
+				// Remapping container element in case template is deep in container
+				container = children[i].parentNode;
+				
 				// Element is a template
 				for (var a = 0; a < element.attributes.length; a++) {
 					var attr = element.attributes[a];
@@ -109,7 +112,7 @@ var SIMPLATE = (function(simplate) {
 		clearContainer : function (el) {
 			for (var i = el.childNodes.length; i >= 0; i--) {
 				if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
-					el.removeChild(el.childNodes[i]);
+					el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
 				}
 			}
 		}
