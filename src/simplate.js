@@ -27,6 +27,7 @@ var SIMPLATE = (function(simplate) {
 							val = '\'' + attr.value + '\'';
 						}
 						namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
+						element.removeAttribute(attr.name);
 					}
 				}
 
