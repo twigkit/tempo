@@ -3,10 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Simplate</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
 	<style>
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
+
+		a.from { display: block; font-size: 1.1em; font-weight: bold;}
 	</style>
 	<script>
 		window.onload = function() {
@@ -26,6 +29,18 @@
 
 			// Complex templates
 			SIMPLATE.prepare('complex-marx-brothers').render(data);
+
+			// jQuery example
+			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+			$.ajax({
+					url: 'http://search.twitter.com/search.json?q=marx brothers',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data) {
+						twitter.render(data.results);
+					}
+				});
+
 		}
 	</script>
 </head>
@@ -160,6 +175,48 @@
 		</tr>
 	</tbody>
 </table>
+
+<h3>Using with jQuery for AJAX</h3>
+
+<h4>JavaScript</h4>
+<pre>
+	var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+	$.ajax({
+			url: 'http://search.twitter.com/search.json?q=marx brothers',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				twitter.render(data.results);
+			}
+		});
+</pre>
+
+<h4>HTML</h4>
+<pre>
+	&lt;style&gt;
+		a.from { display: block; font-size: 1.1em; font-weight: bold;}
+	&lt;/style&gt;
+
+	&lt;div id=&quot;jquery-ajax-twitter&quot;&gt;
+		&lt;div data-template&gt;
+			&lt;a href=&quot;http://twitter.com/{{from_user}}&quot; target=&quot;_blank&quot;&gt;{{from_user}}&lt;/a&gt;
+			&lt;p&gt;{{text}}&lt;/p&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+</pre>
+
+<h4>Output</h4>
+
+<style>
+	a.from { display: block; font-size: 1.1em; font-weight: bold;}
+</style>
+
+<div id="jquery-ajax-twitter">
+	<div data-template>
+		<a href="http://twitter.com/{{from_user}}" target="_blank">{{from_user}}</a>
+		<p>{{text}}</p>
+	</div>
+</div>
 
 </body>
 </html>
