@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Simplate</title>
 	<script type="text/javascript" src="../src/simplate.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shCore.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushJScript.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://syntaxhighlighter.googlecode.com/svn/trunk/Scripts/shBrushXml.js"></script>
-	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css" charset="utf-8">
+	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css">
+	<style>
+		li.brother.Groucho { color: red; }
+		li#Gummo {text-decoration: line-through;}
+	</style>
 	<script>
 		window.onload = function() {
-			dp.SyntaxHighlighter.HighlightAll('code');
-
 			var data = [
 					{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 					{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
@@ -24,6 +24,9 @@
 			
 			// Multiple templates
 			SIMPLATE.prepare('more-marx-brothers').render(data);
+			
+			// Complex templates
+			SIMPLATE.prepare('complex-marx-brothers').render(data);
 		}
 	</script>
 </head>
@@ -33,7 +36,7 @@
 
 <h2>Usage</h2>
 <h3>JavaScript</h3>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	/*
 	 * element : ID or an instance of an HTMLElement
 	 * data    : An array of objects
@@ -42,7 +45,7 @@
 </pre>
 <h3>HTML</h3>
 <p>Any tag with data-template attribute will be considered a template</p>
-<pre name="code" class="xhtml:nocontrols:nogutter">
+<pre>
 	&lt;div id=&quot;container&quot;&gt;
 		&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
 	&lt;/div&gt;
@@ -52,7 +55,7 @@
 
 <p>The following examples will use this sample data</p>
 
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	var data = [
 			{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
 			{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
@@ -65,12 +68,12 @@
 <h3>Simple template</h3>
 
 <h4>JavaScript</h4>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	SIMPLATE.prepare('simple-marx-brothers').render(data);
 </pre>
 
 <h4>HTML</h4>
-<pre name="code" class="xhtml:nocontrols:nogutter">
+<pre>
 	&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
 		&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
 	&lt;/ol&gt;
@@ -85,12 +88,12 @@
 <h3>Template selectors</h3>
 
 <h4>JavaScript</h4>
-<pre name="code" class="js:nocontrols:nogutter">
+<pre>
 	SIMPLATE.prepare('more-marx-brothers').render(data);
 </pre>
 
 <h4>HTML</h4>
-<pre name="code" class="xhtml:nocontrols:nogutter">
+<pre>
 	&lt;style&gt;
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
@@ -106,17 +109,54 @@
 
 <h4>Output</h4>
 
-<style>
-	li.brother.Groucho { color: red; }
-	li#Gummo {text-decoration: line-through;}
-</style>
-
 <ul id="more-marx-brothers">
 	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
 	<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
 	<!-- Default template -->
 	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
 </ul>
+
+<h3>More complex templates</h3>
+
+<h4>JavaScript</h4>
+<pre>
+	SIMPLATE.prepare('complex-marx-brothers').render(data);
+</pre>
+
+<h4>HTML</h4>
+<pre>
+	&lt;table  border=&quot;0&quot; cellspacing=&quot;5&quot; cellpadding=&quot;5&quot;&gt;
+		&lt;tbody id=&quot;complex-marx-brothers&quot;&gt;
+			&lt;tr&gt;
+				&lt;th&gt;Last Name&lt;/th&gt;
+				&lt;th&gt;First Name&lt;/th&gt;
+				&lt;th&gt;DOB&lt;/th&gt;
+			&lt;/tr&gt;
+			&lt;tr data-template&gt;
+				&lt;td&gt;{{name.last}}&lt;/td&gt;
+				&lt;td&gt;{{name.first}}&lt;/td&gt;
+				&lt;td&gt;{{born}}&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+</pre>
+
+<h4>Output</h4>
+
+<table  border="0" cellspacing="5" cellpadding="5">
+	<tbody id="complex-marx-brothers">
+		<tr>
+			<th>Last Name</th>
+			<th>First Name</th>
+			<th>DOB</th>
+		</tr>
+		<tr data-template>
+			<td>{{name.last}}</td>
+			<td>{{name.first}}</td>
+			<td>{{born}}</td>
+		</tr>
+	</tbody>
+</table>
 
 </body>
 </html>

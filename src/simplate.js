@@ -1,12 +1,12 @@
 var SIMPLATE = (function(simplate) {
 
-	var defaultTemplate;
-	var namedTemplates = {};
-
 	/*!
 	 * Prepare a container for rendering, gathering templates and clearing afterwards.
 	 */
 	simplate.prepare = function(container) {
+		var defaultTemplate;
+		var namedTemplates = {};
+		
 		if (typeof container === 'string') {
 			container = document.getElementById(container);
 		}
@@ -38,15 +38,17 @@ var SIMPLATE = (function(simplate) {
 
 		utils.clearContainer(container);
 
-		return new Renderer(container);
+		return new Renderer(container, defaultTemplate, namedTemplates);
 	}
 	simplate.prepare.displayName = 'prepare'
 
 	/*!
 	 * Renderer for populating containers with data using templates.
 	 */
-	function Renderer(container) {
+	function Renderer(container, defaultTemplate, namedTemplates) {
 		this.container = container;
+		this.defaultTemplate = defaultTemplate;
+		this.namedTemplates = namedTemplates;
 
 		return this;
 	}
@@ -59,15 +61,15 @@ var SIMPLATE = (function(simplate) {
 				var item = data[i];
 				var template = null;
 
-				for (var templateName in namedTemplates) {
+				for (var templateName in this.namedTemplates) {
 					if (eval('item.' + templateName)) {
-						template = namedTemplates[templateName].cloneNode(true);
+						template = this.namedTemplates[templateName].cloneNode(true);
 						break;
 					}
 				}
 
 				if (template == null) {
-					template = defaultTemplate.cloneNode(true);
+					template = this.defaultTemplate.cloneNode(true);
 				}
 
 				// Content
@@ -105,10 +107,9 @@ var SIMPLATE = (function(simplate) {
 		},
 
 		clearContainer : function (el) {
-			var children = el.getElementsByTagName('*');
-			for (var i = children.length; i >= 0; i--) {
-				if (children[i] != undefined && children[i].hasAttribute('data-template')) {
-					el.removeChild(children[i]);
+			for (var i = el.childNodes.length; i >= 0; i--) {
+				if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
+					el.removeChild(el.childNodes[i]);
 				}
 			}
 		}
