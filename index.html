@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title>Simplate</title>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
-	<link rel="stylesheet" href="css/syntaxhighlighter.css" type="text/css">
 	<style>
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
@@ -21,9 +20,12 @@
 
 			// Simple template
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
-			
+
 			// Multiple templates
 			SIMPLATE.prepare('more-marx-brothers').render(data);
+
+			// Complex templates
+			SIMPLATE.prepare('complex-marx-brothers').render(data);
 		}
 	</script>
 </head>
@@ -112,6 +114,52 @@
 	<!-- Default template -->
 	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
 </ul>
+
+<h3>More complex templates</h3>
+
+<h4>JavaScript</h4>
+<pre>
+	SIMPLATE.prepare('complex-marx-brothers').render(data);
+</pre>
+
+<h4>HTML</h4>
+<pre>
+	&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;
+				&lt;th&gt;Last Name&lt;/th&gt;
+				&lt;th&gt;First Name&lt;/th&gt;
+				&lt;th&gt;DOB&lt;/th&gt;
+				&lt;th&gt;Grumpy&lt;/th&gt;
+			&lt;/tr&gt;
+			&lt;tr data-template&gt;
+				&lt;td&gt;{{name.last}}&lt;/td&gt;
+				&lt;td&gt;{{name.first}}&lt;/td&gt;
+				&lt;td&gt;{{born}}&lt;/td&gt;
+				&lt;td&gt;{{if nickname == &#x27;Groucho&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+</pre>
+
+<h4>Output</h4>
+
+<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
+	<tbody>
+		<tr>
+			<th>Last Name</th>
+			<th>First Name</th>
+			<th>DOB</th>
+			<th>Grumpy</th>
+		</tr>
+		<tr data-template>
+			<td>{{name.last}}</td>
+			<td>{{name.first}}</td>
+			<td>{{born}}</td>
+			<td>{{if nickname == 'Groucho'}}<span>X</span>{{endif}}</td>
+		</tr>
+	</tbody>
+</table>
 
 </body>
 </html>
