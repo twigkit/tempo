@@ -75,6 +75,14 @@ var SIMPLATE = (function(simplate) {
 					template = this.defaultTemplate.cloneNode(true);
 				}
 
+				// Functions
+				template.innerHTML = template.innerHTML.replace(/{{if (.*?)}}(.*?){{endif}}/g, function(match, condition, content) {
+					if (eval('item.' + condition)) {
+						return content;
+					}
+					return '';
+				});
+				
 				// Content
 				template.innerHTML = utils.replaceVariable(item, template.innerHTML);
 				
