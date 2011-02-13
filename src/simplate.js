@@ -112,7 +112,7 @@ var SIMPLATE = (function(simplate) {
 		},
 		
 		replaceVariable : function(item, str) {
-			return str.replace(/{{([A-Za-z0-9\.]*?)}}/g, replace = function(match, variable) {
+			return str.replace(/{{([A-Za-z0-9\.\_]*?)}}/g, replace = function(match, variable) {
 				return eval('item.' + variable);
 			});
 		},
