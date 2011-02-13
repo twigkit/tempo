@@ -32,9 +32,10 @@
 			
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.getJSON("http://search.twitter.com/search.json?q=marx brothers", function(data) {
-						twitter.render(data.results);
-					});
+			$.getJSON("http://twitter.com/status/user_timeline/mrolafsson.json?count=5&callback=?", function(data) {
+				console.log(data)
+				twitter.render(data);
+			});
 		}
 	</script>
 </head>
@@ -202,8 +203,8 @@
 
 <div id="jquery-ajax-twitter">
 	<div data-template>
-		<a href="http://twitter.com/{{from_user}}" target="_blank">{{from_user}}</a>
 		<p>{{text}}</p>
+		<p>Created at <b>{{created_at}}</b></p>
 	</div>
 </div>
 
