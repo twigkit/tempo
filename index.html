@@ -32,7 +32,7 @@
 			
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.post("http://search.twitter.com/search.json?q=marx brothers", function(data) {
+			$.getJSON("http://search.twitter.com/search.json?q=marx brothers", function(data) {
 						twitter.render(data.results);
 					});
 		}
