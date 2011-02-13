@@ -175,21 +175,25 @@
 <h4>JavaScript</h4>
 <pre>
 	var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-	$.post("http://search.twitter.com/search.json?q=marx brothers", function(data) {
-				twitter.render(data.results);
-			});
+	$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&callback=?", function(data) {
+			twitter.render(data.results);
+		});
 </pre>
 
 <h4>HTML</h4>
 <pre>
 	&lt;style&gt;
-		a.from { display: block; font-size: 1.1em; font-weight: bold;}
+		.tweet img { float: left; height: 48px; width: 48px;}
+		.tweet div { margin-left: 58px;}
 	&lt;/style&gt;
 
 	&lt;div id=&quot;jquery-ajax-twitter&quot;&gt;
-		&lt;div data-template&gt;
-			&lt;a href=&quot;http://twitter.com/{{from_user}}&quot; target=&quot;_blank&quot;&gt;{{from_user}}&lt;/a&gt;
-			&lt;p&gt;{{text}}&lt;/p&gt;
+		&lt;div data-template class=&quot;tweet&quot;&gt;
+			&lt;img src=&quot;{{profile_image_url}}&quot; /&gt;
+			&lt;div&gt;
+				&lt;a href=&quot;http://twitter.com/{{from_user}}&quot;&gt;{{from_user}}&lt;/a&gt; ({{created_at}})
+				&lt;p&gt;{{text}}&lt;/p&gt;
+			&lt;/div&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
 </pre>
@@ -197,13 +201,17 @@
 <h4>Output</h4>
 
 <style>
-	a.from { display: block; font-size: 1.1em; font-weight: bold;}
+	.tweet img { float: left; height: 48px; width: 48px;}
+	.tweet div { margin-left: 58px;}
 </style>
 
 <div id="jquery-ajax-twitter">
-	<div data-template>
-		<p>{{text}}</p>
-		<p>Created at <b>{{created_at}}</b></p>
+	<div data-template class="tweet">
+		<img src="{{profile_image_url}}" />
+		<div>
+			<a href="http://twitter.com/{{from_user}}">{{from_user}}</a> ({{created_at}})
+			<p>{{text}}</p>
+		</div>
 	</div>
 </div>
 
