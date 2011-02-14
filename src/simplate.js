@@ -62,40 +62,56 @@ var SIMPLATE = (function(simplate) {
 
 			for (var i = 0; i < data.length; i++) {
 				var item = data[i];
-				var template = null;
+				
+				var renderItem = function(renderer, item) {
+					var template = null;
 
-				for (var templateName in this.namedTemplates) {
-					if (eval('item.' + templateName)) {
-						template = this.namedTemplates[templateName].cloneNode(true);
-						break;
+					for (var templateName in renderer.namedTemplates) {
+						if (eval('item.' + templateName)) {
+							template = renderer.namedTemplates[templateName].cloneNode(true);
+							break;
+						}
 					}
-				}
 
-				if (template == null) {
-					template = this.defaultTemplate.cloneNode(true);
-				}
-
-				// Functions
-				template.innerHTML = template.innerHTML.replace(/{{if (.*?)}}(.*?){{endif}}/g, function(match, condition, content) {
-					if (eval('item.' + condition)) {
-						return content;
+					if (template == null) {
+						template = renderer.defaultTemplate.cloneNode(true);
 					}
-					return '';
-				});
+
+					// Functions
+					template.innerHTML = template.innerHTML.replace(/{{if (.*?)}}(.*?){{endif}}/g, function(match, condition, content) {
+						var member_regex = '';
+						for (var member in item) {
+							if (member_regex.length > 0) {
+								member_regex += '|'
+							}
+							member_regex += member;
+						}
+						
+						condition = condition.replace(/&amp;/g, '&');
+						condition = condition.replace(new RegExp(member_regex, 'g'), function(match) {
+							return 'item.' + match;
+						});
+
+						if (eval(condition)) {
+							return content;
+						}
+						return '';
+					});
 				
-				// Content
-				template.innerHTML = utils.replaceVariable(item, template.innerHTML);
+					// Content
+					template.innerHTML = utils.replaceVariable(item, template.innerHTML);
 				
-				// Template class attribute
-				if (template.hasAttribute('class')) {
-					template.className = utils.replaceVariable(item, template.className);
-				}
+					// Template class attribute
+					if (template.hasAttribute('class')) {
+						template.className = utils.replaceVariable(item, template.className);
+					}
 				
-				// Template id
-				if (template.hasAttribute('id')) {
-					template.id = utils.replaceVariable(item, template.id);
-				}
-				this.container.appendChild(template);
+					// Template id
+					if (template.hasAttribute('id')) {
+						template.id = utils.replaceVariable(item, template.id);
+					}
+					renderer.container.appendChild(template);
+				}(this, item);
 			}
 
 			return this;
