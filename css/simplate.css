@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a img, form, fieldset {
+  border: none;
+}
+p {
+  margin-bottom: 20px;
+}
+nav,
+aside,
+header,
+article,
+section,
+footer {
+  display: block;
+}
+body {
+  font-family: Helvetica, Arial sans-serif;
+}
+h1, h2, h3 {
+  font-family: Georgia;
+  margin: 1em 0 0.5em 0;
+}
+.column {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.full-column {
+  width: 102.25%;
+  margin: 0 -1.1%;
+}
+.row {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+.nested-row {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+  min-width: 0;
+  width: auto;
+  display: inline-block;
+}
+nav#top {
+  background-color: black;
+  margin-bottom: 2em;
+}
+header {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+section#hero {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 47.917%;
+}
+section#hero h1 {
+  margin: 1em 0 0.5em 0;
+  font-size: 4em;
+}
+section#hero p {
+  font-family: Georgia;
+  font-size: 1.5em;
+}
+section#hero nav#actions ul {
+  overflow: hidden;
+  margin-bottom: 1.5em;
+}
+section#hero nav#actions ul li {
+  list-style: none outside none;
+  float: left;
+  margin-right: 1em;
+}
+section#hero ul#features li {
+  list-style: circle outside none;
+  margin: 0.75em 0 0.75em 2em;
+  padding: 0 0 0 0.5em;
+}
+aside#example {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 47.917%;
+  padding-top: 3.5em;
+}
+#everything-else {
+  display: none;
+}
