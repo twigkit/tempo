@@ -3,8 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Simplate</title>
+	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
+	<script type="text/javascript" src="../src/simplate.js"></script>
 	<style>
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
@@ -32,188 +33,241 @@
 			
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
+			$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&rpp=5&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		}
 	</script>
 </head>
 <body>
+	<nav id="top">
+		From the creators of TwigKit.
+	</nav>
 
-<h1>Simplate > The Simple JavaScript Template Engine</h1>
+	<header>
+		<section id="hero">
+			<h1>Simplate</h1>
+			<p>Simplate is a tiny JSON rendering engine that enables you to craft data templates in pure HTML. Never document.write again.</p>
+			<nav id="actions">
+				<ul>
+					<li><a href="#">Download</a></li>
+					<li><a href="#">Reference on Google Code</a></li>
+					<li><a href="#">View on GitHub</a></li>
+				</ul>
+			</nav>
+			<ul id="features">
+				<li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
+				<li>Itty-bitty footprint (2k), lightning-fast rendering (30k of JSON in 5 milliseconds)</li>
+				<li>Works with or without jQuery</li>
+				<li>Degrades gracefully if JavaScript is not enabled</li>
+				<li>Write HTML in HTML documents, not in JavaScript</li>
+			</ul>
+		</section>
+		<aside id="example">
+			<h3>1. Compose the data template in HTML</h3>
+			<pre>
+&lt;ol id=&quot;tweets&quot;&gt;
+	&lt;li data-template=&quot;results&quot;&gt;
+		&lt;img src=&quot;{{profile_image_url}}&quot; /&gt;
+		&lt;a class=&quot;user&quot; href=&quot;http://twitter.com/{{from_user}}&quot;&gt;{{from_user}}&lt;/a&gt;
+		&lt;p class=&quot;message&quot;&gt;{{text}}&lt;/p&gt;
+	&lt;/li&gt;
+&lt;/ol&gt;
+			</pre>
 
-<h2>Usage</h2>
-<h3>JavaScript</h3>
-<pre>
-	/*
-	 * element : ID or an instance of an HTMLElement
-	 * data    : An array of objects
-	 */
-	SIMPLATE.prepare( element ).render( data );
-</pre>
-<h3>HTML</h3>
-<p>Any tag with data-template attribute will be considered a template</p>
-<pre>
-	&lt;div id=&quot;container&quot;&gt;
-		&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
-	&lt;/div&gt;
-</pre>
+			<h3>2. Reference the Simplate script</h3>
+			<pre>
+&lt;script src=&quot;../src/simplate.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+			</pre>
 
-<h2>Examples</h2>
+			<h3>3. Pass in the template ID and the JSON data source</h3>
+			<pre>
+SIMPLATE.prepare("tweets").render( data );
+			</pre>
 
-<p>The following examples will use this sample data</p>
+			<h3>4. Booyah!</h3>
+			<pre>
+Lorem ipsum
+			</pre>
+		</aside>
+	</header>
 
-<pre>
-	var data = [
-			{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
-			{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
-			{'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born': 'October 2, 1890', 'actor': true},
-			{'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born': 'October 23, 1892'},
-			{'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born': 'February 25, 1901', 'actor': true}
-		];
-</pre>
 
-<h3>Simple template</h3>
 
-<h4>JavaScript</h4>
-<pre>
-	SIMPLATE.prepare('simple-marx-brothers').render(data);
-</pre>
 
-<h4>HTML</h4>
-<pre>
-	&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
-		&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
-	&lt;/ol&gt;
-</pre>
+		<div id="everything-else">
+			<h2>Usage</h2>
+			<h3>JavaScript</h3>
+			<pre>
+				/*
+				 * element : ID or an instance of an HTMLElement
+				 * data    : An array of objects
+				 */
+				SIMPLATE.prepare( element ).render( data );
+			</pre>
+			<h3>HTML</h3>
+			<p>Any tag with data-template attribute will be considered a template</p>
+			<pre>
+				&lt;div id=&quot;container&quot;&gt;
+					&lt;span data-template&gt;{{foo.bar}}&lt;/span&gt;
+				&lt;/div&gt;
+			</pre>
 
-<h4>Output</h4>
+			<h2>Examples</h2>
 
-<ol id="simple-marx-brothers">
-	<li data-template>{{nickname}} {{name.last}}</li>
-</ol>
+			<p>The following examples will use this sample data</p>
 
-<h3>Template selectors</h3>
+			<pre>
+				var data = [
+						{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true},
+						{'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born': 'November 23, 1888', 'actor': true},
+						{'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born': 'October 2, 1890', 'actor': true},
+						{'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born': 'October 23, 1892'},
+						{'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born': 'February 25, 1901', 'actor': true}
+					];
+			</pre>
 
-<h4>JavaScript</h4>
-<pre>
-	SIMPLATE.prepare('more-marx-brothers').render(data);
-</pre>
+			<h3>Simple template</h3>
 
-<h4>HTML</h4>
-<pre>
-	&lt;style&gt;
-		li.brother.Groucho { color: red; }
-		li#Gummo {text-decoration: line-through;}
-	&lt;/style&gt;
+			<h4>JavaScript</h4>
+			<pre>
+				SIMPLATE.prepare('simple-marx-brothers').render(data);
+			</pre>
 
-	&lt;ul id=&quot;more-marx-brothers&quot;&gt;
-		&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;brother {{nickname}}&quot;&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
-		&lt;li data-template data-if-actor class=&quot;brother&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
-		&lt;!-- Default template --&gt;
-		&lt;li data-template id=&quot;{{nickname}}&quot; class=&quot;brother&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
-	&lt;/ul&gt;
-</pre>
+			<h4>HTML</h4>
+			<pre>
+				&lt;ol id=&quot;simple-marx-brothers&quot;&gt;
+					&lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+				&lt;/ol&gt;
+			</pre>
 
-<h4>Output</h4>
+			<h4>Output</h4>
 
-<ul id="more-marx-brothers">
-	<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
-	<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
-	<!-- Default template -->
-	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
-</ul>
+			<ol id="simple-marx-brothers">
+				<li data-template>{{nickname}} {{name.last}}</li>
+			</ol>
 
-<h3>More complex templates</h3>
+			<h3>Template selectors</h3>
 
-<h4>JavaScript</h4>
-<pre>
-	SIMPLATE.prepare('complex-marx-brothers').render(data);
-</pre>
+			<h4>JavaScript</h4>
+			<pre>
+				SIMPLATE.prepare('more-marx-brothers').render(data);
+			</pre>
 
-<h4>HTML</h4>
-<pre>
-	&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
-		&lt;tbody&gt;
-			&lt;tr&gt;
-				&lt;th&gt;Last Name&lt;/th&gt;
-				&lt;th&gt;First Name&lt;/th&gt;
-				&lt;th&gt;DOB&lt;/th&gt;
-				&lt;th&gt;Grumpy&lt;/th&gt;
-			&lt;/tr&gt;
-			&lt;tr data-template&gt;
-				&lt;td&gt;{{name.last}}&lt;/td&gt;
-				&lt;td&gt;{{name.first}}&lt;/td&gt;
-				&lt;td&gt;{{born}}&lt;/td&gt;
-				&lt;td&gt;{{if nickname == &#x27;Groucho&#x27; &amp;&amp; name.last == &#x27;Marx&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt;
-			&lt;/tr&gt;
-		&lt;/tbody&gt;
-	&lt;/table&gt;
-</pre>
+			<h4>HTML</h4>
+			<pre>
+				&lt;style&gt;
+					li.brother.Groucho { color: red; }
+					li#Gummo {text-decoration: line-through;}
+				&lt;/style&gt;
 
-<h4>Output</h4>
+				&lt;ul id=&quot;more-marx-brothers&quot;&gt;
+					&lt;li data-template data-if-nickname=&quot;Groucho&quot; class=&quot;brother {{nickname}}&quot;&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
+					&lt;li data-template data-if-actor class=&quot;brother&quot;&gt;{{name.first}}, nicknamed &#x27;&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;&#x27; was born on {{born}}&lt;/li&gt;
+					&lt;!-- Default template --&gt;
+					&lt;li data-template id=&quot;{{nickname}}&quot; class=&quot;brother&quot;&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
+				&lt;/ul&gt;
+			</pre>
 
-<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
-	<tbody>
-		<tr>
-			<th>Last Name</th>
-			<th>First Name</th>
-			<th>DOB</th>
-			<th>Grumpy</th>
-		</tr>
-		<tr data-template>
-			<td>{{name.last}}</td>
-			<td>{{name.first}}</td>
-			<td>{{born}}</td>
-			<td>{{if nickname == 'Groucho' && name.last == 'Marx'}}<span>X</span>{{endif}}</td>
-		</tr>
-	</tbody>
-</table>
+			<h4>Output</h4>
 
-<h3>Using with jQuery for AJAX</h3>
+			<ul id="more-marx-brothers">
+				<li data-template data-if-nickname="Groucho" class="brother {{nickname}}">{{nickname}} (aka {{name.first}}) was grumpy!</li>
+				<li data-template data-if-actor class="brother">{{name.first}}, nicknamed '<i>{{nickname}} {{name.last}}</i>' was born on {{born}}</li>
+				<!-- Default template -->
+				<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!</li>
+			</ul>
 
-<h4>JavaScript</h4>
-<pre>
-	var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-	$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&callback=?", function(data) {
-			twitter.render(data.results);
-		});
-</pre>
+			<h3>More complex templates</h3>
 
-<h4>HTML</h4>
-<pre>
-	&lt;style&gt;
-		.tweet img { float: left; height: 48px; width: 48px;}
-		.tweet div { margin-left: 58px;}
-	&lt;/style&gt;
+			<h4>JavaScript</h4>
+			<pre>
+				SIMPLATE.prepare('complex-marx-brothers').render(data);
+			</pre>
 
-	&lt;div id=&quot;jquery-ajax-twitter&quot;&gt;
-		&lt;div data-template class=&quot;tweet&quot;&gt;
-			&lt;img src=&quot;{{profile_image_url}}&quot; /&gt;
-			&lt;div&gt;
-				&lt;a href=&quot;http://twitter.com/{{from_user}}&quot;&gt;{{from_user}}&lt;/a&gt; ({{created_at}})
-				&lt;p&gt;{{text}}&lt;/p&gt;
-			&lt;/div&gt;
-		&lt;/div&gt;
-	&lt;/div&gt;
-</pre>
+			<h4>HTML</h4>
+			<pre>
+				&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
+					&lt;tbody&gt;
+						&lt;tr&gt;
+							&lt;th&gt;Last Name&lt;/th&gt;
+							&lt;th&gt;First Name&lt;/th&gt;
+							&lt;th&gt;DOB&lt;/th&gt;
+							&lt;th&gt;Grumpy&lt;/th&gt;
+						&lt;/tr&gt;
+						&lt;tr data-template&gt;
+							&lt;td&gt;{{name.last}}&lt;/td&gt;
+							&lt;td&gt;{{name.first}}&lt;/td&gt;
+							&lt;td&gt;{{born}}&lt;/td&gt;
+							&lt;td&gt;{{if nickname == &#x27;Groucho&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt;
+						&lt;/tr&gt;
+					&lt;/tbody&gt;
+				&lt;/table&gt;
+			</pre>
 
-<h4>Output</h4>
+			<h4>Output</h4>
 
-<style>
-	.tweet img { float: left; height: 48px; width: 48px;}
-	.tweet div { margin-left: 58px;}
-</style>
+			<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
+				<tbody>
+					<tr>
+						<th>Last Name</th>
+						<th>First Name</th>
+						<th>DOB</th>
+						<th>Grumpy</th>
+					</tr>
+					<tr data-template>
+						<td>{{name.last}}</td>
+						<td>{{name.first}}</td>
+						<td>{{born}}</td>
+						<td>{{if nickname == 'Groucho'}}<span>X</span>{{endif}}</td>
+					</tr>
+				</tbody>
+			</table>
 
-<div id="jquery-ajax-twitter">
-	<div data-template class="tweet">
-		<img src="{{profile_image_url}}" />
-		<div>
-			<a href="http://twitter.com/{{from_user}}">{{from_user}}</a> ({{created_at}})
-			<p>{{text}}</p>
+			<h3>Using with jQuery for AJAX</h3>
+
+			<h4>JavaScript</h4>
+			<pre>
+				var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+				$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&callback=?", function(data) {
+						twitter.render(data.results);
+					});
+			</pre>
+
+			<h4>HTML</h4>
+			<pre>
+				&lt;style&gt;
+					.tweet img { float: left; height: 48px; width: 48px;}
+					.tweet div { margin-left: 58px;}
+				&lt;/style&gt;
+
+				&lt;div id=&quot;jquery-ajax-twitter&quot;&gt;
+					&lt;div data-template class=&quot;tweet&quot;&gt;
+						&lt;img src=&quot;{{profile_image_url}}&quot; /&gt;
+						&lt;div&gt;
+							&lt;a href=&quot;http://twitter.com/{{from_user}}&quot;&gt;{{from_user}}&lt;/a&gt; ({{created_at}})
+							&lt;p&gt;{{text}}&lt;/p&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</pre>
+
+			<h4>Output</h4>
+
+			<style>
+				.tweet img { float: left; height: 48px; width: 48px;}
+				.tweet div { margin-left: 58px;}
+			</style>
+
+			<div id="jquery-ajax-twitter">
+				<div data-template class="tweet">
+					<img src="{{profile_image_url}}" />
+					<div>
+						<a href="http://twitter.com/{{from_user}}">{{from_user}}</a> ({{created_at}})
+						<p>{{text}}</p>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-
 </body>
 </html>
