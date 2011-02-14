@@ -32,7 +32,7 @@
 			
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&rpp=5&callback=?", function(data) {
+			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		}
@@ -145,7 +145,7 @@
 				&lt;td&gt;{{name.last}}&lt;/td&gt;
 				&lt;td&gt;{{name.first}}&lt;/td&gt;
 				&lt;td&gt;{{born}}&lt;/td&gt;
-				&lt;td&gt;{{if nickname == &#x27;Groucho&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt;
+				&lt;td&gt;{{if nickname == &#x27;Groucho&#x27; &amp;&amp; name.last == &#x27;Marx&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt;
 			&lt;/tr&gt;
 		&lt;/tbody&gt;
 	&lt;/table&gt;
@@ -165,7 +165,7 @@
 			<td>{{name.last}}</td>
 			<td>{{name.first}}</td>
 			<td>{{born}}</td>
-			<td>{{if nickname == 'Groucho'}}<span>X</span>{{endif}}</td>
+			<td>{{if nickname == 'Groucho' && name.last == 'Marx'}}<span>X</span>{{endif}}</td>
 		</tr>
 	</tbody>
 </table>
