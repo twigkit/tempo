@@ -184,7 +184,7 @@ var SIMPLATE = (function(simplate) {
 		},
 
 		clearContainer : function (el) {
-			if (el != null && el.innerHTML != undefined) {
+			if (el != null) {
 				el.innerHTML = '';
 			}
 //			if (el != null && el.childNodes != undefined) {
