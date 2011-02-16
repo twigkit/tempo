@@ -239,19 +239,49 @@
 	HTML
 </h4>
 		<pre>
-    &lt;table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2"&gt;
-        <br>
-    &lt;tbody&gt; &lt;tr&gt; &lt;th&gt;Last Name&lt;/th&gt; &lt;th&gt;First Name&lt;/th&gt; &lt;th&gt;DOB&lt;/th&gt; &lt;th&gt;Grumpy&lt;/th&gt; &lt;/tr&gt; &lt;tr data-template&gt; &lt;td&gt;{{name.last}}&lt;/td&gt; &lt;td&gt;{{name.first}}&lt;/td&gt; &lt;td&gt;{{born}}&lt;/td&gt; &lt;td&gt;{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}&lt;span&gt;X&lt;/span&gt;{{endif}}&lt;/td&gt; &lt;/tr&gt; &lt;/tbody&gt;
+    		&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
 
-
-    &lt;/table&gt;
+				&lt;thead&gt;
+					&lt;tr&gt;
+					&lt;th&gt;
+						Last Name
+					&lt;/th&gt;
+					&lt;th&gt;
+						First Name
+					&lt;/th&gt;
+					&lt;th&gt;
+						DOB
+					&lt;/th&gt;
+					&lt;th&gt;
+						Grumpy
+					&lt;/th&gt;
+					&lt;/tr&gt;
+				&lt;/thead&gt;
+				&lt;tbody&gt;
+				&lt;tr data-template=&quot;&quot;&gt;
+					&lt;td&gt;
+						{{name.last}}
+					&lt;/td&gt;
+					&lt;td&gt;
+						{{name.first}}
+					&lt;/td&gt;
+					&lt;td&gt;
+						{{born}}
+					&lt;/td&gt;
+					&lt;td&gt;
+						{{if nickname == &#x27;Groucho&#x27; &amp;amp;&amp;amp; name.last == &#x27;Marx&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;/tbody&gt;
+			&lt;/table&gt;
 </pre>
 <h4>
 	Output
 </h4>
 <table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
-	<tbody>
-	<tr>
+	
+	<thead>
+		<tr>
 		<th>
 			Last Name
 		</th>
@@ -264,7 +294,9 @@
 		<th>
 			Grumpy
 		</th>
-	</tr>
+		</tr>
+	</thead>
+	<tbody>
 	<tr data-template="">
 		<td>
 			{{name.last}}
@@ -281,6 +313,8 @@
 	</tr>
 	</tbody>
 </table>
+
+
 <h3>
 	Using with jQuery for AJAX
 </h3>
