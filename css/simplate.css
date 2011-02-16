@@ -36,6 +36,12 @@ pre em, .example em {
   font-style: normal;
   font-weight: bold;
 }
+pre ol,
+.example ol,
+pre ul,
+.example ul {
+  margin-left: 1.5em;
+}
 pre {
   font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
 }
@@ -237,6 +243,7 @@ article#usage section.usage h3 {
   font-size: 1.5em;
   font-weight: normal;
   border-bottom: 1px solid #ccc;
+  margin-top: 2em;
 }
 article#usage section.usage h5 {
   margin-left: 2em;
