@@ -47,14 +47,12 @@ pre em {
   margin: 0 -1.1%;
 }
 .row {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
   overflow-y: visible;
 }
 .nested-row {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
@@ -75,7 +73,6 @@ nav#top#bottom, footer#bottom#bottom {
   padding: 2em 0;
 }
 nav#top section, footer#bottom section {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
@@ -86,14 +83,13 @@ nav#top section p, footer#bottom section p {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 47.917%;
+  width: 97.917%;
   line-height: 2em;
 }
 nav#top section p a, footer#bottom section p a {
   color: white;
 }
 header {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
@@ -154,6 +150,15 @@ header aside#example h3 {
   font-size: 1.5em;
   font-weight: normal;
 }
+@media (max-width: 900px) {
+  header section#hero {
+    width: 97.917%;
+  }
+  header aside#example {
+    width: 97.917%;
+    padding-top: 0;
+  }
+}
 aside#quotes {
   margin: 2em 0 0 0;
   padding: 0.5em 0;
@@ -164,7 +169,6 @@ aside#quotes div {
   background-color: #f2f2f2;
 }
 aside#quotes div section {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
@@ -193,8 +197,23 @@ aside#quotes div section blockquote p span {
   display: block;
   color: #999;
 }
+@media (max-width: 900px) {
+  aside#quotes div section blockquote {
+    width: 47.917%;
+  }
+  aside#quotes div section blockquote.last {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  aside#quotes div section blockquote {
+    width: 97.917%;
+  }
+  aside#quotes div section blockquote.second {
+    display: none;
+  }
+}
 article#usage {
-  min-width: 960px;
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
@@ -205,7 +224,7 @@ article#usage section.usage {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 72.73%;
+  width: 97.917%;
 }
 article#usage section.usage h2 {
   font-size: 2.75em;
@@ -223,13 +242,6 @@ article#usage section.usage h5 {
 article#usage section.usage p.h5 {
   margin-left: 2em;
   font-size: 0.9em;
-}
-article#usage aside.advert {
-  margin: 0 1.04%;
-  overflow: hidden;
-  float: left;
-  display: inline;
-  width: 22.9%;
 }
 #everything-else {
   display: none;

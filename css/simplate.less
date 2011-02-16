@@ -101,7 +101,6 @@ pre {
 	margin: 0 -1.1%;
 }
 .row {
-	min-width: 960px;
 	width: 97.875%;
 	margin: 0 1.064%;
 	overflow-x: auto;
@@ -115,9 +114,9 @@ pre {
 }
 
 
-////////////
-// LAYOUT //
-////////////
+/////////
+// TOP //
+/////////
 
 nav#top,
 footer#bottom {
@@ -137,7 +136,7 @@ footer#bottom {
 		
 		p {
 			.column;
-			width: @6g;
+			width: @12g;
 			line-height: 2em;
 			
 			a {
@@ -146,6 +145,11 @@ footer#bottom {
 		}
 	}
 }
+
+
+////////////
+// HEADER //
+////////////
 
 header {
 	.row;
@@ -209,6 +213,20 @@ header {
 		}
 	}
 }
+@media (max-width: 900px) {
+	header section#hero {
+		width: @12g;
+	}
+	header aside#example {
+		width: @12g;
+		padding-top: 0;
+	}
+}
+
+
+////////////
+// QUOTES //
+////////////
 
 aside#quotes {
 	margin: 2em 0 0 0;
@@ -247,13 +265,36 @@ aside#quotes {
 		}
 	}
 }
+@media (max-width: 900px) {
+	aside#quotes div section blockquote {
+		width: @6g;
+		
+		&.last {
+			display: none;
+		}
+	}
+}
+@media (max-width: 600px) {
+	aside#quotes div section blockquote {
+		width: @12g;
+		
+		&.second {
+			display: none;
+		}
+	}
+}
+
+
+///////////
+// USAGE //
+///////////
 
 article#usage {
 	.row;
 	
 	section.usage {
 		.column;
-		width: @9g;
+		width: @12g;
 		
 		h2 {
 			font-size: 2.75em;
@@ -272,10 +313,6 @@ article#usage {
 			margin-left: 2em;
 			font-size: 0.9em;
 		}
-	}
-	aside.advert {
-		.column;
-		width: @3g;
 	}
 }
 
