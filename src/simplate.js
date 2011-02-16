@@ -29,8 +29,7 @@ var SIMPLATE = (function(simplate) {
 			var children = container.getElementsByTagName('*');
 
 			for (var i = 0; i < children.length; i++) {
-				alert((children[i].hasAttribute != undefined && children[i].hasAttribute('data-template')))
-				if (children[i].hasAttribute != undefined && children[i].hasAttribute('data-template') && (this.nested || !utils.isNested(children[i]))) {
+				if ( children[i].getAttribute('data-template') != null && (this.nested || !utils.isNested(children[i]))) {
 					var element = children[i].cloneNode(true);
 
 					// Remapping container element in case template is deep in container
@@ -91,12 +90,12 @@ var SIMPLATE = (function(simplate) {
 						template.innerHTML = utils.replaceVariable(item, template.innerHTML);
 
 						// Template class attribute
-						if (template.hasAttribute('class')) {
+						if (template.getAttribute('class') != null) {
 							template.className = utils.replaceVariable(item, template.className);
 						}
 
 						// Template id
-						if (template.hasAttribute('id')) {
+						if (template.getAttribute('id') != null) {
 							template.id = utils.replaceVariable(item, template.id);
 						}
 
@@ -187,7 +186,7 @@ var SIMPLATE = (function(simplate) {
 		clearContainer : function (el) {
 			if (el != null && el.childNodes != undefined) {
 				for (var i = el.childNodes.length; i >= 0; i--) {
-					if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
+					if (el.childNodes[i] != null && el.childNodes[i].getAttribute != undefined && el.childNodes[i].getAttribute('data-template') != null) {
 						el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
 					}
 				}
@@ -197,7 +196,7 @@ var SIMPLATE = (function(simplate) {
 		isNested : function(el) {
 			var p = el.parentNode;
 			while (p != null) {
-				if (p.hasAttribute != undefined && p.hasAttribute('data-template')) {
+				if (p.getAttribute != undefined && p.getAttribute('data-template') != null) {
 					return true;
 				}
 				p = p.parentNode;
