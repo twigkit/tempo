@@ -184,7 +184,9 @@ var SIMPLATE = (function(simplate) {
 		},
 
 		clearContainer : function (el) {
-			if (el != null) el.innerHTML = '';
+			if (el != null && el.innerHTML != undefined) {
+				el.innerHTML = '';
+			}
 //			if (el != null && el.childNodes != undefined) {
 //				for (var i = el.childNodes.length; i >= 0; i--) {
 //					if (el.childNodes[i] != null && el.childNodes[i].getAttribute != undefined && el.childNodes[i].getAttribute('data-template') != null) {
