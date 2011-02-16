@@ -29,7 +29,7 @@ var SIMPLATE = (function(simplate) {
 			var children = container.getElementsByTagName('*');
 
 			for (var i = 0; i < children.length; i++) {
-				alert(children[i].hasAttribute('data-template'))
+				alert((children[i].hasAttribute != undefined && children[i].hasAttribute('data-template')))
 				if (children[i].hasAttribute != undefined && children[i].hasAttribute('data-template') && (this.nested || !utils.isNested(children[i]))) {
 					var element = children[i].cloneNode(true);
 
