@@ -201,6 +201,7 @@ var SIMPLATE = (function(simplate) {
 	utils.startsWith.displayName = 'startsWith';
 	utils.replaceVariable.displayName = 'replaceVariable';
 	utils.clearContainer.displayName = 'clearContainer';
+	utils.isNested.displayName = 'isNested';
 
 	return simplate;
 
