@@ -19,7 +19,7 @@ var SIMPLATE = (function(simplate) {
 		this.defaultTemplate = null;
 		this.namedTemplates = {};
 		this.nested = nested != undefined ? nested : false;
-		
+
 		return this;
 	}
 
@@ -27,7 +27,7 @@ var SIMPLATE = (function(simplate) {
 		parse : function(container) {
 
 			var children = container.getElementsByTagName('*');
-			
+
 			for (var i = 0; i < children.length; i++) {
 				if (children[i].hasAttribute != undefined && children[i].hasAttribute('data-template') && (this.nested || !utils.isNested(children[i]))) {
 					var element = children[i].cloneNode(true);
@@ -181,12 +181,12 @@ var SIMPLATE = (function(simplate) {
 
 		clearContainer : function (el) {
 			if (el != null && el.childNodes != undefined) {
-			for (var i = el.childNodes.length; i >= 0; i--) {
-				if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
-					el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
+				for (var i = el.childNodes.length; i >= 0; i--) {
+					if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
+						el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
+					}
 				}
 			}
-		}
 		},
 
 		isNested : function(el) {
