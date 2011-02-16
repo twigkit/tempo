@@ -145,9 +145,8 @@ var SIMPLATE = (function(simplate) {
 
 			// Nested templates
 
-			'<(.*?) data-template="(.*?)".*?>[\\s\\S]*?</\\1>' : function(renderer) {
-				return function(match, tag, member) {
-					alert(match)
+			'data-template="(.*?)"' : function(renderer) {
+				return function(match, member) {
 					if (renderer.item[member] != undefined) {
 						var t = new Templates(true);
 						t.parse(renderer.template);
