@@ -77,28 +77,30 @@ var SIMPLATE = (function(simplate) {
 			for (var i = 0; i < data.length; i++) {
 				var renderItem = function(renderer, item) {
 					var template = renderer.templateFor(item);
-					renderer.template = template;
-					renderer.item = item;
+					if (template != null) {
+						renderer.template = template;
+						renderer.item = item;
 
-					// Functions
-					for (var regex in renderer.functions) {
-						template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'g'), renderer.functions[regex](renderer));
+						// Functions
+						for (var regex in renderer.functions) {
+							template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'g'), renderer.functions[regex](renderer));
+						}
+
+						// Content
+						template.innerHTML = utils.replaceVariable(item, template.innerHTML);
+
+						// Template class attribute
+						if (template.hasAttribute('class')) {
+							template.className = utils.replaceVariable(item, template.className);
+						}
+
+						// Template id
+						if (template.hasAttribute('id')) {
+							template.id = utils.replaceVariable(item, template.id);
+						}
+
+						renderer.container.appendChild(template);
 					}
-
-					// Content
-					template.innerHTML = utils.replaceVariable(item, template.innerHTML);
-
-					// Template class attribute
-					if (template.hasAttribute('class')) {
-						template.className = utils.replaceVariable(item, template.className);
-					}
-
-					// Template id
-					if (template.hasAttribute('id')) {
-						template.id = utils.replaceVariable(item, template.id);
-					}
-
-					renderer.container.appendChild(template);
 				}(this, data[i]);
 			}
 
@@ -111,7 +113,9 @@ var SIMPLATE = (function(simplate) {
 					return this.templates.namedTemplates[templateName].cloneNode(true);
 				}
 			}
-			return this.templates.defaultTemplate.cloneNode(true);
+			if (this.templates.defaultTemplate != null) {
+				return this.templates.defaultTemplate.cloneNode(true);
+			}
 		},
 
 		functions : {
