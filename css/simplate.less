@@ -1,3 +1,38 @@
+/* ========== */
+/* = Mixins = */
+/* ========== */
+
+.rounded-corners (@radius: 6px) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
+.inner-shadow (@x:0, @y:1px, @feather:1px, @color:#fff) {
+	box-shadow: inset @x @y @feather @color;
+	-moz-box-shadow: inset @x @y @feather @color;
+	-webkit-box-shadow: inset @x @y @feather @color;
+}
+.drop-shadow (@x:0, @y:1px, @feather:1px, @color:#fff) {
+	box-shadow: @x @y @feather @color;
+	-moz-box-shadow: @x @y @feather @color;
+	-webkit-box-shadow: @x @y @feather @color;
+}
+.gradient(@from: #ffffff, @to: #000000) {
+	background: ((@from + @to) / 2);
+	background: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
+	background: -moz-linear-gradient(@from, @to);
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @from, @to));
+	-ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @from, @to);
+	zoom: 1;
+}
+.opacity(@opacity: 100) {
+	opacity: @opacity;
+	filter:alpha%("(opacity = %d)",@opacity);
+}
+
+@yellow: #FB3;
+
+
 ///////////
 // RESET //
 ///////////
@@ -17,7 +52,24 @@ body {
 }
 h1, h2, h3 {
 	font-family: Georgia;
-	margin: 1em 0 0.5em 0;
+	margin: 1.5em 0 0.5em 0;
+}
+
+
+//////////
+// CODE //
+//////////
+
+pre {
+	font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+	background-color: #e5e5e5;
+	padding: 1em;
+	margin-bottom: 1.5em;
+	
+	em {
+		font-style: normal;
+		font-weight: bold;
+	}
 }
 
 
@@ -67,56 +119,165 @@ h1, h2, h3 {
 // LAYOUT //
 ////////////
 
-nav#top {
+nav#top,
+footer#bottom {
 	background-color: black;
-	margin-bottom: 2em;
+	color: #fff;
+	
+	&#top {
+		margin-bottom: 2em;
+	}
+	&#bottom {
+		margin-top: 2em;
+		padding: 2em 0;
+	}
+	
+	section {
+		.row;
+		
+		p {
+			.column;
+			width: @6g;
+			line-height: 2em;
+			
+			a {
+				color: white;
+			}
+		}
+	}
 }
 
 header {
 	.row;
-}
-section#hero {
-	.column;
-	width: @6g;
+
+	section#hero {
+		.column;
+		width: @6g;
 	
-	h1 {
-		margin: 1em 0 0.5em 0;
-		font-size: 4em;
-	}
-	p {
-		font-family: Georgia;
-		font-size: 1.5em;
-	}
-	nav#actions ul {
-		overflow: hidden;
-		margin-bottom: 1.5em;
+		h1 {
+			margin: 1em 0 0.5em 0;
+			font-size: 4em;
+		}
+		p {
+			font-family: Georgia;
+			font-size: 1.5em;
+		}
+		nav#actions ul {
+			overflow: hidden;
+			margin-bottom: 1.5em;
 		
-		li {
-			list-style: none outside none;
-			float: left;
-			margin-right: 1em;
+			li {
+				list-style: none outside none;
+				float: left;
+				margin-right: 0.5em;
+				
+				a {
+					display: block;
+					padding: 1em;
+				}
+			
+				&.download a {
+					background-color: blue;
+					color: white;
+					
+					&:hover {
+						background-color: darkblue;
+					}
+				}
+				a:hover {
+					background-color: #e5e5e5;
+				}
+			}
+		}
+		ul#features {
+			li {
+				list-style: circle outside none;
+				margin: 0.75em 0 0.75em 2em;
+				padding: 0 0 0 0.5em;
+			}
 		}
 	}
-	ul#features {
-		li {
-			list-style: circle outside none;
-			margin: 0.75em 0 0.75em 2em;
-			padding: 0 0 0 0.5em;
-		}
-	}
-}
-aside#example {
-	.column;
-	width: @6g;
+	aside#example {
+		.column;
+		width: @6g;
 
-	padding-top: 3.5em;
+		padding-top: 2.5em;
 	
-	h3 {
-
+		h3 {
+			font-size: 1.5em;
+			font-weight: normal;
+		}
 	}
 }
 
+aside#quotes {
+	margin: 2em 0 0 0;
+	padding: 0.5em 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	
+	div {
+		background-color: #f2f2f2;
+		
+		section {
+			.row;
+			padding: 2em 0;
+		
+			blockquote {
+				.column;
+				width: @4g;
+				text-align: center;
+				font-family: Georgia;
+				font-size: 1.5em;
+				color: #666;
+			
+				p {
+					margin: 0;
+				
+					span {
+						margin-top: 0.5em;
+						font-size: 0.75em;
+						font-family: Helvetica;
+						font-weight: 300;
+						display: block;
+						color: #999;
+					}
+				}
+			}
+		}
+	}
+}
 
+article#usage {
+	.row;
+	
+	section.usage {
+		.column;
+		width: @9g;
+		
+		h2 {
+			font-size: 2.75em;
+			font-weight: normal;
+		}
+		h3 {
+			font-size: 1.5em;
+			font-weight: normal;
+			border-bottom: 1px solid #ccc;
+		}
+		h5 {
+			margin-left: 2em;
+			font-size: 0.9em;
+		}
+		p.h5 {
+			margin-left: 2em;
+			font-size: 0.9em;
+		}
+	}
+	aside.advert {
+		.column;
+		width: @3g;
+	}
+}
 
 
 #everything-else {

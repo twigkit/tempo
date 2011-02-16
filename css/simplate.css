@@ -1,3 +1,6 @@
+/* ========== */
+/* = Mixins = */
+/* ========== */
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +24,17 @@ body {
 }
 h1, h2, h3 {
   font-family: Georgia;
-  margin: 1em 0 0.5em 0;
+  margin: 1.5em 0 0.5em 0;
+}
+pre {
+  font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+  background-color: #e5e5e5;
+  padding: 1em;
+  margin-bottom: 1.5em;
+}
+pre em {
+  font-style: normal;
+  font-weight: bold;
 }
 .column {
   margin: 0 1.04%;
@@ -50,9 +63,34 @@ h1, h2, h3 {
   width: auto;
   display: inline-block;
 }
-nav#top {
+nav#top, footer#bottom {
   background-color: black;
+  color: #fff;
+}
+nav#top#top, footer#bottom#top {
   margin-bottom: 2em;
+}
+nav#top#bottom, footer#bottom#bottom {
+  margin-top: 2em;
+  padding: 2em 0;
+}
+nav#top section, footer#bottom section {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+nav#top section p, footer#bottom section p {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 47.917%;
+  line-height: 2em;
+}
+nav#top section p a, footer#bottom section p a {
+  color: white;
 }
 header {
   min-width: 960px;
@@ -61,42 +99,137 @@ header {
   overflow-x: auto;
   overflow-y: visible;
 }
-section#hero {
+header section#hero {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
   display: inline;
   width: 47.917%;
 }
-section#hero h1 {
+header section#hero h1 {
   margin: 1em 0 0.5em 0;
   font-size: 4em;
 }
-section#hero p {
+header section#hero p {
   font-family: Georgia;
   font-size: 1.5em;
 }
-section#hero nav#actions ul {
+header section#hero nav#actions ul {
   overflow: hidden;
   margin-bottom: 1.5em;
 }
-section#hero nav#actions ul li {
+header section#hero nav#actions ul li {
   list-style: none outside none;
   float: left;
-  margin-right: 1em;
+  margin-right: 0.5em;
 }
-section#hero ul#features li {
+header section#hero nav#actions ul li a {
+  display: block;
+  padding: 1em;
+}
+header section#hero nav#actions ul li.download a {
+  background-color: blue;
+  color: white;
+}
+header section#hero nav#actions ul li.download a:hover {
+  background-color: darkblue;
+}
+header section#hero nav#actions ul li a:hover {
+  background-color: #e5e5e5;
+}
+header section#hero ul#features li {
   list-style: circle outside none;
   margin: 0.75em 0 0.75em 2em;
   padding: 0 0 0 0.5em;
 }
-aside#example {
+header aside#example {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
   display: inline;
   width: 47.917%;
-  padding-top: 3.5em;
+  padding-top: 2.5em;
+}
+header aside#example h3 {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+aside#quotes {
+  margin: 2em 0 0 0;
+  padding: 0.5em 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+aside#quotes div {
+  background-color: #f2f2f2;
+}
+aside#quotes div section {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 2em 0;
+}
+aside#quotes div section blockquote {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 31.25%;
+  text-align: center;
+  font-family: Georgia;
+  font-size: 1.5em;
+  color: #666;
+}
+aside#quotes div section blockquote p {
+  margin: 0;
+}
+aside#quotes div section blockquote p span {
+  margin-top: 0.5em;
+  font-size: 0.75em;
+  font-family: Helvetica;
+  font-weight: 300;
+  display: block;
+  color: #999;
+}
+article#usage {
+  min-width: 960px;
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+article#usage section.usage {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 72.73%;
+}
+article#usage section.usage h2 {
+  font-size: 2.75em;
+  font-weight: normal;
+}
+article#usage section.usage h3 {
+  font-size: 1.5em;
+  font-weight: normal;
+  border-bottom: 1px solid #ccc;
+}
+article#usage section.usage h5 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+article#usage section.usage p.h5 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+article#usage aside.advert {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 22.9%;
 }
 #everything-else {
   display: none;
