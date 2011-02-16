@@ -149,7 +149,7 @@ var SIMPLATE = (function(simplate) {
 
 						var r = new Renderer(t);
 						r.render(renderer.item[member]);
-						console.log(r.container.innerHTML)
+
 						return r.container.innerHTML;
 					}
 
@@ -180,8 +180,6 @@ var SIMPLATE = (function(simplate) {
 		},
 
 		clearContainer : function (el) {
-//			el.innerHTML = '';
-			console.log(el)
 			for (var i = el.childNodes.length; i >= 0; i--) {
 				if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
 					el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
