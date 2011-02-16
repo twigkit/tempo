@@ -29,7 +29,7 @@ var SIMPLATE = (function(simplate) {
 			var children = container.getElementsByTagName('*');
 			
 			for (var i = 0; i < children.length; i++) {
-				if (children[i].hasAttribute('data-template') && (this.nested || !utils.isNested(children[i]))) {
+				if (children[i].hasAttribute != undefined && children[i].hasAttribute('data-template') && (this.nested || !utils.isNested(children[i]))) {
 					var element = children[i].cloneNode(true);
 
 					// Remapping container element in case template is deep in container
