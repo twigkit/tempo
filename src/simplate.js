@@ -78,16 +78,16 @@ var SIMPLATE = (function(simplate) {
                     var renderItem = function(renderer, item) {
                         var template = renderer.templateFor(item);
                         if (template != null) {
-                            renderer.template = template;
+                            renderer.template = renderer.container.appendChild(template);;
                             renderer.item = item;
 
                             var test = template.innerHTML.match(/data-template="(.*?)"/);
                             if (test != null) {
                                 var t = new Templates(true);
-                                t.parse(renderer.template);
-
-                                var r = new Renderer(t);
-                                r.render(renderer.item[test[1]]);
+								t.parse(renderer.template);
+                                    
+								var r = new Renderer(t);
+								r.render(renderer.item[test[1]]);
                             }
 
                             // Functions
@@ -108,7 +108,7 @@ var SIMPLATE = (function(simplate) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
 
-                            renderer.container.appendChild(template);
+                            
                         }
                     } (this, data[i]);
                 }
