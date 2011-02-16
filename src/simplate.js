@@ -180,11 +180,13 @@ var SIMPLATE = (function(simplate) {
 		},
 
 		clearContainer : function (el) {
+			if (el != null && el.childNodes != undefined) {
 			for (var i = el.childNodes.length; i >= 0; i--) {
 				if (el.childNodes[i] != undefined && el.childNodes[i].hasAttribute != undefined && el.childNodes[i].hasAttribute('data-template')) {
 					el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
 				}
 			}
+		}
 		},
 
 		isNested : function(el) {
