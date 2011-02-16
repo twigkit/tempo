@@ -78,7 +78,7 @@ var SIMPLATE = (function(simplate) {
                     var renderItem = function(renderer, item) {
                         var template = renderer.templateFor(item);
                         if (template != null) {
-                            renderer.template = renderer.container.appendChild(template);;
+                            renderer.template = template;
                             renderer.item = item;
 
                             var test = template.innerHTML.match(/data-template="(.*?)"/);
@@ -108,7 +108,7 @@ var SIMPLATE = (function(simplate) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
 
-                            
+                            renderer.container.appendChild(template);
                         }
                     } (this, data[i]);
                 }
