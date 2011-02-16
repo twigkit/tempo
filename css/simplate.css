@@ -26,15 +26,18 @@ h1, h2, h3 {
   font-family: Georgia;
   margin: 1.5em 0 0.5em 0;
 }
-pre {
-  font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+pre, .example {
   background-color: #e5e5e5;
   padding: 1em;
   margin-bottom: 1.5em;
+  overflow-x: auto;
 }
-pre em {
+pre em, .example em {
   font-style: normal;
   font-weight: bold;
+}
+pre {
+  font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
 }
 .column {
   margin: 0 1.04%;
@@ -66,7 +69,7 @@ nav#top, footer#bottom {
   color: #fff;
 }
 nav#top#top, footer#bottom#top {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 nav#top#bottom, footer#bottom#bottom {
   margin-top: 2em;

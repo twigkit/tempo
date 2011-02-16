@@ -60,16 +60,20 @@ h1, h2, h3 {
 // CODE //
 //////////
 
-pre {
-	font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+pre,
+.example {
 	background-color: #e5e5e5;
 	padding: 1em;
 	margin-bottom: 1.5em;
+	overflow-x: auto;
 	
 	em {
 		font-style: normal;
 		font-weight: bold;
 	}
+}
+pre {
+	font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
 }
 
 
@@ -124,7 +128,7 @@ footer#bottom {
 	color: #fff;
 	
 	&#top {
-		margin-bottom: 2em;
+		margin-bottom: 1em;
 	}
 	&#bottom {
 		margin-top: 2em;

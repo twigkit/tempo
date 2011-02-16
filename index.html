@@ -5,12 +5,33 @@
 	<title>Simplate</title>
 	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-	<script type="text/javascript" src="../src/simplate.js"></script>
+	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
 	<style>
 		li.brother.Groucho { color: red; }
 		li#Gummo {text-decoration: line-through;}
-		
 		a.from { display: block; font-size: 1.1em; font-weight: bold;}
+		
+		ol#tweets li {
+			overflow: hidden;
+			list-style: none outside none;
+		}
+		ol#tweets li img {
+			float: left;
+			margin-right: 10px;
+		}
+		ol#tweets li h3 {
+			margin: 0;
+			font-size: 0.9em;
+			font-family: Helvetica;
+			font-weight: bold;
+		}
+		ol#tweets li p {
+			font-size: 0.9em;
+			color: #666;
+		}
+		ol#tweets li:last-child p {
+			margin-bottom: 0;
+		}
 	</style>
 	<script>
 		window.onload = function() {
@@ -32,8 +53,8 @@
 			SIMPLATE.prepare('complex-marx-brothers').render(data);
 			
 			// jQuery example
-			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-			$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&rpp=5&callback=?", function(data) {
+			var twitter = SIMPLATE.prepare('tweets');
+			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=3&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		}
@@ -68,31 +89,37 @@
 			</ul>
 		</section>
 		<aside id="example">
-			<h3><span>1.</span> Compose the data template in HTML</h3>
+			<h3><span>1.</span> Include the Simplate script</h3>
+<pre>
+&lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+</pre>
+			<h3><span>2.</span> Compose the data template in HTML</h3>
 <pre>
 &lt;ol id=&quot;tweets&quot;&gt;
-	&lt;li <em>data-template=&quot;results&quot;</em>&gt;
+	&lt;li <em>data-template</em>&gt;
 		&lt;img src=&quot;<em>{{profile_image_url}}</em>&quot; /&gt;
-		&lt;h3&quot;&gt;<em>{{from_user}}</em>&lt;/h3&gt;
+		&lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
 		&lt;p&gt;<em>{{text}}</em>&lt;/p&gt;
 	&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
-
-			<h3><span>2.</span> Reference the Simplate script</h3>
-<pre>
-&lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-</pre>
-
 			<h3><span>3.</span> Pass in the template ID and the JSON data source</h3>
 <pre>
 SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );
 </pre>
 
 			<h3><span>4.</span> Booyah!</h3>
-<pre>
-Lorem ipsum
-</pre>
+
+			<div class="example">
+				<ol id="tweets">
+					<li data-template>
+						<img src="{{profile_image_url}}" />
+						<h3>{{from_user}}</h3>
+						<p>{{text}}</p>
+					</li>
+				</ol>
+			</div>
+
 		</aside>
 	</header>
 
