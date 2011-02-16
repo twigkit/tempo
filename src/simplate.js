@@ -81,13 +81,13 @@ var SIMPLATE = (function(simplate) {
                             renderer.template = template;
                             renderer.item = item;
 
-                            var test = template.innerHTML.match(/data-template="(.*?)"/);
-                            if (test != null) {
+                            var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
+                            if (nestedDeclaration != null) {
                                 var t = new Templates(true);
 								t.parse(renderer.template);
                                     
 								var r = new Renderer(t);
-								r.render(renderer.item[test[1]]);
+								r.render(renderer.item[nestedDeclaration[1]]);
                             }
 
                             // Functions
@@ -107,7 +107,7 @@ var SIMPLATE = (function(simplate) {
                             if (template.getAttribute('id') != null) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
-
+							
                             renderer.container.appendChild(template);
                         }
                     } (this, data[i]);
