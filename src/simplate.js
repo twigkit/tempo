@@ -83,7 +83,7 @@ var SIMPLATE = (function(simplate) {
 
 						// Functions
 						for (var regex in renderer.functions) {
-							template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'g'), renderer.functions[regex](renderer));
+							template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
 						}
 
 						// Content
@@ -131,7 +131,7 @@ var SIMPLATE = (function(simplate) {
 					}
 
 					condition = condition.replace(/&amp;/g, '&');
-					condition = condition.replace(new RegExp(member_regex, 'g'), function(match) {
+					condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) {
 						return 'renderer.item.' + match;
 					});
 
@@ -145,8 +145,8 @@ var SIMPLATE = (function(simplate) {
 
 			// Nested templates
 
-			'data-template="(.*?)"' : function(renderer) {
-				return function(match, member) {
+			'<(.*?) data-template="(.*?)".*?>[\\s\\S]*?</\\1>' : function(renderer) {
+				return function(match, tag, member) {
 					if (renderer.item[member] != undefined) {
 						var t = new Templates(true);
 						t.parse(renderer.template);
