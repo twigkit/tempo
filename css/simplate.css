@@ -139,7 +139,7 @@ header section#hero {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 47.91%;
+  width: 47.85%;
 }
 header section#hero h1 {
   margin: 1em 0 0.5em 0;
@@ -165,7 +165,7 @@ header aside#example {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 47.91%;
+  width: 47.85%;
   padding-top: 2.5em;
 }
 header aside#example h3 {
