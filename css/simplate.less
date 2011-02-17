@@ -35,16 +35,16 @@
 // GRID //
 //////////
 
-@1g: 6.25%;		//60
-@2g: 14.583%;	//140
-@3g: 22.900%;	//220
-@4g: 31.25%;	//300
-@5g: 41.667%;	//380
-@6g: 47.917%;	//460
-@7g: 56.25%;	//540
-@8g: 64.585%;	//620
-@9g: 72.730%;	//700
-@10g: 81.25%;	//780
+@1g:  08.333%;	//60
+@2g:  14.583%;	//140
+@3g:  22.916%;	//220
+@4g:  31.250%;	//300
+@5g:  39.583%;	//380
+@6g:  47.850%;	//460
+@7g:  56.250%;	//540
+@8g:  64.585%;	//620
+@9g:  72.730%;	//700
+@10g: 81.250%;	//780
 @11g: 89.583%;	//860
 @12g: 97.917%;	//940
 
@@ -88,6 +88,8 @@ nav, aside, header, article, section, footer { display: block; }
 
 body {
 	font-family: Helvetica, Arial sans-serif;
+	font-size: 1em;
+	-webkit-text-size-adjust: 200%;
 }
 h1, h2, h3 {
 	font-family: Georgia;
@@ -243,7 +245,16 @@ header {
 		}
 	}
 }
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
+	header section#hero {
+		width: @12g;
+	}
+	header aside#example {
+		width: @12g;
+		padding-top: 0;
+	}
+}
+@media screen and (max-device-width: 480px) {
 	header section#hero {
 		width: @12g;
 	}

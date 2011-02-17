@@ -3,11 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Simplate</title>
-	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
 	<!--[if lt IE 9]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	<style>
 		ol#tweets {
@@ -96,7 +96,7 @@
 	&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
-			<h3><span>4.</span> Booyah!</h3>
+			<h3><span>3.</span> Booyah!</h3>
 
 			<div class="example">
 				<ol id="tweets">
@@ -132,7 +132,7 @@
 				</ul>
 			</nav>
 
-			<a name="json"></a>
+			<a id="json"></a>
 			<h3>JSON</h3>
 			<p>Simplate takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
 <pre>
@@ -145,7 +145,7 @@ var data = [
 ];
 </pre>
 			
-			<a name="javascript"></a>
+			<a id="javascript"></a>
 			<h3>JavaScript</h3>
 			<h4>Include script</h4>
 			<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
@@ -170,7 +170,7 @@ SIMPLATE.prepare( <em>element</em> ).render( <em>data</em> );
 SIMPLATE.prepare('marx-brothers').render(data);
 </pre>
 
-			<a name="html"></a>
+			<a id="html"></a>
 			<h3>HTML</h3>
 			<h4>data-template</h4>
 			<p>Any tag with the <strong>data-template</strong> attribute will be flagged as a data template.</p>
@@ -184,7 +184,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 </pre>
 			<p>The above example would be rendered as:</p>
 			<div class="example">
-				<ol id="marx-brothers">
+				<ol id="marx-brothers1">
 					<li data-template="">Chico Marx</li>
 					<li data-template="">Harpo Marx</li>
 					<li data-template="">Groucho Marx</li>
@@ -204,7 +204,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 &lt;/li&gt;
 </pre>
 			<div class="example">
-				<ol id="marx-brothers">
+				<ol id="marx-brothers2">
 					<li>Chico Marx
 						<ul>
 							<li>Papa Romani</li>
@@ -235,7 +235,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 			<h4>Conditionals</h4>
 			<p>Simplate provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
-&lt;ul id="marx-brothers"&gt;
+&lt;ul id="marx-brothers3"&gt;
 	&lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
 	&lt;li <em>data-template</em> <em>data-if-actor</em>&gt;<em>{{name.first}}</em>, nicknamed '&lt;i&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/i&gt;' was born on <em>{{born}}</em>&lt;/li&gt;
 	
@@ -244,7 +244,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 &lt;/ul&gt;
 </pre>
 			<div class="example">
-				<ul id="marx-brothers">
+				<ul id="marx-brothers4">
 					<li>Leonard, nicknamed '<i>Chico Marx</i>' was born on March 21, 1887</li>
 					<li>Adolph, nicknamed '<i>Harpo Marx</i>' was born on November 23, 1888</li>
 					<li>Groucho (aka Julius Henry) was grumpy!</li>
@@ -253,7 +253,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 				</ul>
 			</div>
 
-			<a name="jquery"></a>
+			<a id="jquery"></a>
 			<h3>Using Simplate with jQuery</h3>
 			<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
 <pre>
