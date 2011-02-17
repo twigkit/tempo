@@ -30,57 +30,6 @@
 	filter:alpha%("(opacity = %d)",@opacity);
 }
 
-@yellow: #FB3;
-
-
-///////////
-// RESET //
-///////////
-
-* { margin: 0; padding: 0; }
-a img, form, fieldset { border: none; }
-p { margin-bottom: 20px; }
-nav, aside, header, article, section, footer { display: block; }
-
-
-//////////
-// TYPE //
-//////////
-
-body {
-	font-family: Helvetica, Arial sans-serif;
-}
-h1, h2, h3 {
-	font-family: Georgia;
-	margin: 1.5em 0 0.5em 0;
-}
-
-
-//////////
-// CODE //
-//////////
-
-pre,
-.example {
-	background-color: #e5e5e5;
-	padding: 1em;
-	margin-bottom: 1.5em;
-	overflow-x: auto;
-	
-	em {
-		font-style: normal;
-		font-weight: bold;
-	}
-	
-	ol,
-	ul {
-		margin-left: 1.5em;
-	}
-}
-pre {
-	font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
-}
-
 
 //////////
 // GRID //
@@ -123,6 +72,99 @@ pre {
 }
 
 
+///////////
+// RESET //
+///////////
+
+* { margin: 0; padding: 0; }
+a img, form, fieldset { border: none; }
+p { margin-bottom: 20px; }
+nav, aside, header, article, section, footer { display: block; }
+
+
+//////////
+// TYPE //
+//////////
+
+body {
+	font-family: Helvetica, Arial sans-serif;
+}
+h1, h2, h3 {
+	font-family: Georgia;
+	margin: 1.5em 0 0.5em 0;
+}
+
+
+//////////
+// CODE //
+//////////
+
+pre,
+.example {
+	background-color: #e5e5e5;
+	padding: 1em;
+	margin-bottom: 1.5em;
+	overflow-x: auto;
+	
+	em {
+		font-style: normal;
+		font-weight: bold;
+	}
+	span {
+		color: #999;
+	}
+	
+	ol,
+	ul {
+		margin-left: 1.5em;
+	}
+}
+pre {
+	font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+}
+
+
+/////////
+// NAV //
+/////////
+
+nav ul {
+	overflow: hidden;
+
+	li {
+		list-style: none outside none;
+		float: left;
+		margin-right: 0.5em;
+		
+		a {
+			display: block;
+			padding: 0.5em;
+			
+			&:hover {
+				background-color: #e5e5e5;
+			}
+			&:active {
+				background-color: #ccc;
+			}
+		}
+		
+		&.download {
+			a {
+				color: white;
+				background-color: blue;
+				
+				&:hover {
+					background-color: darkblue;
+				}
+				&:active {
+					background-color: black;
+				}
+			}
+		}
+	}
+}
+
+
 /////////
 // TOP //
 /////////
@@ -132,9 +174,6 @@ footer#bottom {
 	background-color: black;
 	color: #fff;
 	
-	&#top {
-		margin-bottom: 1em;
-	}
 	&#bottom {
 		margin-top: 2em;
 		padding: 2em 0;
@@ -176,29 +215,11 @@ header {
 			font-size: 1.5em;
 		}
 		nav#actions ul {
-			overflow: hidden;
 			margin-bottom: 1.5em;
 		
 			li {
-				list-style: none outside none;
-				float: left;
-				margin-right: 0.5em;
-				
 				a {
-					display: block;
 					padding: 1em;
-				}
-			
-				&.download a {
-					background-color: blue;
-					color: white;
-					
-					&:hover {
-						background-color: darkblue;
-					}
-				}
-				a:hover {
-					background-color: #e5e5e5;
 				}
 			}
 		}
@@ -248,32 +269,35 @@ aside#quotes {
 		
 		section {
 			.row;
-			padding: 2em 0;
+			padding: 2.5em 0;
 		
 			blockquote {
 				.column;
-				width: @4g;
+				width: @12g;
 				text-align: center;
 				font-family: Georgia;
-				font-size: 1.5em;
+				font-size: 1.75em;
 				color: #666;
 			
 				p {
 					margin: 0;
 				
-					span {
-						margin-top: 0.5em;
+					span, a {
 						font-size: 0.75em;
 						font-family: Helvetica;
 						font-weight: 300;
-						display: block;
 						color: #999;
+					}
+					span {
+						display: block;
+						margin-top: 0.5em;
 					}
 				}
 			}
 		}
 	}
 }
+/*
 @media (max-width: 900px) {
 	aside#quotes div section blockquote {
 		width: @6g;
@@ -292,6 +316,7 @@ aside#quotes {
 		}
 	}
 }
+*/
 
 
 ///////////
@@ -308,8 +333,14 @@ article#usage {
 		h2 {
 			font-size: 2.75em;
 			font-weight: normal;
+			float: left;
+		}
+		nav {
+			float: left;
+			margin: 4.9em 0 0 2em;
 		}
 		h3 {
+			clear: both;
 			font-size: 1.5em;
 			font-weight: normal;
 			border-bottom: 1px solid #ccc;
@@ -317,16 +348,32 @@ article#usage {
 		}
 		h5 {
 			margin-left: 2em;
+			margin-top: -1em;
 			font-size: 0.9em;
 		}
 		p.h5 {
 			margin-left: 2em;
+			margin-bottom: 2em;
 			font-size: 0.9em;
 		}
 	}
 }
 
 
-#everything-else {
-	display: none;
+//////////////
+//BOTTOM NAV//
+//////////////
+
+nav#actions2 {
+	.row;
+	text-align: center;
+
+	ul {
+		margin: 2em 0;
+		display: inline-block;
+		
+		li a {
+			padding: 1em;
+		}
+	}
 }

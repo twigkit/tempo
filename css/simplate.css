@@ -1,6 +1,31 @@
 /* ========== */
 /* = Mixins = */
 /* ========== */
+.column {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.full-column {
+  width: 102.25%;
+  margin: 0 -1.1%;
+}
+.row {
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+.nested-row {
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+  min-width: 0;
+  width: auto;
+  display: inline-block;
+}
 * {
   margin: 0;
   padding: 0;
@@ -36,6 +61,9 @@ pre em, .example em {
   font-style: normal;
   font-weight: bold;
 }
+pre span, .example span {
+  color: #999;
+}
 pre ol,
 .example ol,
 pre ul,
@@ -45,37 +73,37 @@ pre ul,
 pre {
   font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
 }
-.column {
-  margin: 0 1.04%;
+nav ul {
   overflow: hidden;
+}
+nav ul li {
+  list-style: none outside none;
   float: left;
-  display: inline;
+  margin-right: 0.5em;
 }
-.full-column {
-  width: 102.25%;
-  margin: 0 -1.1%;
+nav ul li a {
+  display: block;
+  padding: 0.5em;
 }
-.row {
-  width: 97.875%;
-  margin: 0 1.064%;
-  overflow-x: auto;
-  overflow-y: visible;
+nav ul li a:hover {
+  background-color: #e5e5e5;
 }
-.nested-row {
-  width: 97.875%;
-  margin: 0 1.064%;
-  overflow-x: auto;
-  overflow-y: visible;
-  min-width: 0;
-  width: auto;
-  display: inline-block;
+nav ul li a:active {
+  background-color: #ccc;
+}
+nav ul li.download a {
+  color: white;
+  background-color: blue;
+}
+nav ul li.download a:hover {
+  background-color: darkblue;
+}
+nav ul li.download a:active {
+  background-color: black;
 }
 nav#top, footer#bottom {
   background-color: black;
   color: #fff;
-}
-nav#top#top, footer#bottom#top {
-  margin-bottom: 1em;
 }
 nav#top#bottom, footer#bottom#bottom {
   margin-top: 2em;
@@ -120,27 +148,10 @@ header section#hero p {
   font-size: 1.5em;
 }
 header section#hero nav#actions ul {
-  overflow: hidden;
   margin-bottom: 1.5em;
 }
-header section#hero nav#actions ul li {
-  list-style: none outside none;
-  float: left;
-  margin-right: 0.5em;
-}
 header section#hero nav#actions ul li a {
-  display: block;
   padding: 1em;
-}
-header section#hero nav#actions ul li.download a {
-  background-color: blue;
-  color: white;
-}
-header section#hero nav#actions ul li.download a:hover {
-  background-color: darkblue;
-}
-header section#hero nav#actions ul li a:hover {
-  background-color: #e5e5e5;
 }
 header section#hero ul#features li {
   list-style: circle outside none;
@@ -182,46 +193,52 @@ aside#quotes div section {
   margin: 0 1.064%;
   overflow-x: auto;
   overflow-y: visible;
-  padding: 2em 0;
+  padding: 2.5em 0;
 }
 aside#quotes div section blockquote {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
   display: inline;
-  width: 31.25%;
+  width: 97.917%;
   text-align: center;
   font-family: Georgia;
-  font-size: 1.5em;
+  font-size: 1.75em;
   color: #666;
 }
 aside#quotes div section blockquote p {
   margin: 0;
 }
-aside#quotes div section blockquote p span {
-  margin-top: 0.5em;
+aside#quotes div section blockquote p span, aside#quotes div section blockquote p a {
   font-size: 0.75em;
   font-family: Helvetica;
   font-weight: 300;
-  display: block;
   color: #999;
 }
+aside#quotes div section blockquote p span {
+  display: block;
+  margin-top: 0.5em;
+}
+/*
 @media (max-width: 900px) {
-  aside#quotes div section blockquote {
-    width: 47.917%;
-  }
-  aside#quotes div section blockquote.last {
-    display: none;
-  }
+	aside#quotes div section blockquote {
+		width: @6g;
+		
+		&.last {
+			display: none;
+		}
+	}
 }
 @media (max-width: 600px) {
-  aside#quotes div section blockquote {
-    width: 97.917%;
-  }
-  aside#quotes div section blockquote.second {
-    display: none;
-  }
+	aside#quotes div section blockquote {
+		width: @12g;
+		
+		&.second {
+			display: none;
+		}
+	}
 }
+*/
 article#usage {
   width: 97.875%;
   margin: 0 1.064%;
@@ -238,8 +255,14 @@ article#usage section.usage {
 article#usage section.usage h2 {
   font-size: 2.75em;
   font-weight: normal;
+  float: left;
+}
+article#usage section.usage nav {
+  float: left;
+  margin: 4.9em 0 0 2em;
 }
 article#usage section.usage h3 {
+  clear: both;
   font-size: 1.5em;
   font-weight: normal;
   border-bottom: 1px solid #ccc;
@@ -247,12 +270,25 @@ article#usage section.usage h3 {
 }
 article#usage section.usage h5 {
   margin-left: 2em;
+  margin-top: -1em;
   font-size: 0.9em;
 }
 article#usage section.usage p.h5 {
   margin-left: 2em;
+  margin-bottom: 2em;
   font-size: 0.9em;
 }
-#everything-else {
-  display: none;
+nav#actions2 {
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+  text-align: center;
+}
+nav#actions2 ul {
+  margin: 2em 0;
+  display: inline-block;
+}
+nav#actions2 ul li a {
+  padding: 1em;
 }

@@ -39,7 +39,7 @@
 		window.onload = function() {
 			// jQuery example
 			var twitter = SIMPLATE.prepare('tweets');
-			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=3&callback=?", function(data) {
+			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=2&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		}
@@ -60,23 +60,31 @@
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="#">Download</a></li>
-					<li><a href="#">Demo</a></li>
-					<li><a href="#">GitHub</a></li>
+					<li><a href="https://github.com/twigkit/simplate">View on GitHub</a></li>
 					<li><a href="#">Google Code</a></li>
 				</ul>
 			</nav>
+			<h3>Why use Simplate?</h3>
+			<ul id="features">
+				<li>Clear separation of concerns: no HTML in your JavaScript files</li>
+				<li>It makes AJAX content easier to work with</li>
+				<li>It's as friendly as a bunny rabbit (which are quite friendly)</li>
+			</ul>
+			<h3>Key Features</h3>
 			<ul id="features">
 				<li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
 				<li>Itty-bitty footprint (2k), lightning-fast rendering (30k of JSON in 5 milliseconds)</li>
 				<li>Works with or without jQuery</li>
 				<li>Degrades gracefully if JavaScript is not enabled</li>
-				<li>Write HTML in HTML documents, not in JavaScript</li>
+				<li>Supports nested and conditional templates and maximum flexibility</li>
 			</ul>
 		</section>
 		<aside id="example">
 			<h3><span>1.</span> Include the Simplate script</h3>
 <pre>
 &lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+<span>&lt;script&gt;</span>SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );<span>&lt;/script&gt;</span>
 </pre>
 			<h3><span>2.</span> Compose the data template in HTML</h3>
 <pre>
@@ -88,11 +96,6 @@
 	&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
-			<h3><span>3.</span> Pass in the template ID and the JSON data source</h3>
-<pre>
-SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );
-</pre>
-
 			<h3><span>4.</span> Booyah!</h3>
 
 			<div class="example">
@@ -111,9 +114,7 @@ SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );
 	<aside id="quotes">
 		<div>
 			<section>
-				<blockquote class="first"><p>Simplate is clean code at its best. <span>Tyler Tate</span></p></blockquote>
-				<blockquote class="second"><p>Simplate is clean code at its best. <span>Tyler Tate</span></p></blockquote>
-				<blockquote class="last"><p>Simplate is clean code at its best. <span>Tyler Tate</span></p></blockquote>
+				<blockquote class="second"><p>Simple, clean, and powerful. The way it should be. <span>Tyler Tate, creator of <a href="http://1kbcssgrid.com/">1KB Grid</a></span></p></blockquote>
 			</section>
 		</div>
 	</aside>
@@ -122,14 +123,16 @@ SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );
 		<section class="usage">
 			<h2>Usage</h2>
 			
-			<nav style="display: none">
+			<nav>
 				<ul>
-					<li><a href="#">JavaScript</a></li>
-					<li><a href="#">HTML</a></li>
-					<li><a href="#">JSON</a></li>
+					<li><a href="#json">JSON</a></li>
+					<li><a href="#javascript">JavaScript</a></li>
+					<li><a href="#html">HTML</a></li>
+					<li><a href="#jquery">jQuery</a></li>
 				</ul>
 			</nav>
 
+			<a name="json"></a>
 			<h3>JSON</h3>
 			<p>Simplate takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
 <pre>
@@ -142,6 +145,7 @@ var data = [
 ];
 </pre>
 			
+			<a name="javascript"></a>
 			<h3>JavaScript</h3>
 			<h4>Include script</h4>
 			<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
@@ -149,16 +153,16 @@ var data = [
 &lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
 			<h4>SIMPLATE.prepare()</h4>
-			<p>To initialize Simplate, run the <strong>prepare()</strong> function as soon as possible (such as on document.ready). The prepare function will scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
+			<p>To initialize Simplate, run the <strong>prepare()</strong> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
 			<h5>element</h5>
-			<p class="h5">Tell Simplate the <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
+			<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 			
 			<h4>SIMPLATE.render()</h4>
 			<p>Once the JSON data is available, run the <strong>render()</strong> function to add the data to the page.</p>
 
 			<h5>data</h5>
-			<p class="h5">You'll also need to tell Simplate what JSON <strong>data</strong> you would like to be rendered with the data template. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
+			<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
 <pre>
 SIMPLATE.prepare( <em>element</em> ).render( <em>data</em> );
 </pre>
@@ -166,9 +170,10 @@ SIMPLATE.prepare( <em>element</em> ).render( <em>data</em> );
 SIMPLATE.prepare('marx-brothers').render(data);
 </pre>
 
+			<a name="html"></a>
 			<h3>HTML</h3>
 			<h4>data-template</h4>
-			<p>Any tag with a <strong>data-template</strong> attribute will be considered a data template.</p>
+			<p>Any tag with the <strong>data-template</strong> attribute will be flagged as a data template.</p>
 			
 			<h4>{{fields}}</h4>
 			<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.
@@ -189,7 +194,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 			</div>
 			
 			<h4>Nested data-templates</h4>
-			<p>Simplate even allows you to nest data templates within other data templates. 
+			<p>Data templates can even be nested within other data templates. 
 <pre>
 &lt;li <em>data-template</em>&gt;
     <em>{{nickname}}</em> <em>{{name.last}}</em>
@@ -248,24 +253,29 @@ SIMPLATE.prepare('marx-brothers').render(data);
 				</ul>
 			</div>
 
+			<a name="jquery"></a>
 			<h3>Using Simplate with jQuery</h3>
-			<p>The jQuery JavaScript library provides any easy method to retrieve JSON via an AJAX request.</p>
+			<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
 <pre>
-var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+var twitter = SIMPLATE.<em>prepare</em>('tweets');
 $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
-	twitter.render(data.results);
+	twitter.<em>render</em>(data.results);
 });
 </pre>
 		</section>
 	</article>
-	
-	<article id="exampels">
-		
-	</article>
+
+	<nav id="actions2">
+		<ul>
+			<li class="download"><a href="#">Download</a></li>
+			<li><a href="https://github.com/twigkit/simplate">View on GitHub</a></li>
+			<li><a href="#">Google Code</a></li>
+		</ul>
+	</nav>
 
 	<footer id="bottom">
 		<section>
-			<p>Brought to you by the friendly chaps over at <a href="http://twigkit.com/">TwigKit</a>.</p>
+			<p>Brought to you by the nice chaps over at <a href="http://twigkit.com/">TwigKit</a>.</p>
 		</section>
 	</footer>
 
