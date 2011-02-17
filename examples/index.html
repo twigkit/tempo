@@ -48,10 +48,10 @@
 					{'title':'A Kiss in the Dark'}
 				]}
 			];
-
+			console.profile();
 			// Simple template
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
-
+			console.profileEnd();
 			// Nested template
 			SIMPLATE.prepare('nested-marx-brothers').render(data);
 
@@ -279,9 +279,9 @@
 	Output
 </h4>
 <table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
-	
+
 	<thead>
-		<tr>
+	<tr>
 		<th>
 			Last Name
 		</th>
@@ -294,7 +294,7 @@
 		<th>
 			Grumpy
 		</th>
-		</tr>
+	</tr>
 	</thead>
 	<tbody>
 	<tr data-template="">
