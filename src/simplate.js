@@ -96,7 +96,7 @@ var SIMPLATE = (function(simplate) {
                             //                             }
 
                             // Content
-                            template.innerHTML = utils.replaceVariable(item, template.innerHTML);
+                            // template.innerHTML = utils.replaceVariable(item, template.innerHTML);
 
                             // Template class attribute
                             if (template.getAttribute('class') != null) {
