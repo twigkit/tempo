@@ -91,9 +91,9 @@ var SIMPLATE = (function(simplate) {
                             }
 
                             // Functions
-                            for (var regex in renderer.functions) {
-                                template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
-                            }
+                            // for (var regex in renderer.functions) {
+                            //                                 template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
+                            //                             }
 
                             // Content
                             template.innerHTML = utils.replaceVariable(item, template.innerHTML);
