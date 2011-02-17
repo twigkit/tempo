@@ -57,6 +57,17 @@ var SIMPLATE = (function(simplate) {
             }
 
             utils.clearContainer(this.container);
+        },
+
+		templateFor: function(item) {
+            for (var templateName in this.namedTemplates) {
+                if (eval('item.' + templateName)) {
+                    return this.namedTemplates[templateName].cloneNode(true);
+                }
+            }
+            if (this.defaultTemplate != null) {
+                return this.defaultTemplate.cloneNode(true);
+            }
         }
     }
 
@@ -76,7 +87,7 @@ var SIMPLATE = (function(simplate) {
             if (data != null) {
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item) {
-                        var template = renderer.templateFor(item);
+                        var template = renderer.templates.templateFor(item);
                         if (template != null) {
                             renderer.template = template;
                             renderer.item = item;
@@ -90,13 +101,16 @@ var SIMPLATE = (function(simplate) {
 								r.render(renderer.item[nestedDeclaration[1]]);
                             }
 
+							// Dealing with HTML as a String from now on (to be reviewed)
+							var html = template.innerHTML;
+
                             // Functions
                             for (var regex in renderer.functions) {
-								template.innerHTML = template.innerHTML.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
+								html = html.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
 							}
 
                             // Content
-                            // template.innerHTML = utils.replaceVariable(item, template.innerHTML);
+                            html = utils.replaceVariable(item, html);
 
                             // Template class attribute
                             if (template.getAttribute('class') != null) {
@@ -108,24 +122,21 @@ var SIMPLATE = (function(simplate) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
 							
-                            renderer.container.appendChild(template);
+							if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
+								var div = document.createElement('div');
+								div.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+								var rows = div.getElementsByTagName('tr');
+								renderer.container.appendChild(rows[0]);
+							} else {
+								template.innerHTML = html;
+								renderer.container.appendChild(template);
+							}
                         }
                     } (this, data[i]);
                 }
             }
 
             return this;
-        },
-
-        templateFor: function(item) {
-            for (var templateName in this.templates.namedTemplates) {
-                if (eval('item.' + templateName)) {
-                    return this.templates.namedTemplates[templateName].cloneNode(true);
-                }
-            }
-            if (this.templates.defaultTemplate != null) {
-                return this.templates.defaultTemplate.cloneNode(true);
-            }
         },
 
         functions: {
@@ -195,7 +206,11 @@ var SIMPLATE = (function(simplate) {
                 p = p.parentNode;
             }
             return false;
-        }
+        },
+
+		equalsIgnoreCase : function( str1, str2 ) {
+			return str1.toLowerCase() == str2.toLowerCase();
+		}
     }
     utils.startsWith.displayName = 'startsWith';
     utils.replaceVariable.displayName = 'replaceVariable';
