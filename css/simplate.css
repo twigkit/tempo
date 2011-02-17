@@ -179,6 +179,15 @@ header aside#example h3 {
     padding-top: 0;
   }
 }
+@media handheld {
+  header section#hero {
+    width: 97.917%;
+  }
+  header aside#example {
+    width: 97.917%;
+    padding-top: 0;
+  }
+}
 aside#quotes {
   margin: 2em 0 0 0;
   padding: 0.5em 0;
