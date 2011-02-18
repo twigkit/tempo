@@ -50,6 +50,7 @@
 			];
 			
 			// Simple template
+			console.profile('local examples');
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
 			
 			// Nested template
@@ -60,7 +61,7 @@
 
 			// Complex templates
 			SIMPLATE.prepare('complex-marx-brothers').render(data);
-
+			console.profileEnd();
 			// jQuery example
 			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
 			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
@@ -232,17 +233,16 @@
 <h4>
 	JavaScript
 </h4>
-		<pre>
-    SIMPLATE.prepare('complex-marx-brothers').render(data);
-</pre>
+	<pre>
+        SIMPLATE.prepare('complex-marx-brothers').render(data);
+	</pre>
 <h4>
 	HTML
 </h4>
-		<pre>
-    		&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
-
-				&lt;thead&gt;
-					&lt;tr&gt;
+	<pre>
+    	&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
+			&lt;thead&gt;
+				&lt;tr&gt;
 					&lt;th&gt;
 						Last Name
 					&lt;/th&gt;
@@ -255,15 +255,15 @@
 					&lt;th&gt;
 						Grumpy
 					&lt;/th&gt;
-					&lt;/tr&gt;
-				&lt;/thead&gt;
-				&lt;tbody&gt;
+				&lt;/tr&gt;
+			&lt;/thead&gt;
+			&lt;tbody&gt;
 				&lt;tr data-template=&quot;&quot;&gt;
 					&lt;td&gt;
 						{{name.last}}
 					&lt;/td&gt;
 					&lt;td&gt;
-						{{name.first}}
+						&lt;a href=&quot;#&quot; onclick=&quot;alert(&#x27;{{nickname}}&#x27;); return false;&quot;&gt;{{name.first}}&lt;/a&gt;
 					&lt;/td&gt;
 					&lt;td&gt;
 						{{born}}
@@ -272,45 +272,45 @@
 						{{if nickname == &#x27;Groucho&#x27; &amp;amp;&amp;amp; name.last == &#x27;Marx&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}
 					&lt;/td&gt;
 				&lt;/tr&gt;
-				&lt;/tbody&gt;
-			&lt;/table&gt;
-</pre>
+			&lt;/tbody&gt;
+		&lt;/table&gt;
+	</pre>
 <h4>
 	Output
 </h4>
-<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
 
+<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
 	<thead>
-	<tr>
-		<th>
-			Last Name
-		</th>
-		<th>
-			First Name
-		</th>
-		<th>
-			DOB
-		</th>
-		<th>
-			Grumpy
-		</th>
-	</tr>
+		<tr>
+			<th>
+				Last Name
+			</th>
+			<th>
+				First Name
+			</th>
+			<th>
+				DOB
+			</th>
+			<th>
+				Grumpy
+			</th>
+		</tr>
 	</thead>
 	<tbody>
-	<tr data-template="">
-		<td>
-			{{name.last}}
-		</td>
-		<td>
-			<a href="#" onclick="alert('{{nickname}}'); return false;">{{name.first}}</a>
-		</td>
-		<td>
-			{{born}}
-		</td>
-		<td>
-			{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}<span>X</span>{{endif}}
-		</td>
-	</tr>
+		<tr data-template="">
+			<td>
+				{{name.last}}
+			</td>
+			<td>
+				<a href="#" onclick="alert('{{nickname}}'); return false;">{{name.first}}</a>
+			</td>
+			<td>
+				{{born}}
+			</td>
+			<td>
+				{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}<span>X</span>{{endif}}
+			</td>
+		</tr>
 	</tbody>
 </table>
 
