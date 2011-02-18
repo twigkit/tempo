@@ -86,12 +86,12 @@ var Tempo = (function(tempo) {
     Renderer.prototype = {
         render: function(data) {
             utils.clearContainer(this.templates.container);
-
             if (data) {
                 // If object then wrapping in an array
                 if (utils.typeOf(data) == 'object') data = [data];
-
+                
                 var fragment = document.createDocumentFragment();
+                
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
