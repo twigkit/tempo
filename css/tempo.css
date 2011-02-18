@@ -1,6 +1,3 @@
-/* ========== */
-/* = Mixins = */
-/* ========== */
 .column {
   margin: 0 1.04%;
   overflow: hidden;
@@ -53,6 +50,9 @@ h1, h2, h3 {
   font-family: Georgia;
   margin: 1.5em 0 0.5em 0;
 }
+pre, code {
+  font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
+}
 pre, .example {
   background-color: #e5e5e5;
   padding: 1em;
@@ -71,9 +71,6 @@ pre ol,
 pre ul,
 .example ul {
   margin-left: 1.5em;
-}
-pre {
-  font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace;
 }
 nav ul {
   overflow: hidden;
@@ -142,7 +139,7 @@ header section#hero {
   width: 47.85%;
 }
 header section#hero h1 {
-  margin: 1em 0 0.5em 0;
+  margin: 1em 0 0.25em 0;
   font-size: 4em;
 }
 header section#hero p {
@@ -150,7 +147,7 @@ header section#hero p {
   font-size: 1.5em;
 }
 header section#hero nav#actions ul {
-  margin-bottom: 1.5em;
+  margin: 2em 0;
 }
 header section#hero nav#actions ul li a {
   padding: 1em;
