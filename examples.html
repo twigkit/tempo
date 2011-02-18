@@ -7,7 +7,6 @@
 	</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
-
 	<style type="text/css">
 		li.brother.Groucho {
 			color: red;
@@ -231,14 +230,14 @@
 <h4>
 	JavaScript
 </h4>
-		<pre>
-    SIMPLATE.prepare('complex-marx-brothers').render(data);
-</pre>
+	<pre>
+        SIMPLATE.prepare('complex-marx-brothers').render(data);
+	</pre>
 <h4>
 	HTML
 </h4>
 	<pre>
-		&lt;table id=&quot;complex-marx-brothers&quot;&gt;
+    	&lt;table id=&quot;complex-marx-brothers&quot; border=&quot;0&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;
 			&lt;thead&gt;
 				&lt;tr&gt;
 					&lt;th&gt;
@@ -261,7 +260,7 @@
 						{{name.last}}
 					&lt;/td&gt;
 					&lt;td&gt;
-						{{name.first}}
+						&lt;a href=&quot;#&quot; onclick=&quot;alert(&#x27;{{nickname}}&#x27;); return false;&quot;&gt;{{name.first}}&lt;/a&gt;
 					&lt;/td&gt;
 					&lt;td&gt;
 						{{born}}
@@ -276,38 +275,39 @@
 <h4>
 	Output
 </h4>
-<table id="complex-marx-brothers">
+
+<table id="complex-marx-brothers" border="0" cellspacing="2" cellpadding="2">
 	<thead>
-	<tr>
-		<th>
-			Last Name
-		</th>
-		<th>
-			First Name
-		</th>
-		<th>
-			DOB
-		</th>
-		<th>
-			Grumpy
-		</th>
-	</tr>
+		<tr>
+			<th>
+				Last Name
+			</th>
+			<th>
+				First Name
+			</th>
+			<th>
+				DOB
+			</th>
+			<th>
+				Grumpy
+			</th>
+		</tr>
 	</thead>
 	<tbody>
-	<tr data-template="">
-		<td>
-			{{name.last}}
-		</td>
-		<td>
-			{{name.first}}
-		</td>
-		<td>
-			{{born}}
-		</td>
-		<td>
-			{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}<span>X</span>{{endif}}
-		</td>
-	</tr>
+		<tr data-template="">
+			<td>
+				{{name.last}}
+			</td>
+			<td>
+				<a href="#" onclick="alert('{{nickname}}'); return false;">{{name.first}}</a>
+			</td>
+			<td>
+				{{born}}
+			</td>
+			<td>
+				{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}<span>X</span>{{endif}}
+			</td>
+		</tr>
 	</tbody>
 </table>
 
