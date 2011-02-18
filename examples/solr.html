@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>
+		Tempo | Solr
+	</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+	<script type="text/javascript" src="../src/tempo.js"></script>
+	<script type="text/javascript" src="../src/plugins/tempo.plugins.solr.js"></script>
+	<script type="text/javascript">
+
+		var solr, facetsTemplate;
+
+		$(document).ready(function() {
+			console.log(Tempo.solr)
+			solr = Tempo.solr.prepare('solr-response');
+			facetsTemplate = Tempo.prepare('solr-facets');
+			search('literature');
+		});
+
+		function search(q) {
+			$.ajax({
+				url: "http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1",
+				data: {'q': q},
+				dataType: 'jsonp',
+				jsonp: 'json.wrf',
+				success: function(data) {
+					solr.render(data.response);
+					facetsTemplate.render(facets(data.facet_counts.facet_fields));
+				}
+			});
+		}
+
+		function facets(facet_fields) {
+			var facets = [];
+
+			for (var field in facet_fields) {
+				var f = {'name' : field};
+
+				var facet = [];
+				var i = 0;
+				while (i < facet_fields[field].length) {
+					facet.push({'label': facet_fields[field][i++], 'count': facet_fields[field][i++]});
+				}
+				f['facet'] = facet;
+
+				facets.push(f);
+			}
+
+			return facets;
+		}
+	</script>
+</head>
+<body>
+<h1>
+	Tempo + Solr = True Love
+</h1>
+
+<form id="search" onsubmit="search($('#query').val()); return false;">
+	<input type="text" name="query" id="query">
+	<input type="submit" value="Search">
+</form>
+
+<div id="solr-response">
+	<div data-template style="display: none;">
+		Results found <span>{{numFound}}</span>
+
+		<ol>
+			<li data-template="docs">
+				<span>{{title}}</span> by <span style="font-weight: bold;">{{creator}}</span>
+			</li>
+		</ol>
+	</div>
+</div>
+
+<div id="solr-facets">
+	<div>
+		<ul>
+			<li data-template style="display: none;">
+				{{name}}
+				<ul>
+					<li data-template="facet">
+						{{label}} {{count}}
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
