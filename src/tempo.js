@@ -30,7 +30,7 @@ var Tempo = (function(tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== undefined && (this.nested || !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template') !== null && (this.nested || !utils.isNested(children[i]))) {
                     var element = children[i].cloneNode(true);
 
                     // Remapping container element in case template
@@ -87,14 +87,15 @@ var Tempo = (function(tempo) {
         render: function(data) {
             utils.clearContainer(this.templates.container);
 
-            var fragment = document.createDocumentFragment();
-
             if (data) {
+                // If object then wrapping in an array
+                if (utils.typeOf(data) == 'object') data = [data];
+
+                var fragment = document.createDocumentFragment();
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
                         if (template) {
-
                             var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
                             if (nestedDeclaration) {
                                 var t = new Templates(true);
@@ -221,6 +222,17 @@ var Tempo = (function(tempo) {
                 template.innerHTML = html;
                 return template;
             }
+        },
+
+        typeOf : function(obj) {
+            if (typeof(obj) == "object") {
+                if (obj === null) return "null";
+                if (obj.constructor == (new Array).constructor) return "array";
+                if (obj.constructor == (new Date).constructor) return "date";
+                if (obj.constructor == (new RegExp).constructor) return "regex";
+                return "object";
+            }
+            return typeof(obj);
         }
     };
 
