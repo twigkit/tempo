@@ -128,6 +128,7 @@
 					<li><a href="#json">JSON</a></li>
 					<li><a href="#javascript">JavaScript</a></li>
 					<li><a href="#html">HTML</a></li>
+					<li><a href="#css">CSS</a></li>
 					<li><a href="#jquery">jQuery</a></li>
 				</ul>
 			</nav>
@@ -153,13 +154,13 @@ var data = [
 &lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
 			<h4>Tempo.prepare()</h4>
-			<p>To initialize Tempo, run the <strong>prepare()</strong> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
+			<p>To initialize Tempo, run the <code>prepare()</code> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
 			<h5>element</h5>
 			<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 			
 			<h4>Tempo.render()</h4>
-			<p>Once the JSON data is available, run the <strong>render()</strong> function to add the data to the page.</p>
+			<p>Once the JSON data is available, run the <code>render()</code> function to add the data to the page.</p>
 
 			<h5>data</h5>
 			<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
@@ -173,7 +174,7 @@ Tempo.prepare('marx-brothers').render(data);
 			<a id="html"></a>
 			<h3>HTML</h3>
 			<h4>data-template</h4>
-			<p>Any tag with the <strong>data-template</strong> attribute will be flagged as a data template.</p>
+			<p>Any tag with the <code>data-template</code> attribute will be flagged as a data template.</p>
 			
 			<h4>{{fields}}</h4>
 			<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.
@@ -252,6 +253,15 @@ Tempo.prepare('marx-brothers').render(data);
 					<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
 				</ul>
 			</div>
+
+			<a id="css"></a>
+			<h3>CSS</h3>
+			<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered. If there is no inline rule (if, for instance, you defined <code>display: none</code> in an external stylesheet), Tempo will add <code>style="display: block;"</code> once the rendering has taken place.</p>
+<pre>
+ol#marx-brothers {
+	display: none;
+}
+</pre>
 
 			<a id="jquery"></a>
 			<h3>Using Tempo with jQuery</h3>
