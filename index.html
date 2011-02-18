@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tempo</title>
-	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="css/tempo.css" type="text/css" media="screen">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/src/tempo.js"></script>
 	<!--[if lt IE 9]>
@@ -60,7 +60,7 @@
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="#">Download</a></li>
-					<li><a href="https://github.com/twigkit/simplate">View on GitHub</a></li>
+					<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
 					<li><a href="#">Google Code</a></li>
 				</ul>
 			</nav>
@@ -82,9 +82,9 @@
 		<aside id="example">
 			<h3><span>1.</span> Include the Tempo script</h3>
 <pre>
-&lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 
-<span>&lt;script&gt;</span>SIMPLATE.<em>prepare</em>("tweets").<em>render</em>( data );<span>&lt;/script&gt;</span>
+<span>&lt;script&gt;</span>Tempo.<em>prepare</em>("tweets").<em>render</em>( data );<span>&lt;/script&gt;</span>
 </pre>
 			<h3><span>2.</span> Compose the data template in HTML</h3>
 <pre>
@@ -150,24 +150,24 @@ var data = [
 			<h4>Include script</h4>
 			<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
 <pre>
-&lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
-			<h4>SIMPLATE.prepare()</h4>
+			<h4>Tempo.prepare()</h4>
 			<p>To initialize Tempo, run the <strong>prepare()</strong> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
 			<h5>element</h5>
 			<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 			
-			<h4>SIMPLATE.render()</h4>
+			<h4>Tempo.render()</h4>
 			<p>Once the JSON data is available, run the <strong>render()</strong> function to add the data to the page.</p>
 
 			<h5>data</h5>
 			<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
 <pre>
-SIMPLATE.prepare( <em>element</em> ).render( <em>data</em> );
+Tempo.prepare( <em>element</em> ).render( <em>data</em> );
 </pre>
 <pre>
-SIMPLATE.prepare('marx-brothers').render(data);
+Tempo.prepare('marx-brothers').render(data);
 </pre>
 
 			<a id="html"></a>
@@ -257,7 +257,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 			<h3>Using Tempo with jQuery</h3>
 			<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
 <pre>
-var twitter = SIMPLATE.<em>prepare</em>('tweets');
+var twitter = Tempo.<em>prepare</em>('tweets');
 $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
 	twitter.<em>render</em>(data.results);
 });
@@ -268,7 +268,7 @@ $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=
 	<nav id="actions2">
 		<ul>
 			<li class="download"><a href="#">Download</a></li>
-			<li><a href="https://github.com/twigkit/simplate">View on GitHub</a></li>
+			<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
 			<li><a href="#">Google Code</a></li>
 		</ul>
 	</nav>
