@@ -125,15 +125,7 @@ var SIMPLATE = (function(simplate) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
 
-                            if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
-                                var div = document.createElement('div');
-                                div.innerHTML = '<table><tbody>' + html + '</tbody></table>';
-                                var rows = div.getElementsByTagName('tr');
-                                fragment.appendChild(rows[0]);
-                            } else {
-                                template.innerHTML = html;
-                                fragment.appendChild(template);
-                            }
+                            fragment.appendChild(utils.getElement(template, html));
                         }
                     }(this, data[i], fragment);
                 }
@@ -157,7 +149,9 @@ var SIMPLATE = (function(simplate) {
                     }
 
                     condition = condition.replace(/&amp;/g, '&');
-                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) { return 'item.' + match; });
+                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) {
+                        return 'item.' + match;
+                    });
 
                     if (eval(condition)) {
                         return content;
@@ -210,6 +204,17 @@ var SIMPLATE = (function(simplate) {
 
         equalsIgnoreCase: function(str1, str2) {
             return str1.toLowerCase() === str2.toLowerCase();
+        },
+
+        getElement : function(template, html) {
+            if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
+                var div = document.createElement('div');
+                div.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+                return div.lastChild.lastChild.lastChild;
+            } else {
+                template.innerHTML = html;
+                return template;
+            }
         }
     };
 
