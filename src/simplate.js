@@ -9,7 +9,7 @@ var SIMPLATE = (function(simplate) {
             container = document.getElementById(container);
         }
 
-        var templates = new Templates();
+        var templates = new Templates(false);
         templates.parse(container);
 
         return new Renderer(templates);
@@ -79,14 +79,13 @@ var SIMPLATE = (function(simplate) {
      */
     function Renderer(templates) {
         this.templates = templates;
-        this.container = templates.container;
 
         return this;
     }
 
     Renderer.prototype = {
         render: function(data) {
-            utils.clearContainer(this.container);
+            utils.clearContainer(this.templates.container);
 
             var fragment = document.createDocumentFragment();
 
@@ -95,16 +94,14 @@ var SIMPLATE = (function(simplate) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
                         if (template) {
-                            renderer.template = template;
-                            renderer.item = item;
 
                             var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
                             if (nestedDeclaration) {
                                 var t = new Templates(true);
-                                t.parse(renderer.template);
+                                t.parse(template);
 
                                 var r = new Renderer(t);
-                                r.render(renderer.item[nestedDeclaration[1]]);
+                                r.render(item[nestedDeclaration[1]]);
                             }
 
                             // Dealing with HTML as a String from now on (to be reviewed)
@@ -112,7 +109,7 @@ var SIMPLATE = (function(simplate) {
 
                             // Tags
                             for (var regex in renderer.tags) {
-                                html = html.replace(new RegExp(regex, 'gi'), renderer.tags[regex](renderer));
+                                html = html.replace(new RegExp(regex, 'gi'), renderer.tags[regex](renderer, item));
                             }
 
                             // Content
@@ -141,7 +138,7 @@ var SIMPLATE = (function(simplate) {
                     }(this, data[i], fragment);
                 }
 
-                this.container.appendChild(fragment);
+                this.templates.container.appendChild(fragment);
             }
 
             return this;
@@ -149,10 +146,10 @@ var SIMPLATE = (function(simplate) {
 
         tags: {
             // If tag
-            '\\{\\{if (.*?)\\}\\}(.*?)\\{\\{endif\\}\\}': function(renderer) {
+            '\\{\\{if (.*?)\\}\\}(.*?)\\{\\{endif\\}\\}': function(renderer, item) {
                 return function(match, condition, content) {
                     var member_regex = '';
-                    for (var member in renderer.item) {
+                    for (var member in item) {
                         if (member_regex.length > 0) {
                             member_regex += '|';
                         }
@@ -160,7 +157,7 @@ var SIMPLATE = (function(simplate) {
                     }
 
                     condition = condition.replace(/&amp;/g, '&');
-                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) { return 'renderer.item.' + match; });
+                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) { return 'item.' + match; });
 
                     if (eval(condition)) {
                         return content;
