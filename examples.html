@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>
-		Simplate
+		Tempo
 	</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
@@ -48,19 +48,19 @@
 			];
 
 			// Simple template
-			SIMPLATE.prepare('simple-marx-brothers').render(data);
+			Tempo.prepare('simple-marx-brothers').render(data);
 			
 			// Nested template
-			SIMPLATE.prepare('nested-marx-brothers').render(data);
+			Tempo.prepare('nested-marx-brothers').render(data);
 
 			// Multiple templates
-			SIMPLATE.prepare('more-marx-brothers').render(data);
+			Tempo.prepare('more-marx-brothers').render(data);
 
 			// Complex templates
-			SIMPLATE.prepare('complex-marx-brothers').render(data);
+			Tempo.prepare('complex-marx-brothers').render(data);
 
 			// jQuery example
-			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+			var twitter = Tempo.prepare('jquery-ajax-twitter');
 			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
 				twitter.render(data.results);
 			});
@@ -80,7 +80,7 @@
 </head>
 <body>
 <h1>
-	Simplate &gt; The Simple JavaScript Template Engine
+	Tempo &gt; The Simple JavaScript Template Engine
 </h1>
 
 <h2>
@@ -95,7 +95,7 @@
      * element : ID or an instance of an HTMLElement
      * data    : An array of objects
      */
-    SIMPLATE.prepare( element ).render( data );
+    Tempo.prepare( element ).render( data );
 </pre>
 <h3>
 	HTML
@@ -132,7 +132,7 @@
 	JavaScript
 </h4>
 		<pre>
-    SIMPLATE.prepare('simple-marx-brothers').render(data);
+    Tempo.prepare('simple-marx-brothers').render(data);
 </pre>
 <h4>
 	HTML
@@ -156,7 +156,7 @@
 	JavaScript
 </h4>
 		<pre>
-    SIMPLATE.prepare('nested-marx-brothers').render(data);
+    Tempo.prepare('nested-marx-brothers').render(data);
 </pre>
 <h4>
 	HTML
@@ -192,7 +192,7 @@
 	JavaScript
 </h4>
 		<pre>
-    SIMPLATE.prepare('more-marx-brothers').render(data);
+    Tempo.prepare('more-marx-brothers').render(data);
 </pre>
 <h4>
 	HTML
@@ -231,7 +231,7 @@
 	JavaScript
 </h4>
 	<pre>
-        SIMPLATE.prepare('complex-marx-brothers').render(data);
+        Tempo.prepare('complex-marx-brothers').render(data);
 	</pre>
 <h4>
 	HTML
@@ -319,7 +319,7 @@
 	JavaScript
 </h4>
 		<pre>
-    var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+    var twitter = Tempo.prepare('jquery-ajax-twitter');
     $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
             twitter.render(data.results);
         });
