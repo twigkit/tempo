@@ -208,10 +208,16 @@ var SIMPLATE = (function(simplate) {
 
         getElement : function(template, html) {
             if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
-                var div = document.createElement('div');
-                div.innerHTML = '<table><tbody>' + html + '</tbody></table>';
-                return div.lastChild.lastChild.lastChild;
+                // Wrapping to get around read-only innerHTML
+                var el = document.createElement('div');
+                el.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+                var depth = 3;
+                while ( depth-- ) {
+					el = el.lastChild;
+				}
+                return el;
             } else {
+                // No need to wrap
                 template.innerHTML = html;
                 return template;
             }

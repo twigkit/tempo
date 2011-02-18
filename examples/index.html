@@ -49,8 +49,6 @@
 				]}
 			];
 
-			console.profile();
-
 			// Simple template
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
 			
@@ -63,13 +61,11 @@
 			// Complex templates
 			SIMPLATE.prepare('complex-marx-brothers').render(data);
 
-			console.profileEnd();
-			
 			// jQuery example
-//			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
-//			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
-//				twitter.render(data.results);
-//			});
+			var twitter = SIMPLATE.prepare('jquery-ajax-twitter');
+			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=5&callback=?", function(data) {
+				twitter.render(data.results);
+			});
 		}
 	</script>
 	<style type="text/css">
