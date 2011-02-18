@@ -92,9 +92,9 @@ var Tempo = (function(tempo) {
             if (data) {
                 // If object then wrapping in an array
                 if (utils.typeOf(data) == 'object') data = [data];
-                
+
                 var fragment = document.createDocumentFragment();
-                
+
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
@@ -112,8 +112,8 @@ var Tempo = (function(tempo) {
                             var html = template.innerHTML;
 
                             // Tags
-                            for (var regex in renderer.tags) {
-                                html = html.replace(new RegExp(regex, 'gi'), renderer.tags[regex](renderer, item));
+                            for (var p in renderer.tags) {
+                                html = html.replace(new RegExp(renderer.tags[p].regex, 'gi'), renderer.tags[p].handler(renderer, item));
                             }
 
                             // Content
@@ -140,32 +140,33 @@ var Tempo = (function(tempo) {
             return this;
         },
 
-        tags: {
+        tags : [
             // If tag
-            '\\{\\{if (.*?)\\}\\}(.*?)\\{\\{endif\\}\\}': function(renderer, item) {
-                return function(match, condition, content) {
-                    var member_regex = '';
-                    for (var member in item) {
-                        if (member_regex.length > 0) {
-                            member_regex += '|';
+            {'regex': '\\{\\{if (.*?)\\}\\}(.*?)\\{\\{endif\\}\\}', 'handler': function(renderer, item) {
+                    return function(match, condition, content) {
+                        var member_regex = '';
+                        for (var member in item) {
+                            if (member_regex.length > 0) {
+                                member_regex += '|';
+                            }
+                            member_regex += member;
                         }
-                        member_regex += member;
+
+                        condition = condition.replace(/&amp;/g, '&');
+                        condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) {
+                            return 'item.' + match;
+                        });
+
+                        if (eval(condition)) {
+                            return content;
+                        }
+
+                        return '';
                     }
-
-                    condition = condition.replace(/&amp;/g, '&');
-                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) {
-                        return 'item.' + match;
-                    });
-
-                    if (eval(condition)) {
-                        return content;
-                    }
-
-                    return '';
-                };
+                }
             }
-        }
-    };
+        ]
+    }
 
     /*!
      * Helpers
@@ -216,9 +217,9 @@ var Tempo = (function(tempo) {
                 var el = document.createElement('div');
                 el.innerHTML = '<table><tbody>' + html + '</tbody></table>';
                 var depth = 3;
-                while ( depth-- ) {
-					el = el.lastChild;
-				}
+                while (depth--) {
+                    el = el.lastChild;
+                }
                 return el;
             } else {
                 // No need to wrap
