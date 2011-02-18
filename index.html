@@ -36,13 +36,13 @@
 		}
 	</style>
 	<script>
-		window.onload = function() {
+		$(document).ready(function() {
 			// jQuery example
 			var twitter = Tempo.prepare('tweets');
 			$.getJSON("http://search.twitter.com/search.json?q='twigkit'&rpp=2&callback=?", function(data) {
 				twitter.render(data.results);
 			});
-		}
+		});
 	</script>
 	
 </head>
