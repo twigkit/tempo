@@ -33,6 +33,9 @@ var Tempo = (function(tempo) {
                 if (children[i].getAttribute('data-template') !== null && (this.nested || !utils.isNested(children[i]))) {
                     var element = children[i].cloneNode(true);
 
+                    // Clear display: none;
+                    element.style.removeProperty('display');
+
                     // Remapping container element in case template
                     // is deep in container
                     this.container = children[i].parentNode;
