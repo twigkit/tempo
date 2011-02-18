@@ -1,10 +1,10 @@
-var SIMPLATE = (function(simplate) {
+var Tempo = (function(tempo) {
 
     /*!
      * Prepare a container for rendering, gathering templates and
      * clearing afterwards.
      */
-    simplate.prepare = function(container) {
+    tempo.prepare = function(container) {
         if (typeof container === 'string') {
             container = document.getElementById(container);
         }
@@ -224,6 +224,6 @@ var SIMPLATE = (function(simplate) {
         }
     };
 
-    return simplate;
+    return tempo;
 
-})(SIMPLATE || {});
+})(Tempo || {});
