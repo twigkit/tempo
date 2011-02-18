@@ -2,10 +2,10 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Simplate</title>
+	<title>Tempo</title>
 	<link rel="stylesheet" href="css/simplate.css" type="text/css" media="screen">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-	<script type="text/javascript" src="https://github.com/twigkit/simplate/raw/master/src/simplate.js"></script>
+	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/src/tempo.js"></script>
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -38,7 +38,7 @@
 	<script>
 		window.onload = function() {
 			// jQuery example
-			var twitter = SIMPLATE.prepare('tweets');
+			var twitter = Tempo.prepare('tweets');
 			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=2&callback=?", function(data) {
 				twitter.render(data.results);
 			});
@@ -55,8 +55,8 @@
 
 	<header>
 		<section id="hero">
-			<h1>Simplate</h1>
-			<p>Simplate is a tiny JSON rendering engine that enables you to craft data templates in pure HTML. Never document.write() again.</p>
+			<h1>Tempo</h1>
+			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="#">Download</a></li>
@@ -64,7 +64,7 @@
 					<li><a href="#">Google Code</a></li>
 				</ul>
 			</nav>
-			<h3>Why use Simplate?</h3>
+			<h3>Why use Tempo?</h3>
 			<ul id="features">
 				<li>Clear separation of concerns: no HTML in your JavaScript files</li>
 				<li>It makes AJAX content easier to work with</li>
@@ -73,14 +73,14 @@
 			<h3>Key Features</h3>
 			<ul id="features">
 				<li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
-				<li>Itty-bitty footprint (2k), lightning-fast rendering (30k of JSON in 5 milliseconds)</li>
-				<li>Works with or without jQuery</li>
+				<li>Itty-bitty footprint, lightning-fast rendering!</li>
+				<li>No dependencies - Works with or without jQuery</li>
 				<li>Degrades gracefully if JavaScript is not enabled</li>
-				<li>Supports nested and conditional templates and maximum flexibility</li>
+				<li>Supports nested and conditional templates</li>
 			</ul>
 		</section>
 		<aside id="example">
-			<h3><span>1.</span> Include the Simplate script</h3>
+			<h3><span>1.</span> Include the Tempo script</h3>
 <pre>
 &lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 
@@ -134,7 +134,7 @@
 
 			<a id="json"></a>
 			<h3>JSON</h3>
-			<p>Simplate takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
+			<p>Tempo takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
 <pre>
 var data = [
 	{'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born': 'March 21, 1887', 'actor': true, 'sole_endevors' : [{'title':'Papa Romani'}]},
@@ -153,7 +153,7 @@ var data = [
 &lt;script src=&quot;<em>../src/simplate.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
 			<h4>SIMPLATE.prepare()</h4>
-			<p>To initialize Simplate, run the <strong>prepare()</strong> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
+			<p>To initialize Tempo, run the <strong>prepare()</strong> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
 			<h5>element</h5>
 			<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
@@ -233,7 +233,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 			</div>
 
 			<h4>Conditionals</h4>
-			<p>Simplate provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
+			<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
 &lt;ul id="marx-brothers3"&gt;
 	&lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
@@ -254,7 +254,7 @@ SIMPLATE.prepare('marx-brothers').render(data);
 			</div>
 
 			<a id="jquery"></a>
-			<h3>Using Simplate with jQuery</h3>
+			<h3>Using Tempo with jQuery</h3>
 			<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
 <pre>
 var twitter = SIMPLATE.<em>prepare</em>('tweets');
