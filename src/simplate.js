@@ -110,9 +110,9 @@ var SIMPLATE = (function(simplate) {
 							// Dealing with HTML as a String from now on (to be reviewed)
 							var html = template.innerHTML;
 
-							// Functions
-							for (var regex in renderer.functions) {
-								html = html.replace(new RegExp(regex, 'gi'), renderer.functions[regex](renderer));
+							// Tags
+							for (var regex in renderer.tags) {
+								html = html.replace(new RegExp(regex, 'gi'), renderer.tags[regex](renderer));
 							}
 
 							// Content
@@ -147,8 +147,8 @@ var SIMPLATE = (function(simplate) {
 			return this;
 		},
 
-		functions: {
-			// If function
+		tags: {
+			// If tag
 			'{{if (.*?)}}(.*?){{endif}}' : function(renderer) {
 				return function(match, condition, content) {
 					var member_regex = '';

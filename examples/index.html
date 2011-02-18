@@ -48,10 +48,10 @@
 					{'title':'A Kiss in the Dark'}
 				]}
 			];
-			console.profile();
+			
 			// Simple template
 			SIMPLATE.prepare('simple-marx-brothers').render(data);
-			console.profileEnd();
+			
 			// Nested template
 			SIMPLATE.prepare('nested-marx-brothers').render(data);
 
@@ -302,7 +302,7 @@
 			{{name.last}}
 		</td>
 		<td>
-			{{name.first}}
+			<a href="#" onclick="alert('{{nickname}}'); return false;">{{name.first}}</a>
 		</td>
 		<td>
 			{{born}}
