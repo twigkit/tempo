@@ -30,8 +30,7 @@ var SIMPLATE = (function(simplate) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== undefined &&
-                        (this.nested || !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template') !== undefined && (this.nested || !utils.isNested(children[i]))) {
                     var element = children[i].cloneNode(true);
 
                     // Remapping container element in case template
@@ -68,7 +67,7 @@ var SIMPLATE = (function(simplate) {
                     return this.namedTemplates[templateName].cloneNode(true);
                 }
             }
-            if (this.defaultTemplate !== null) {
+            if (this.defaultTemplate) {
                 return this.defaultTemplate.cloneNode(true);
             }
         }
@@ -91,16 +90,16 @@ var SIMPLATE = (function(simplate) {
 
             var fragment = document.createDocumentFragment();
 
-            if (data !== undefined) {
+            if (data) {
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
-                        if (template !== undefined) {
+                        if (template) {
                             renderer.template = template;
                             renderer.item = item;
 
                             var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
-                            if (nestedDeclaration !== null) {
+                            if (nestedDeclaration) {
                                 var t = new Templates(true);
                                 t.parse(renderer.template);
 
@@ -120,12 +119,12 @@ var SIMPLATE = (function(simplate) {
                             html = utils.replaceVariable(item, html);
 
                             // Template class attribute
-                            if (template.getAttribute('class') !== null) {
+                            if (template.getAttribute('class')) {
                                 template.className = utils.replaceVariable(item, template.className);
                             }
 
                             // Template id
-                            if (template.getAttribute('id') !== null) {
+                            if (template.getAttribute('id')) {
                                 template.id = utils.replaceVariable(item, template.id);
                             }
 
@@ -161,10 +160,7 @@ var SIMPLATE = (function(simplate) {
                     }
 
                     condition = condition.replace(/&amp;/g, '&');
-                    condition = condition.replace(new RegExp(member_regex, 'gi'),
-                            function(match) {
-                                return 'renderer.item.' + match;
-                            });
+                    condition = condition.replace(new RegExp(member_regex, 'gi'), function(match) { return 'renderer.item.' + match; });
 
                     if (eval(condition)) {
                         return content;
@@ -197,9 +193,7 @@ var SIMPLATE = (function(simplate) {
         clearContainer: function(el) {
             if (el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
-                    if (el.childNodes[i] !== undefined &&
-                            el.childNodes[i].getAttribute !== undefined &&
-                            el.childNodes[i].getAttribute('data-template') !== null) {
+                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && el.childNodes[i].getAttribute('data-template') !== null) {
                         el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
                     }
                 }
@@ -208,7 +202,7 @@ var SIMPLATE = (function(simplate) {
 
         isNested: function(el) {
             var p = el.parentNode;
-            while (p !== null) {
+            while (p) {
                 if (p.getAttribute !== undefined && p.getAttribute('data-template') !== null) {
                     return true;
                 }
