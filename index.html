@@ -94,7 +94,7 @@
 
 <span>&lt;script&gt;</span>Tempo.<em>prepare</em>("tweets").<em>render</em>(data);<span>&lt;/script&gt;</span>
 </pre>
-			<h3><span>2.</span> Compose the data template in HTML</h3>
+			<h3><span>2.</span> Compose the data template inline in HTML</h3>
 <pre>
 &lt;ol id=&quot;tweets&quot;&gt;
 	&lt;li <em>data-template</em>&gt;
@@ -164,7 +164,7 @@ var data = [
 				<p>To initialize Tempo, run the <code>prepare()</code> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
 				<h5>element</h5>
-				<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
+				<p class="h5">The <strong>ID</strong> of the HTML element (or the element itself) containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 			
 				<h4>Tempo.render()</h4>
 				<p>Once the JSON data is available, run the <code>render()</code> function to add the data to the page.</p>
