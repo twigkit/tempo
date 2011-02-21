@@ -30,7 +30,6 @@
 		/* header */
 		#header {
 			background-color: black;
-			margin-bottom: 2em;
 		}
 		h1 {
 			color: white;
@@ -44,6 +43,28 @@
 		}
 		form #query {
 			width: 15em;
+		}
+		
+		/* breadcrumbs */
+		ul#solr-breadcrumbs {
+			margin-top: 1em;
+			margin-bottom: 2em;
+			padding-bottom: 0.5em;
+		}
+		ul#solr-breadcrumbs li {
+			display: block;
+			float: left;
+			margin-right: 1px;
+		}
+		ul#solr-breadcrumbs li a {
+			color: #999;
+			text-decoration: none;
+		}
+		ul#solr-breadcrumbs li:before {
+			content: "\0020 \0020 \0020 \00BB \0020";
+			color: #999;
+			font-size: 1.25em;
+			font-family: Georgia;
 		}
 		
 		/* search results */
@@ -94,11 +115,20 @@
 			font-size: 0.95em;
 			border-bottom: 1px solid #e9e9e9;
 		}
+		#solr-facets ul li li:hover {
+			background-color: #f2f2f2;
+		}
 		#solr-facets ul li span {
 			color: #999;
 			font-family: Georgia;
 		}
-
+		#solr-facets ul li a {
+			color: black;
+			text-decoration: none;
+		}
+		#solr-facets ul li a:hover {
+			text-decoration: underline;
+		}
 	</style>
 	
 	<!-- Import Tempo -->
@@ -181,7 +211,7 @@
 	<div id="solr-breadcrumbs">
 		<ul data-template>
 			<li><a href="#" onclick="query('');">{{q}}</a></li>
-			<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");'>{{field}}:{{value}}</a></li>
+			<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">{{value}}</a></li>
 		</ul>
 	</div>
 	
