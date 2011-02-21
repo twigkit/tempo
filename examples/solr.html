@@ -127,7 +127,6 @@
 			// Search request
 			solrjs.q(q != undefined && q != '' ? q : '*:*');
 			_request();
-			return false;
 		}
 		
 		function addFilter(field, value) {
@@ -167,8 +166,8 @@
 			<h1>Tempo + Solr = True Love</h1>
 		</div>
 		<div class="column grid_6">
-			<form id="search" onsubmit="query($('#query').val()); return false;">
-				<input type="search" name="query" id="query" placeholder="Search for old books">
+			<form id="search" onsubmit="solrjs.reset(); query($('#q').val()); return false;">
+				<input type="search" name="q" id="q" placeholder="Search for old books">
 				<input type="submit" value="Search" id="submit">
 			</form>
 		</div>
