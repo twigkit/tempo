@@ -6,14 +6,13 @@
 		Tempo | Solr
 	</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-	<script type="text/javascript" src="../src/tempo.js"></script>
-	<script type="text/javascript" src="../src/plugins/tempo.plugins.solr.js"></script>
+	<script type="text/javascript" src="../tempo.js"></script>
 	<script type="text/javascript">
 
 		var solr, facetsTemplate;
 
 		$(document).ready(function() {
-			solr = Tempo.solr.prepare('solr-response');
+			solr = Tempo.prepare('solr-response');
 			facetsTemplate = Tempo.prepare('solr-facets');
 			search('literature');
 		});

@@ -5,11 +5,11 @@
 	<title>Tempo :: Twitter Example</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 
-	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/src/tempo.js"></script>
+	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/tempo.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
 			var twitter = Tempo.prepare('tweets');
-			$.getJSON("http://search.twitter.com/search.json?q='twigkit'&rpp=10&callback=?", function(data) {
+			$.getJSON("http://search.twitter.com/search.json?q='groucho'&rpp=10&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		});
