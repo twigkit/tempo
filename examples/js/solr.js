@@ -1,50 +1,45 @@
-function SolrJS() {
+function SolrJS(host) {
+	this.h = host;
+	this.params = {};
+	
 	return this;
 }
 
-SolrJS.prototype.query = {
-	query : function(query) {
+SolrJS.prototype = {
+	q : function(query) {
 		if (query != undefined) {
 			this._reset();
-			this.q = query;
+			this.params.q = query;
 		} else {
-			return q;
+			return this.params.q;
 		}
 	},
 	
-	add_filter : function(field, value) {
-		this.filters.push({'field': field, 'value': value});
+	add_fq : function(field, value) {
+		this.params.fq.push({'field': field, 'value': value});
 	},
 	
-	remove_filter : function(field, value) {
-		for (var i in this.filters) {
-			if (this.filters[i] != undefined && this.filters[i].field == field && this.filters[i].value == value) {
-				this.filters[i] = undefined;
+	remove_fq : function(field, value) {
+		for (var i in this.params.fq) {
+			if (this.params.fq[i] != undefined && this.params.fq[i].field == field && this.params.fq[i].value == value) {
+				this.params.fq[i] = undefined;
 			}
 		}
 	},
 	
-	host : function(host) {
-		if (host != undefined) {
-			return this.host = host;
-		} else {
-			return this.host;
-		}
-	},
-	
 	url : function() {
-		var req = this.host + '&q=' + this.q;
-		for (var i in this.filters) {
-			if (this.filters[i] != undefined) {
-				req += '&fq=' + this.filters[i].field + ':("' + this.filters[i].value + '")';
+		var req = this.h + '&q=' + this.params.q;
+		for (var i in this.params.fq) {
+			if (this.params.fq[i] != undefined) {
+				req += '&fq=' + this.params.fq[i].field + ':("' + this.params.fq[i].value + '")';
 			}
 		}
 		return req;
 	},
 	
 	_reset : function() {
-		this.q = '';
-		this.filters = [];
+		this.params.q = '';
+		this.params.fq = [];
 	},
 }
 

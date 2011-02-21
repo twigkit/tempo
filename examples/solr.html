@@ -110,12 +110,10 @@
 	
 	<script type="text/javascript">
 
-		var solrjs = new SolrJS();
+		var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
 		var responseTemplate, facetsTemplate;
 
 		$(document).ready(function() {
-			solrjs.query.host('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
-			
 			// Prepare templates
 			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
 			responseTemplate = Tempo.prepare('solr-response');
@@ -127,28 +125,28 @@
 
 		function search(q) {
 			// Search request
-			solrjs.query.query(q != undefined && q != '' ? q : 'literature');
+			solrjs.q(q != undefined && q != '' ? q : '*:*');
 			_request();
 		}
 		
 		function addFilter(field, value) {
-			solrjs.query.add_filter(field, value);
+			solrjs.add_fq(field, value);
 			_request();
 		}
 		
 		function removeFilter(field, value) {
-			solrjs.query.remove_filter(field, value);
+			solrjs.remove_fq(field, value);
 			_request();
 		}
 		
 		function _request() {
 			$.ajax({
-				url: solrjs.query.url(),
+				url: solrjs.url(),
 				dataType: 'jsonp',
 				jsonp: 'json.wrf',
 				success: function(data) {
 					// Render the query breadcrumbs
-					breadcrumbsTemplate.render(solrjs.query.filters);
+					breadcrumbsTemplate.render(solrjs.params.fq);
 					// Render the primary response and associated results
 					responseTemplate.render(data.response);
 					// Render the facets, using SolrJS function to improve the object structure first
