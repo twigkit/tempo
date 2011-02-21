@@ -120,13 +120,14 @@
 			facetsTemplate = Tempo.prepare('solr-facets');
 			
 			// Default query
-			search();
+			query('');
 		});
 
-		function search(q) {
+		function query(q) {
 			// Search request
 			solrjs.q(q != undefined && q != '' ? q : '*:*');
 			_request();
+			return false;
 		}
 		
 		function addFilter(field, value) {
@@ -146,7 +147,7 @@
 				jsonp: 'json.wrf',
 				success: function(data) {
 					// Render the query breadcrumbs
-					breadcrumbsTemplate.render(solrjs.params.fq);
+					breadcrumbsTemplate.render(solrjs.params);
 					// Render the primary response and associated results
 					responseTemplate.render(data.response);
 					// Render the facets, using SolrJS function to improve the object structure first
@@ -166,7 +167,7 @@
 			<h1>Tempo + Solr = True Love</h1>
 		</div>
 		<div class="column grid_6">
-			<form id="search" onsubmit="search($('#query').val()); return false;">
+			<form id="search" onsubmit="query($('#query').val()); return false;">
 				<input type="search" name="query" id="query" placeholder="Search for old books">
 				<input type="submit" value="Search" id="submit">
 			</form>
@@ -178,9 +179,12 @@
 <!-- Main Body -->
 <div id="mainbody" class="row">
 	
-	<ul id="solr-breadcrumbs">
-		<li data-template><a href="#" onclick='removeFilter("{{field}}", "{{value}}");'>{{field}}:{{value}}</a></li>
-	</ul>
+	<div id="solr-breadcrumbs">
+		<ul data-template>
+			<li><a href="#" onclick="query('');">{{q}}</a></li>
+			<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");'>{{field}}:{{value}}</a></li>
+		</ul>
+	</div>
 	
 	<!-- Search Results -->
 	<div id="solr-response" class="column grid_8">
