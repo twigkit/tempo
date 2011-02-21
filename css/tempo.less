@@ -112,7 +112,7 @@ nav ul {
 			padding: 0.5em;
 			
 			&:hover {
-				background-color: #e5e5e5;
+				background-color: #e0e0e0;
 			}
 			&:active {
 				background-color: #ccc;
@@ -140,7 +140,7 @@ nav ul {
 // TOP //
 /////////
 
-nav#top,
+div#top,
 footer#bottom {
 	background-color: black;
 	color: #fff;
@@ -163,6 +163,9 @@ footer#bottom {
 			}
 		}
 	}
+	&#top {
+		padding: 0.5em 0;
+	}
 }
 
 
@@ -170,7 +173,7 @@ footer#bottom {
 // HEADER //
 ////////////
 
-header {
+header#overview {
 	.row;
 
 	section#hero {
@@ -277,26 +280,6 @@ aside#quotes {
 		}
 	}
 }
-/*
-@media (max-width: 900px) {
-	aside#quotes div section blockquote {
-		width: @6g;
-		
-		&.last {
-			display: none;
-		}
-	}
-}
-@media (max-width: 600px) {
-	aside#quotes div section blockquote {
-		width: @12g;
-		
-		&.second {
-			display: none;
-		}
-	}
-}
-*/
 
 
 ///////////
@@ -304,37 +287,58 @@ aside#quotes {
 ///////////
 
 article#usage {
-	.row;
+	margin-top: 2em;
+	border-top: 5px solid black;
 	
-	section.usage {
-		.column;
-		width: @12g;
+	header {
+		overflow: hidden;
+		background-color: #F0F0F0;
 		
-		h2 {
-			font-size: 2.75em;
-			font-weight: normal;
-			float: left;
+		div {
+			.row;
+			
+			section {
+				.column;
+				width: @12g;
+		
+				h2 {
+					font-size: 2.75em;
+					font-weight: normal;
+					float: left;
+					margin: 0;
+					padding: 0.66em 0;
+				}
+				nav {
+					float: left;
+					margin: 2.66em 0 0 2em;
+				}
+			}
 		}
-		nav {
-			float: left;
-			margin: 4.9em 0 0 2em;
-		}
-		h3 {
-			clear: both;
-			font-size: 1.5em;
-			font-weight: normal;
-			border-bottom: 1px solid #ccc;
-			margin-top: 2em;
-		}
-		h5 {
-			margin-left: 2em;
-			margin-top: -1em;
-			font-size: 0.9em;
-		}
-		p.h5 {
-			margin-left: 2em;
-			margin-bottom: 2em;
-			font-size: 0.9em;
+	}
+	
+	div.usage {
+		.row;
+	
+		section.usage {
+			.column;
+			width: @12g;
+			h3 {
+				clear: both;
+				font-size: 1.5em;
+				font-weight: normal;
+				border-bottom: 1px solid #ccc;
+				margin-top: 2em;
+			}
+			h5 {
+				margin-left: 2em;
+				margin-top: -1em;
+				font-size: 0.9em;
+			}
+			p.h5 {
+				margin-left: 2em;
+				margin-bottom: 2em;
+				font-size: 0.9em;
+			}
 		}
 	}
 }

@@ -85,7 +85,7 @@ nav ul li a {
   padding: 0.5em;
 }
 nav ul li a:hover {
-  background-color: #e5e5e5;
+  background-color: #e0e0e0;
 }
 nav ul li a:active {
   background-color: #ccc;
@@ -100,21 +100,21 @@ nav ul li.download a:hover {
 nav ul li.download a:active {
   background-color: black;
 }
-nav#top, footer#bottom {
+div#top, footer#bottom {
   background-color: black;
   color: #fff;
 }
-nav#top#bottom, footer#bottom#bottom {
+div#top#bottom, footer#bottom#bottom {
   margin-top: 2em;
   padding: 2em 0;
 }
-nav#top section, footer#bottom section {
+div#top section, footer#bottom section {
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
   overflow-y: visible;
 }
-nav#top section p, footer#bottom section p {
+div#top section p, footer#bottom section p {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
@@ -122,42 +122,45 @@ nav#top section p, footer#bottom section p {
   width: 97.917%;
   line-height: 2em;
 }
-nav#top section p a, footer#bottom section p a {
+div#top section p a, footer#bottom section p a {
   color: white;
 }
-header {
+div#top#top, footer#bottom#top {
+  padding: 0.5em 0;
+}
+header#overview {
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
   overflow-y: visible;
 }
-header section#hero {
+header#overview section#hero {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
   display: inline;
   width: 47.85%;
 }
-header section#hero h1 {
+header#overview section#hero h1 {
   margin: 1em 0 0.25em 0;
   font-size: 4em;
 }
-header section#hero p {
+header#overview section#hero p {
   font-family: Georgia;
   font-size: 1.5em;
 }
-header section#hero nav#actions ul {
+header#overview section#hero nav#actions ul {
   margin: 2em 0;
 }
-header section#hero nav#actions ul li a {
+header#overview section#hero nav#actions ul li a {
   padding: 1em;
 }
-header section#hero ul#features li {
+header#overview section#hero ul#features li {
   list-style: circle outside none;
   margin: 0.75em 0 0.75em 2em;
   padding: 0 0 0 0.5em;
 }
-header aside#example {
+header#overview aside#example {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
@@ -165,7 +168,7 @@ header aside#example {
   width: 47.85%;
   padding-top: 2.5em;
 }
-header aside#example h3 {
+header#overview aside#example h3 {
   font-size: 1.5em;
   font-weight: normal;
 }
@@ -227,61 +230,64 @@ aside#quotes div section blockquote p span {
   display: block;
   margin-top: 0.5em;
 }
-/*
-@media (max-width: 900px) {
-	aside#quotes div section blockquote {
-		width: @6g;
-		
-		&.last {
-			display: none;
-		}
-	}
-}
-@media (max-width: 600px) {
-	aside#quotes div section blockquote {
-		width: @12g;
-		
-		&.second {
-			display: none;
-		}
-	}
-}
-*/
 article#usage {
+  margin-top: 2em;
+  border-top: 5px solid black;
+}
+article#usage header {
+  overflow: hidden;
+  background-color: #F0F0F0;
+}
+article#usage header div {
   width: 97.875%;
   margin: 0 1.064%;
   overflow-x: auto;
   overflow-y: visible;
 }
-article#usage section.usage {
+article#usage header div section {
   margin: 0 1.04%;
   overflow: hidden;
   float: left;
   display: inline;
   width: 97.917%;
 }
-article#usage section.usage h2 {
+article#usage header div section h2 {
   font-size: 2.75em;
   font-weight: normal;
   float: left;
+  margin: 0;
+  padding: 0.66em 0;
 }
-article#usage section.usage nav {
+article#usage header div section nav {
   float: left;
-  margin: 4.9em 0 0 2em;
+  margin: 2.66em 0 0 2em;
 }
-article#usage section.usage h3 {
+article#usage div.usage {
+  width: 97.875%;
+  margin: 0 1.064%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+article#usage div.usage section.usage {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 97.917%;
+}
+article#usage div.usage section.usage h3 {
   clear: both;
   font-size: 1.5em;
   font-weight: normal;
   border-bottom: 1px solid #ccc;
   margin-top: 2em;
 }
-article#usage section.usage h5 {
+article#usage div.usage section.usage h5 {
   margin-left: 2em;
   margin-top: -1em;
   font-size: 0.9em;
 }
-article#usage section.usage p.h5 {
+article#usage div.usage section.usage p.h5 {
   margin-left: 2em;
   margin-bottom: 2em;
   font-size: 0.9em;

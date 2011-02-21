@@ -5,7 +5,7 @@
 	<title>Tempo :: The tiny JSON rendering engine by TwigKit</title>
 	<link rel="stylesheet" href="css/tempo.css" type="text/css" media="screen">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/src/tempo.js"></script>
+	<script type="text/javascript" src="tempo.js"></script>
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -47,21 +47,17 @@
 	
 </head>
 <body>
-	<nav id="top">
-		<section>
-			<p>Follow <a href="http://twitter.com/mrolafsson">@mrolafsson</a> on Twitter.</p>
-		</section>
-	</nav>
+	<div id="top"> </div>
 
-	<header>
+	<header id="overview">
 		<section id="hero">
 			<h1>Tempo</h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+					<li><a href="examples/twitter.html">Twitter Example</a></li>
 					<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
-					<li><a href="#">Google Code</a></li>
 				</ul>
 			</nav>
 			<h3>Why use Tempo?</h3>
@@ -84,7 +80,7 @@
 <pre>
 &lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 
-<span>&lt;script&gt;</span>Tempo.<em>prepare</em>("tweets").<em>render</em>( data );<span>&lt;/script&gt;</span>
+<span>&lt;script&gt;</span>Tempo.<em>prepare</em>("tweets").<em>render</em>(data);<span>&lt;/script&gt;</span>
 </pre>
 			<h3><span>2.</span> Compose the data template in HTML</h3>
 <pre>
@@ -111,31 +107,30 @@
 		</aside>
 	</header>
 
-	<aside id="quotes">
-		<div>
-			<section>
-				<blockquote class="second"><p>Simple, clean, and powerful. The way it should be. <span>Tyler Tate, creator of <a href="http://1kbcssgrid.com/">1KB Grid</a></span></p></blockquote>
-			</section>
-		</div>
-	</aside>
-
 	<article id="usage">
-		<section class="usage">
-			<h2>Usage</h2>
-			
-			<nav>
-				<ul>
-					<li><a href="#json">JSON</a></li>
-					<li><a href="#javascript">JavaScript</a></li>
-					<li><a href="#html">HTML</a></li>
-					<li><a href="#css">CSS</a></li>
-					<li><a href="#jquery">jQuery</a></li>
-				</ul>
-			</nav>
+		<header>
+			<div>
+				<section>
+					<h2>Usage</h2>
+		
+					<nav>
+						<ul>
+							<li><a href="#json">JSON</a></li>
+							<li><a href="#javascript">JavaScript</a></li>
+							<li><a href="#html">HTML</a></li>
+							<li><a href="#css">CSS</a></li>
+							<li><a href="#jquery">jQuery</a></li>
+						</ul>
+					</nav>
+				</div>
+			</section>
+		</header>
+		<div class="usage">
+			<section class="usage">
 
-			<a id="json"></a>
-			<h3>JSON</h3>
-			<p>Tempo takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
+				<a id="json"></a>
+				<h3>JSON</h3>
+				<p>Tempo takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
 <pre>
 var data = [
 	{'name':{'first':'Leonard','last':'Marx'},'nickname':'Chico','born':'March 21, 1887','actor': true,'solo_endeavours':[{'title':'Papa Romani'}]},
@@ -146,24 +141,24 @@ var data = [
 ];
 </pre>
 			
-			<a id="javascript"></a>
-			<h3>JavaScript</h3>
-			<h4>Include script</h4>
-			<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
+				<a id="javascript"></a>
+				<h3>JavaScript</h3>
+				<h4>Include script</h4>
+				<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
 <pre>
 &lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
-			<h4>Tempo.prepare()</h4>
-			<p>To initialize Tempo, run the <code>prepare()</code> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
+				<h4>Tempo.prepare()</h4>
+				<p>To initialize Tempo, run the <code>prepare()</code> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
 
-			<h5>element</h5>
-			<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
+				<h5>element</h5>
+				<p class="h5">The <strong>ID</strong> of the HTML element containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 			
-			<h4>Tempo.render()</h4>
-			<p>Once the JSON data is available, run the <code>render()</code> function to add the data to the page.</p>
+				<h4>Tempo.render()</h4>
+				<p>Once the JSON data is available, run the <code>render()</code> function to add the data to the page.</p>
 
-			<h5>data</h5>
-			<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
 <pre>
 Tempo.prepare( <em>element</em> ).render( <em>data</em> );
 </pre>
@@ -171,31 +166,31 @@ Tempo.prepare( <em>element</em> ).render( <em>data</em> );
 Tempo.prepare('marx-brothers').render(data);
 </pre>
 
-			<a id="html"></a>
-			<h3>HTML</h3>
-			<h4>data-template</h4>
-			<p>Any tag with the <code>data-template</code> attribute will be flagged as a data template.</p>
+				<a id="html"></a>
+				<h3>HTML</h3>
+				<h4>data-template</h4>
+				<p>Any tag with the <code>data-template</code> attribute will be flagged as a data template.</p>
 			
-			<h4>{{fields}}</h4>
-			<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.
+				<h4>{{fields}}</h4>
+				<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.</p>
 <pre>
 &lt;ol id=&quot;marx-brothers&quot;&gt;
 	&lt;li <em>data-template</em>&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
-			<p>The above example would be rendered as:</p>
-			<div class="example">
-				<ol id="marx-brothers1">
-					<li data-template="">Chico Marx</li>
-					<li data-template="">Harpo Marx</li>
-					<li data-template="">Groucho Marx</li>
-					<li data-template="">Gummo Marx</li>
-					<li data-template="">Zeppo Marx</li>
-				</ol>
-			</div>
+				<p>The above example would be rendered as:</p>
+				<div class="example">
+					<ol id="marx-brothers1">
+						<li data-template="">Chico Marx</li>
+						<li data-template="">Harpo Marx</li>
+						<li data-template="">Groucho Marx</li>
+						<li data-template="">Gummo Marx</li>
+						<li data-template="">Zeppo Marx</li>
+					</ol>
+				</div>
 			
-			<h4>Nested data-templates</h4>
-			<p>Data templates can even be nested within other data templates. 
+				<h4>Nested data-templates</h4>
+				<p>Data templates can even be nested within other data templates.</p>
 <pre>
 &lt;li <em>data-template</em>&gt;
     <em>{{nickname}}</em> <em>{{name.last}}</em>
@@ -204,37 +199,37 @@ Tempo.prepare('marx-brothers').render(data);
     &lt;/ul&gt;
 &lt;/li&gt;
 </pre>
-			<div class="example">
-				<ol id="marx-brothers2">
-					<li>Chico Marx
-						<ul>
-							<li>Papa Romani</li>
-						</ul>
-					</li>
-					<li>Harpo Marx
-						<ul>
-							<li>Too Many Kisses</li>
-							<li>Stage Door Canteen</li>
-						</ul>
-					</li>
-					<li>Groucho Marx
-						<ul>
-							<li>Copacabana</li>
-							<li>Mr. Music</li>
-							<li>Double Dynamite	</li>
-						</ul>
-					</li>
-					<li>Gummo Marx</li>
-					<li>Zeppo Marx
-						<ul>
-							<li>A Kiss in the Dark</li>
-						</ul>
-					</li>
-				</ol>
-			</div>
+				<div class="example">
+					<ol id="marx-brothers2">
+						<li>Chico Marx
+							<ul>
+								<li>Papa Romani</li>
+							</ul>
+						</li>
+						<li>Harpo Marx
+							<ul>
+								<li>Too Many Kisses</li>
+								<li>Stage Door Canteen</li>
+							</ul>
+						</li>
+						<li>Groucho Marx
+							<ul>
+								<li>Copacabana</li>
+								<li>Mr. Music</li>
+								<li>Double Dynamite	</li>
+							</ul>
+						</li>
+						<li>Gummo Marx</li>
+						<li>Zeppo Marx
+							<ul>
+								<li>A Kiss in the Dark</li>
+							</ul>
+						</li>
+					</ol>
+				</div>
 
-			<h4>Conditionals</h4>
-			<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
+				<h4>Conditionals</h4>
+				<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
 &lt;ul id="marx-brothers3"&gt;
 	&lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
@@ -244,48 +239,49 @@ Tempo.prepare('marx-brothers').render(data);
 	&lt;li <em>data-template</em>&gt;<em>{{name.first}}</em> <em>{{name.last}}</em> was not in any movies!&lt;/li&gt;
 &lt;/ul&gt;
 </pre>
-			<div class="example">
-				<ul id="marx-brothers4">
-					<li>Leonard, nicknamed '<i>Chico Marx</i>' was born on March 21, 1887</li>
-					<li>Adolph, nicknamed '<i>Harpo Marx</i>' was born on November 23, 1888</li>
-					<li>Groucho (aka Julius Henry) was grumpy!</li>
-					<li>Milton Marx was not in any movies!</li>
-					<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
-				</ul>
-			</div>
+				<div class="example">
+					<ul id="marx-brothers4">
+						<li>Leonard, nicknamed '<i>Chico Marx</i>' was born on March 21, 1887</li>
+						<li>Adolph, nicknamed '<i>Harpo Marx</i>' was born on November 23, 1888</li>
+						<li>Groucho (aka Julius Henry) was grumpy!</li>
+						<li>Milton Marx was not in any movies!</li>
+						<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
+					</ul>
+				</div>
 
-			<a id="css"></a>
-			<h3>CSS</h3>
-			<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered. If there is no inline rule (if, for instance, you defined <code>display: none</code> in an external stylesheet), Tempo will add <code>style="display: block;"</code> once the rendering has taken place.</p>
+				<a id="css"></a>
+				<h3>CSS</h3>
+				<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered. If there is no inline rule (if, for instance, you defined <code>display: none</code> in an external stylesheet), Tempo will add <code>style="display: block;"</code> once the rendering has taken place.</p>
 <pre>
 ol#marx-brothers {
 	display: none;
 }
 </pre>
 
-			<a id="jquery"></a>
-			<h3>Using Tempo with jQuery</h3>
-			<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
+				<a id="jquery"></a>
+				<h3>Using Tempo with jQuery</h3>
+				<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
 <pre>
 var twitter = Tempo.<em>prepare</em>('tweets');
 $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
 	twitter.<em>render</em>(data.results);
 });
 </pre>
-		</section>
+			</section>
+		</div>
 	</article>
 
 	<nav id="actions2">
 		<ul>
-			<li class="download"><a href="#">Download</a></li>
+			<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+			<li><a href="examples/twitter.html">Twitter Example</a></li>
 			<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
-			<li><a href="#">Google Code</a></li>
 		</ul>
 	</nav>
 
 	<footer id="bottom">
 		<section>
-			<p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>.</p>
+			<p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> and <a href="http://twitter.com/tylertate">Tyler Tate</a> on Twitter.</p>
 		</section>
 	</footer>
 
