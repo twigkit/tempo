@@ -98,7 +98,7 @@ var Tempo = (function(tempo) {
                 for (var i = 0; i < data.length; i++) {
                     var renderItem = function(renderer, item, fragment) {
                         var template = renderer.templates.templateFor(item);
-                        if (template) {
+                        if (template && item) {
                             var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
                             if (nestedDeclaration) {
                                 var t = new Templates(true);
