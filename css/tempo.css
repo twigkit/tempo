@@ -173,19 +173,19 @@ header#overview aside#example h3 {
   font-weight: normal;
 }
 @media screen and (max-width: 900px) {
-  header section#hero {
+  header#overview section#hero {
     width: 97.917%;
   }
-  header aside#example {
+  header#overview aside#example {
     width: 97.917%;
     padding-top: 0;
   }
 }
 @media screen and (max-device-width: 480px) {
-  header section#hero {
+  header#overview section#hero {
     width: 97.917%;
   }
-  header aside#example {
+  header#overview aside#example {
     width: 97.917%;
     padding-top: 0;
   }
