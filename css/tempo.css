@@ -155,7 +155,7 @@ header#overview section#hero nav#actions ul {
 header#overview section#hero nav#actions ul li a {
   padding: 1em;
 }
-header#overview section#hero ul#features li {
+header#overview section#hero ul#features li, header#overview section#hero ul#why li {
   list-style: circle outside none;
   margin: 0.75em 0 0.75em 2em;
   padding: 0 0 0 0.5em;
