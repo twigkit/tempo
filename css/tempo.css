@@ -292,6 +292,11 @@ article#usage div.usage section.usage p.h5 {
   margin-bottom: 2em;
   font-size: 0.9em;
 }
+@media screen and (max-device-width: 480px) {
+  article#usage header div section nav {
+    display: none;
+  }
+}
 nav#actions2 {
   width: 97.875%;
   margin: 0 1.064%;
