@@ -197,7 +197,8 @@ header#overview {
 				}
 			}
 		}
-		ul#features {
+		ul#features,
+		ul#why {
 			li {
 				list-style: circle outside none;
 				margin: 0.75em 0 0.75em 2em;
@@ -218,19 +219,19 @@ header#overview {
 	}
 }
 @media screen and (max-width: 900px) {
-	header section#hero {
+	header#overview section#hero {
 		width: @12g;
 	}
-	header aside#example {
+	header#overview aside#example {
 		width: @12g;
 		padding-top: 0;
 	}
 }
 @media screen and (max-device-width: 480px) {
-	header section#hero {
+	header#overview section#hero {
 		width: @12g;
 	}
-	header aside#example {
+	header#overview aside#example {
 		width: @12g;
 		padding-top: 0;
 	}
@@ -322,6 +323,7 @@ article#usage {
 		section.usage {
 			.column;
 			width: @12g;
+			
 			h3 {
 				clear: both;
 				font-size: 1.5em;
@@ -340,6 +342,11 @@ article#usage {
 				font-size: 0.9em;
 			}
 		}
+	}
+}
+@media screen and (max-device-width: 480px) {
+	article#usage header div section nav {
+		display: none;
 	}
 }
 
