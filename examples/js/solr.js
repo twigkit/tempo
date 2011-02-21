@@ -1,6 +1,7 @@
 function SolrJS(host) {
 	this.h = host;
 	this.params = {};
+	this.params.fq = [];
 	
 	return this;
 }
@@ -8,7 +9,6 @@ function SolrJS(host) {
 SolrJS.prototype = {
 	q : function(query) {
 		if (query != undefined) {
-			this._reset();
 			this.params.q = query;
 		} else {
 			return this.params.q;
@@ -37,8 +37,9 @@ SolrJS.prototype = {
 		return req;
 	},
 	
-	_reset : function() {
+	reset : function() {
 		this.params.q = '';
+		this.params = {};
 		this.params.fq = [];
 	},
 }

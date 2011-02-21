@@ -3,9 +3,73 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tempo :: Twitter Example</title>
+
+	<!-- Import the 1KB CSS Grid -->
+	<link rel="stylesheet" href="../css/grid.css" type="text/css" media="screen">
+
+	<!-- Import styles for the universal footer -->
+	<link rel="stylesheet" href="examples.css" type="text/css" media="screen">
+
+	<style type="text/css" media="screen">
+		/* reset and basic typography */
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Helvetica, Arial, sans-serif;
+		}
+		h1, ol#tweets p {
+			font-family: Georgia, "Times New Roman", serif;
+			font-weight: normal;
+		}
+		ol {
+			margin: 0;
+			padding: 0;
+			list-style: none outside none;
+		}
+		
+		/* header */
+		#header {
+			background-color: black;
+			margin-bottom: 2em;
+		}
+		h1 {
+			color: white;
+			padding: 0.667em 0;
+			margin: 0;
+			text-align: center;
+		}
+
+		/* tweets */
+		ol#tweets li {
+			padding: 1.25em 0;
+			border-bottom: 1px solid #e9e9e9;
+		}
+		ol#tweets p {
+			font-size: 1.5em;
+			color: #666;
+		}
+		
+		.user img {
+			float: right;
+			padding: 5px;
+			border: 1px solid #e9e9e9;
+			margin-right: 20px;
+		}
+		.user h3 {
+			float: right;
+			margin: 0 15px 0 0;
+			color: #333;
+			line-height: 60px;
+		}
+
+	</style>
+	
+	<!-- Import Tempo -->
+	<script type="text/javascript" src="../tempo.js"></script>
+	
+	<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 
-	<script type="text/javascript" src="https://github.com/twigkit/tempo/raw/master/tempo.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
 			var twitter = Tempo.prepare('tweets');
@@ -17,14 +81,42 @@
 	
 </head>
 <body>
-	
-	<ol id="tweets">
-		<li data-template>
+
+
+<!-- Header -->
+<div id="header">
+	<div class="row">
+		<div class="column grid_12">
+			<h1>Tempo and Twitter, sittin&rsquo; in a tree</h1>
+		</div>
+	</div>
+</div>
+
+
+<!-- Tweets -->
+<ol id="tweets">
+	<li class="row" data-template>
+		<div class="column grid_4 user">
 			<img src="{{profile_image_url}}" />
 			<h3>{{from_user}}</h3>
-			<p>{{text}}</p>
-		</li>
-	</ol>
-	
+		</div>
+		<p class="column grid_8 text">{{text}}</p>
+	</li>
+</ol>
+
+
+<!-- Universal Footer -->
+<ul id="tempo-actions">	
+	<li><a href="http://twigkit.github.com/tempo/">Back to the Overview</a></li>
+	<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+	<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
+</ul>
+<div id="footer">
+	<div class="row">
+		<p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> and <a href="http://twitter.com/tylertate">Tyler Tate</a> on Twitter.</p>
+	</div>
+</div>
+
+
 </body>
 </html>
