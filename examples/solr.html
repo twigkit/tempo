@@ -106,50 +106,55 @@
 	
 	<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-
+	<script type="text/javascript" src="js/solr.js"></script>
+	
 	<script type="text/javascript">
-		var solr, facetsTemplate;
+
+		var solrjs = new SolrJS();
+		var responseTemplate, facetsTemplate;
 
 		$(document).ready(function() {
-			//run Tempo.prepare() on both the response and facet containers
-			solr = Tempo.prepare('solr-response');
+			solrjs.query.host('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
+			
+			// Prepare templates
+			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
+			responseTemplate = Tempo.prepare('solr-response');
 			facetsTemplate = Tempo.prepare('solr-facets');
-			search('literature');
+			
+			// Default query
+			search();
 		});
 
-		//retrieve data from Solr
 		function search(q) {
+			// Search request
+			solrjs.query.query(q != undefined && q != '' ? q : 'literature');
+			_request();
+		}
+		
+		function addFilter(field, value) {
+			solrjs.query.add_filter(field, value);
+			_request();
+		}
+		
+		function removeFilter(field, value) {
+			solrjs.query.remove_filter(field, value);
+			_request();
+		}
+		
+		function _request() {
 			$.ajax({
-				url: "http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1",
-				data: {'q': q},
+				url: solrjs.query.url(),
 				dataType: 'jsonp',
 				jsonp: 'json.wrf',
 				success: function(data) {
-					//once the data is available, run Tempo.render()
-					solr.render(data.response);
-					facetsTemplate.render(facets(data.facet_counts.facet_fields));
+					// Render the query breadcrumbs
+					breadcrumbsTemplate.render(solrjs.query.filters);
+					// Render the primary response and associated results
+					responseTemplate.render(data.response);
+					// Render the facets, using SolrJS function to improve the object structure first
+					facetsTemplate.render(new SolrJS().response.getFacetsAsArray(data.facet_counts.facet_fields));
 				}
 			});
-		}
-
-		//Solr returns facets and facet counts in a strange format, so we'll need to do a bit of pre-processing for sending it off to Tempo.redner()
-		function facets(facet_fields) {
-			var facets = [];
-
-			for (var field in facet_fields) {
-				var f = {'name' : field};
-
-				var facet = [];
-				var i = 0;
-				while (i < facet_fields[field].length) {
-					facet.push({'label': facet_fields[field][i++], 'count': facet_fields[field][i++]});
-				}
-				f['facet'] = facet;
-
-				facets.push(f);
-			}
-
-			return facets;
 		}
 	</script>
 </head>
@@ -174,6 +179,10 @@
 
 <!-- Main Body -->
 <div id="mainbody" class="row">
+	
+	<ul id="solr-breadcrumbs">
+		<li data-template><a href="#" onclick='removeFilter("{{field}}", "{{value}}");'>{{field}}:{{value}}</a></li>
+	</ul>
 	
 	<!-- Search Results -->
 	<div id="solr-response" class="column grid_8">
