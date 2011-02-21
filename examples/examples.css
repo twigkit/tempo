@@ -1,0 +1,39 @@
+/* universal footer */
+ul#tempo-actions {
+	text-align: center;
+	background-color: #f0f0f0;
+	margin: 3em 0 0 0;
+	padding: 3em;
+}
+ul#tempo-actions li {
+	display: inline-block;
+	margin-right: 0.5em;
+}
+ul#tempo-actions li a {
+	display: block;
+	padding: 1em;
+}
+ul#tempo-actions li:hover {
+	background-color: #e0e0e0;
+}
+ul#tempo-actions li:active {
+	background-color: #ccc;
+}
+ul#tempo-actions li.download a {
+	color: white;
+	background-color: blue;
+}
+ul#tempo-actions li.download a:hover {
+	background-color: darkblue;
+}
+ul#tempo-actions li.download a:active {
+	background-color: black;
+}
+#footer {
+	background-color: black;
+	color: white;
+	padding: 2em 0px;
+}
+#footer a {
+	color: white;
+}
