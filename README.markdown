@@ -8,16 +8,16 @@ Usage
 
 1. Include the Tempo script
 
-	<script src="js/tempo.js" type="text/javascript"></script>
-	<script>Tempo.prepare("tweets").render(data);</script>
+	&lt;script src=&quot;js/tempo.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+	&lt;script&gt;Tempo.prepare(&quot;tweets&quot;).render(data);&lt;/script&gt;
 	
 
 2. Compose the data template inline in HTML
 
-	<ol id="tweets">
-		<li data-template>
-			<img src="{{profile_image_url}}" />
-			<h3>{{from_user}}</h3>
-			<p>{{text}}</p>
-		</li>
-	</ol>
+	&lt;ol id=&quot;tweets&quot;&gt;
+		&lt;li data-template&gt;
+			&lt;img src=&quot;{{profile_image_url}}&quot; /&gt;
+			&lt;h3&gt;{{from_user}}&lt;/h3&gt;
+			&lt;p&gt;{{text}}&lt;/p&gt;
+		&lt;/li&gt;
+	&lt;/ol&gt;
