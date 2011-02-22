@@ -1,6 +1,8 @@
 Tempo
 =====
 
+Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.
+
 Usage
 -----
 
@@ -8,6 +10,7 @@ Usage
 
 	<script src="js/tempo.js" type="text/javascript"></script>
 	<script>Tempo.prepare("tweets").render(data);</script>
+	
 
 2. Compose the data template inline in HTML
 
