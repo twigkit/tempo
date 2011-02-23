@@ -132,6 +132,7 @@
 							<li><a href="#html">HTML</a></li>
 							<li><a href="#css">CSS</a></li>
 							<li><a href="#jquery">jQuery</a></li>
+							<li><a href="#advanced">Advanced Topics</a></li>
 						</ul>
 					</nav>
 				</section>
@@ -156,18 +157,18 @@ var data = [
 				<a id="javascript"></a>
 				<h3>JavaScript</h3>
 				<h4>Include script</h4>
-				<p>You only need to include a single, 2kb script. You can either download and host the script yourself, or simply reference the minified script on Google Code.</p>
+				<p>You only need to include a single, 4kb script.</p>
 <pre>
 &lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
 </pre>
-				<h4>Tempo.prepare()</h4>
-				<p>To initialize Tempo, run the <code>prepare()</code> function to scan the page for data templates, cache them in memory, and remove the data template HTML elements from the page.</p>
-
+				<h4>Tempo.prepare(element)</h4>
+				<p>To initialize Tempo, run the <code>prepare()</code> function to scan an HTML container for data templates, cache them in memory, and remove the data template HTML elements from the page. <code>Tempo.prepare(element)</code> returns an instance of a renderer that knows how to layout the data you provide to it.</p>
+				
 				<h5>element</h5>
 				<p class="h5">The <strong>ID</strong> of the HTML element (or the element itself) containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
-			
-				<h4>Tempo.render()</h4>
-				<p>Once the JSON data is available, run the <code>render()</code> function to add the data to the page.</p>
+				
+				<h4>renderer.render()</h4>
+				<p>The Tempo.prepare() function returns an instance of a renderer. Once the JSON data is available, run the <code>render(data)</code> function to add the data to the page.</p>
 
 				<h5>data</h5>
 				<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
@@ -271,7 +272,7 @@ Tempo.prepare('marx-brothers').render(data);
 	&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
-
+				
 				<a id="jquery"></a>
 				<h3>Using Tempo with jQuery</h3>
 				<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
@@ -281,6 +282,45 @@ $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=
 	twitter.<em>render</em>(data.results);
 });
 </pre>
+				<a id="advanced"></a>
+				<h3>Advanced Topics</h3>
+					
+				<h4>renderer.notify(eventlistener)</h4>
+				<p>After preparing a template you can register an event listener by providing a callback function to be notified of events in the lifecycle. The event listener will be called with a single argument, a <code>TempoEvent</code> which has the following properties:</p>
+
+				<h5>type</h5>
+				<p class="h5">The <strong>type</strong> of the event. Constant values are defined in <code>TempoEvent.Types</code>.</p>
+				
+				<ul class="h5">
+					<li><code>TempoEvent.Types.RENDER_STARTING</code>: Indicates that rendering has started, or been manually triggered by calling <code>starting()</code> on the renderer object.</li>
+					<li><code>TempoEvent.Types.ITEM_RENDER_STARTING</code>: Indicates that the rendering of a given individual item is starting.</li>
+					<li><code>TempoEvent.Types.ITEM_RENDER_COMPLETE</code>: Indicates that the rendering of a given individual item has completed.</li>
+					<li><code>TempoEvent.Types.RENDER_COMPLETE</code>: Indicates that the rendering of all items is completed.</li>
+				</ul>
+				
+				<h5>item</h5>
+				<p class="h5">The <strong>item</strong> being rendered. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+				
+				<h5>element</h5>
+				<p class="h5">The HTML <strong>element</strong> or template being used for rendering. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+
+				<h4>starting()</h4>
+				<p>In some cases you prepare the templates ahead of calling render. In those cases if you would like to e.g. set loader graphics, call the renderer's <code>starting()</code> method just prior to issuing e.g. a jQuery request. This will fire the <code>ITEM_RENDER_STARTING</code> event.</p>
+				
+<p>The following example demonstrates use of both methods above. In this case we prepare the templates, and register our event handler function. The event handler is then notified that the jQuery request is about to be issued (when we manually fire <code>RENDER_STARTING</code> with a call to <code>starting()</code>) adding a CSS class to the container. We are then notified that rendering is complete so we can remove the CSS class.
+				
+<pre>
+var twitter = Tempo.prepare('tweets').<em>notify</em>( function (event) {
+	if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+		$('#tweets').toggleClass('loading');
+	}
+});
+twitter.<em>starting</em>();
+$.getJSON(url, function(data) {
+	twitter.render(data.results);
+});
+</pre>
+				
 			</section>
 		</div>
 	</article>

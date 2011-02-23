@@ -287,10 +287,14 @@ article#usage div.usage section.usage h5 {
   margin-top: -1em;
   font-size: 0.9em;
 }
-article#usage div.usage section.usage p.h5 {
+article#usage div.usage section.usage .h5 {
   margin-left: 2em;
   margin-bottom: 2em;
   font-size: 0.9em;
+}
+article#usage div.usage section.usage ul.h5 {
+  margin-top: -1em;
+  margin-left: 5em;
 }
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
