@@ -40,6 +40,10 @@
 		}
 
 		/* tweets */
+		ol#tweets.loading {
+			padding: 6em 0;
+			background: url('images/loading.gif') no-repeat center;
+		}
 		ol#tweets li {
 			padding: 1.25em 0;
 			border-bottom: 1px solid #e9e9e9;
@@ -65,20 +69,37 @@
 	</style>
 	
 	<!-- Import Tempo -->
-	<script type="text/javascript" src="../tempo.min.js"></script>
+	<script type="text/javascript" src="../tempo.js"></script>
 	
 	<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
-			var twitter = Tempo.prepare('tweets');
+			var twitter = Tempo.prepare('tweets').notify(function(event) {
+				if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+					$('ol').toggleClass('loading');
+				}
+			});
+			twitter.starting();
 			$.getJSON("http://search.twitter.com/search.json?q='groucho'&rpp=10&callback=?", function(data) {
 				twitter.render(data.results);
 			});
 		});
 	</script>
-	
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-10163369-2']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
 </head>
 <body>
 
@@ -97,7 +118,7 @@
 <ol id="tweets">
 	<li class="row" data-template>
 		<div class="column grid_4 user">
-			<img src="{{profile_image_url}}" />
+			<img src="{{profile_image_url}}" height="48" width="48" />
 			<h3>{{from_user}}</h3>
 		</div>
 		<p class="column grid_8 text">{{text}}</p>
