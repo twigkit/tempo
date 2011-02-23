@@ -1,14 +1,31 @@
+function TempoEvent(type, item, element) {
+    this.type = type;
+    this.item = item;
+    this.element = element;
+
+    return this;
+}
+
+TempoEvent.Types = {
+    RENDER_STARTING : 'render_starting',
+    ITEM_RENDER_STARTING : 'item_render_starting',
+    ITEM_RENDER_COMPLETE : 'item_render_complete',
+    RENDER_COMPLETE : 'render_complete'
+};
+
+
+
 var Tempo = (function (tempo) {
 
     /*!
      * Helpers
      */
     var utils = {
-        startsWith: function (str, prefix) {
+        startsWith : function (str, prefix) {
             return (str.indexOf(prefix) === 0);
         },
 
-        replaceVariable: function (item, str) {
+        replaceVariable : function (item, str) {
             return str.replace(/\{\{([A-Za-z0-9\._]*?)\}\}/g, function (match, variable) {
                 var val = eval('item.' + variable);
                 if (val) {
@@ -18,7 +35,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        clearContainer: function (el) {
+        clearContainer : function (el) {
             if (el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
                     if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && el.childNodes[i].getAttribute('data-template') !== null) {
@@ -28,7 +45,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        isNested: function (el) {
+        isNested : function (el) {
             var p = el.parentNode;
             while (p) {
                 if (p.getAttribute !== undefined && p.getAttribute('data-template') !== null) {
@@ -39,7 +56,7 @@ var Tempo = (function (tempo) {
             return false;
         },
 
-        equalsIgnoreCase: function (str1, str2) {
+        equalsIgnoreCase : function (str1, str2) {
             return str1.toLowerCase() === str2.toLowerCase();
         },
 
@@ -77,9 +94,14 @@ var Tempo = (function (tempo) {
                 return "object";
             }
             return typeof(obj);
+        },
+
+        notify : function (listener, event) {
+            if (listener !== undefined) {
+                listener(event);
+            }
         }
     };
-
 
     function Templates(nested) {
         this.defaultTemplate = null;
@@ -152,12 +174,34 @@ var Tempo = (function (tempo) {
      */
     function Renderer(templates) {
         this.templates = templates;
+        this.listener = undefined;
+        this.started = false;
 
         return this;
     }
 
     Renderer.prototype = {
-        render: function (data) {
+        notify : function (listener) {
+            this.listener = listener;
+
+            return this;
+        },
+
+        starting : function () {
+            // Use this to manually fire the RENDER_STARTING event e.g. just before you issue an AJAX request
+            // Useful if you're not calling prepare immediately before render
+            this.started = true;
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+
+            return this;
+        },
+
+        render : function (data) {
+            // Check if starting event was manually fired
+            if (!this.started) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+            }
+
             utils.clearContainer(this.templates.container);
             if (data) {
                 // If object then wrapping in an array
@@ -170,8 +214,11 @@ var Tempo = (function (tempo) {
                 for (var i = 0; i < data.length; i++) {
                     this.renderItem(this, data[i], fragment);
                 }
+
                 this.templates.container.appendChild(fragment);
             }
+
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
 
             return this;
         },
@@ -179,6 +226,8 @@ var Tempo = (function (tempo) {
         renderItem : function (renderer, item, fragment) {
             var template = renderer.templates.templateFor(item);
             if (template && item) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
+
                 var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
                 if (nestedDeclaration) {
                     var t = new Templates(true);
@@ -210,6 +259,8 @@ var Tempo = (function (tempo) {
                 }
 
                 fragment.appendChild(utils.getElement(template, html));
+                
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, item, template));
             }
         },
 
