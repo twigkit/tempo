@@ -129,8 +129,13 @@ var Tempo = (function (tempo) {
         createTemplate : function (node) {
             var element = node.cloneNode(true);
 
-            // Clear display: none;
-            element.style.removeProperty('display');
+            /// Clear display: none;
+            if (element.style.removeAttribute) {
+                element.style.removeAttribute ("display");
+            }
+            else {
+                element.style.removeProperty ("display");
+            }
 
             // Remapping container element in case template
             // is deep in container
