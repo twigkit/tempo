@@ -132,7 +132,7 @@
 	</style>
 	
 	<!-- Import Tempo -->
-	<script type="text/javascript" src="../tempo.min.js"></script>
+	<script type="text/javascript" src="../tempo.js"></script>
 	
 	<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
@@ -146,7 +146,7 @@
 		$(document).ready(function() {
 			// Prepare templates
 			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-			responseTemplate = Tempo.prepare('solr-response');
+			responseTemplate = Tempo.prepare('solr-response').notify(function(event) {console.log(event)});
 			facetsTemplate = Tempo.prepare('solr-facets');
 			
 			// Default query
@@ -170,6 +170,7 @@
 		}
 		
 		function _request() {
+			responseTemplate.starting();
 			$.ajax({
 				url: solrjs.url(),
 				dataType: 'jsonp',
