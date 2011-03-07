@@ -129,7 +129,7 @@ var Tempo = (function (tempo) {
         createTemplate : function (node) {
             var element = node.cloneNode(true);
 
-            /// Clear display: none;
+            // Clear display: none;
             if (element.style.removeAttribute) {
                 element.style.removeAttribute ("display");
             }
