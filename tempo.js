@@ -28,7 +28,7 @@ var Tempo = (function (tempo) {
         replaceVariable : function (item, str) {
             return str.replace(/\{\{([A-Za-z0-9\._]*?)\}\}/g, function (match, variable) {
                 var val = eval('item.' + variable);
-                if (val === 0 || val) {
+                if (val !== undefined) {
                     return val;
                 }
                 return '';
