@@ -243,7 +243,8 @@ var Tempo = (function (tempo) {
                 }
 
                 // Dealing with HTML as a String from now on (to be reviewed)
-                var html = template.innerHTML;
+				// Attribute values are escaped in FireFox so making sure there are no escaped tags
+                var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
                 for (var p in renderer.tags) {
