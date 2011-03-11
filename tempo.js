@@ -26,8 +26,14 @@ var Tempo = (function (tempo) {
         },
 
         replaceVariable : function (item, str) {
-            return str.replace(/\{\{([A-Za-z0-9\._]*?)\}\}/g, function (match, variable) {
-                var val = eval('item.' + variable);
+            return str.replace(/\{\{([A-Za-z0-9\._\[\]]*?)\}\}/g, function (match, variable) {
+				var val = null;
+				if (utils.typeOf(item) === 'array') {
+					val = eval('item' + variable);
+				} else {
+					val = eval('item.' + variable);
+				}
+                 
                 if (val !== undefined) {
                     return val;
                 }
@@ -240,7 +246,7 @@ var Tempo = (function (tempo) {
 				if (nestedDeclaration) {
 					for (var i = 0; i < nestedDeclaration.length; i++) {
 						var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
-						console.log(nested)
+
 						var t = new Templates(true);
 	                    t.parse(template);
 

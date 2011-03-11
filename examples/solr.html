@@ -177,11 +177,11 @@
 				jsonp: 'json.wrf',
 				success: function(data) {
 					// Render the query breadcrumbs
-					// breadcrumbsTemplate.render(solrjs.params);
+					breadcrumbsTemplate.render(solrjs.params);
 					// Render the primary response and associated results
 					responseTemplate.render(data);
 					// Render the facets, using SolrJS function to improve the object structure first
-					// facetsTemplate.render(new SolrJS().response.getFacetsAsArray(data.facet_counts.facet_fields));
+					facetsTemplate.render(data.facet_counts.facet_fields);
 				}
 			});
 		}
@@ -227,19 +227,21 @@
 					<p>by {{creator}}</p>
 				</li>
 			</ol>
-			
-			<ul>
-				<li data-template="facet_counts.facet_fields.language">
-					<h3>{{title}}</h3>
-					<p>by {{creator}}</p>
-				</li>
-			</ul>
 		</div>
 	</div>
 
 	<!-- Faceted Navigation -->
 	<div id="solr-facets"class="column grid_3">
-
+		<ul>
+			<li data-template style="display: none;">
+				<h3></h3>
+				<ul>
+					<li data-template="language">
+						<a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
 
 </div>
