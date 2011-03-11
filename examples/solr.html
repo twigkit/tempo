@@ -146,7 +146,7 @@
 		$(document).ready(function() {
 			// Prepare templates
 			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-			responseTemplate = Tempo.prepare('solr-response');//.notify(function(event) {console.log(event)});
+			responseTemplate = Tempo.prepare('solr-response').notify(function(event) {console.log(event)});
 			facetsTemplate = Tempo.prepare('solr-facets');
 			
 			// Default query
@@ -234,10 +234,10 @@
 	<div id="solr-facets"class="column grid_3">
 		<ul>
 			<li data-template style="display: none;">
-				<h3></h3>
+				<h3>Subjects</h3>
 				<ul>
-					<li data-template="language">
-						<a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+					<li data-template="subject">
+						<a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
 					</li>
 				</ul>
 			</li>
