@@ -108,11 +108,10 @@ var Tempo = (function (tempo) {
         }
     };
 
-    function Templates(nested, nestedItem) {
+    function Templates(nestedItem) {
         this.defaultTemplate = null;
         this.namedTemplates = {};
         this.container = null;
-        this.nested = nested !== undefined ? nested : false;
 		this.nestedItem = nestedItem !== undefined ? nestedItem : null;
 
         return this;
@@ -124,10 +123,20 @@ var Tempo = (function (tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== null && ((this.nested && this.nestedItem === children[i].getAttribute('data-template')) || !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' && !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
                 }
             }
+
+			if (this.defaultTemplate === null) {
+				var el = document.createElement('div');
+				el.innerHTML = this.container.innerHTML;
+				this.container.innerHTML = '';
+				el.setAttribute('data-template', '')
+				
+				this.container.appendChild(el);
+				this.createTemplate(el);
+			}
 
             utils.clearContainer(this.container);
         },
@@ -145,7 +154,7 @@ var Tempo = (function (tempo) {
 
             // Remapping container element in case template
             // is deep in container
-            this.container = node.parentNode;
+			this.container = node.parentNode;
 
             // Element is a template
 			var nonDefault = false;
@@ -249,7 +258,7 @@ var Tempo = (function (tempo) {
 					for (var i = 0; i < nestedDeclaration.length; i++) {
 						var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
 
-						var t = new Templates(true, nested);
+						var t = new Templates(nested);
 	                    t.parse(template);
 
 	                    var r = new Renderer(t);

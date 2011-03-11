@@ -141,7 +141,7 @@
 	<script type="text/javascript">
 
 		var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
-		var responseTemplate, facetsTemplate;
+		var responseTemplate;
 
 		$(document).ready(function() {
 			// Prepare templates
@@ -212,8 +212,6 @@
 
 <!-- Main Body -->
 <div id="mainbody" class="row">
-	
-	<div data-template>
 		<!-- Search Results -->
 		<div class="column grid_8">
 			<h2>{{response.numFound}} results found</h2>
@@ -247,7 +245,6 @@
 				</li>
 			</ul>
 		</div>
-	</div>
 
 </div>
 
