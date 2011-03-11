@@ -28,7 +28,7 @@ var Tempo = (function (tempo) {
         replaceVariable : function (item, str) {
             return str.replace(/\{\{([A-Za-z0-9\._]*?)\}\}/g, function (match, variable) {
                 var val = eval('item.' + variable);
-                if (val) {
+                if (val !== undefined) {
                     return val;
                 }
                 return '';
@@ -130,7 +130,12 @@ var Tempo = (function (tempo) {
             var element = node.cloneNode(true);
 
             // Clear display: none;
-            element.style.removeProperty('display');
+            if (element.style.removeAttribute) {
+                element.style.removeAttribute ("display");
+            }
+            else {
+                element.style.removeProperty ("display");
+            }
 
             // Remapping container element in case template
             // is deep in container
@@ -238,7 +243,8 @@ var Tempo = (function (tempo) {
                 }
 
                 // Dealing with HTML as a String from now on (to be reviewed)
-                var html = template.innerHTML;
+				// Attribute values are escaped in FireFox so making sure there are no escaped tags
+                var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
                 for (var p in renderer.tags) {
