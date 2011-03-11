@@ -146,8 +146,7 @@
 		$(document).ready(function() {
 			// Prepare templates
 			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-			responseTemplate = Tempo.prepare('solr-response').notify(function(event) {console.log(event)});
-			facetsTemplate = Tempo.prepare('solr-facets');
+			responseTemplate = Tempo.prepare('mainbody');
 			
 			// Default query
 			query('');
@@ -180,8 +179,6 @@
 					breadcrumbsTemplate.render(solrjs.params);
 					// Render the primary response and associated results
 					responseTemplate.render(data);
-					// Render the facets, using SolrJS function to improve the object structure first
-					facetsTemplate.render(data.facet_counts.facet_fields);
 				}
 			});
 		}
@@ -206,19 +203,19 @@
 </div>
 
 
+<div id="solr-breadcrumbs" class="row">
+	<ul data-template>
+		<li><a href="#" onclick="query('');">{{q}}</a></li>
+		<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">{{value}}</a></li>
+	</ul>
+</div>
+
 <!-- Main Body -->
 <div id="mainbody" class="row">
 	
-	<div id="solr-breadcrumbs">
-		<ul data-template>
-			<li><a href="#" onclick="query('');">{{q}}</a></li>
-			<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">{{value}}</a></li>
-		</ul>
-	</div>
-	
-	<!-- Search Results -->
-	<div id="solr-response" class="column grid_8">
-		<div data-template style="display: none;">
+	<div data-template>
+		<!-- Search Results -->
+		<div class="column grid_8">
 			<h2>{{response.numFound}} results found</h2>
 
 			<ol>
@@ -228,20 +225,28 @@
 				</li>
 			</ol>
 		</div>
-	</div>
 
-	<!-- Faceted Navigation -->
-	<div id="solr-facets"class="column grid_3">
-		<ul>
-			<li data-template style="display: none;">
-				<h3>Subjects</h3>
-				<ul>
-					<li data-template="subject">
-						<a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
-					</li>
-				</ul>
-			</li>
-		</ul>
+		<!-- Faceted Navigation -->
+		<div id="solr-facets" class="column grid_3">
+			<ul>
+				<li>
+					<h3>Subjects</h3>
+					<ul>
+						<li data-template="facet_counts.facet_fields.subject">
+							<a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<h3>Languages</h3>
+					<ul>
+						<li data-template="facet_counts.facet_fields.language">
+							<a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 	</div>
 
 </div>

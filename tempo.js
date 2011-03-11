@@ -113,7 +113,7 @@ var Tempo = (function (tempo) {
         this.namedTemplates = {};
         this.container = null;
         this.nested = nested !== undefined ? nested : false;
-		this.nestedItem = nestedItem;
+		this.nestedItem = nestedItem !== undefined ? nestedItem : null;
 
         return this;
     }
@@ -124,7 +124,7 @@ var Tempo = (function (tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== null && (this.nested && this.nestedItem === children[i].getAttribute('data-template') || !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template') !== null && ((this.nested && this.nestedItem === children[i].getAttribute('data-template')) || !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
                 }
             }
@@ -244,22 +244,12 @@ var Tempo = (function (tempo) {
             if (template && item) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
 
-<<<<<<< HEAD
-                // var nestedDeclaration = template.innerHTML.match(/data-template=\"(.*?)\"/);
-				var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
-=======
                 var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
->>>>>>> master
-
 				if (nestedDeclaration) {
 					for (var i = 0; i < nestedDeclaration.length; i++) {
 						var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
 
-<<<<<<< HEAD
-						var t = new Templates(true);
-=======
 						var t = new Templates(true, nested);
->>>>>>> master
 	                    t.parse(template);
 
 	                    var r = new Renderer(t);
