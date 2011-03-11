@@ -140,13 +140,13 @@
 	
 	<script type="text/javascript">
 
-		var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
+		var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
 		var responseTemplate, facetsTemplate;
 
 		$(document).ready(function() {
 			// Prepare templates
 			breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-			responseTemplate = Tempo.prepare('solr-response').notify(function(event) {console.log(event)});
+			responseTemplate = Tempo.prepare('solr-response');//.notify(function(event) {console.log(event)});
 			facetsTemplate = Tempo.prepare('solr-facets');
 			
 			// Default query
@@ -177,11 +177,11 @@
 				jsonp: 'json.wrf',
 				success: function(data) {
 					// Render the query breadcrumbs
-					breadcrumbsTemplate.render(solrjs.params);
+					// breadcrumbsTemplate.render(solrjs.params);
 					// Render the primary response and associated results
-					responseTemplate.render(data.response);
+					responseTemplate.render(data);
 					// Render the facets, using SolrJS function to improve the object structure first
-					facetsTemplate.render(new SolrJS().response.getFacetsAsArray(data.facet_counts.facet_fields));
+					// facetsTemplate.render(new SolrJS().response.getFacetsAsArray(data.facet_counts.facet_fields));
 				}
 			});
 		}
@@ -219,29 +219,27 @@
 	<!-- Search Results -->
 	<div id="solr-response" class="column grid_8">
 		<div data-template style="display: none;">
-			<h2>{{numFound}} results found</h2>
+			<h2>{{response.numFound}} results found</h2>
 
 			<ol>
-				<li data-template="docs">
+				<li data-template="response.docs">
 					<h3>{{title}}</h3>
 					<p>by {{creator}}</p>
 				</li>
 			</ol>
+			
+			<ul>
+				<li data-template="facet_counts.facet_fields.language">
+					<h3>{{title}}</h3>
+					<p>by {{creator}}</p>
+				</li>
+			</ul>
 		</div>
 	</div>
 
 	<!-- Faceted Navigation -->
 	<div id="solr-facets"class="column grid_3">
-		<ul>
-			<li data-template style="display: none;">
-				<h3>{{name}}</h3>
-				<ul>
-					<li data-template="facet">
-						<a href="#" onclick='addFilter("{{field}}", "{{label}}");'>{{label}}</a> <span>{{count}}</span>
-					</li>
-				</ul>
-			</li>
-		</ul>
+
 	</div>
 
 </div>

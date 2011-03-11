@@ -208,6 +208,7 @@ var Tempo = (function (tempo) {
             }
 
             utils.clearContainer(this.templates.container);
+			
             if (data) {
                 // If object then wrapping in an array
                 if (utils.typeOf(data) === 'object') {
@@ -233,14 +234,20 @@ var Tempo = (function (tempo) {
             if (template && item) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
 
-                var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/);
-                if (nestedDeclaration) {
-                    var t = new Templates(true);
-                    t.parse(template);
+                // var nestedDeclaration = template.innerHTML.match(/data-template=\"(.*?)\"/);
+				var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
 
-                    var r = new Renderer(t);
-                    r.render(item[nestedDeclaration[1]]);
-                }
+				if (nestedDeclaration) {
+					for (var i = 0; i < nestedDeclaration.length; i++) {
+						var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
+						console.log(nested)
+						var t = new Templates(true);
+	                    t.parse(template);
+
+	                    var r = new Renderer(t);
+	                    r.render(eval('item.' + nested));
+					}
+				}
 
                 // Dealing with HTML as a String from now on (to be reviewed)
 				// Attribute values are escaped in FireFox so making sure there are no escaped tags
