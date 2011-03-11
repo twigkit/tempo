@@ -33,7 +33,6 @@ var Tempo = (function (tempo) {
 				} else {
 					val = eval('item.' + variable);
 				}
-                 
                 if (val !== undefined) {
                     return val;
                 }
@@ -109,11 +108,12 @@ var Tempo = (function (tempo) {
         }
     };
 
-    function Templates(nested) {
+    function Templates(nested, nestedItem) {
         this.defaultTemplate = null;
         this.namedTemplates = {};
         this.container = null;
         this.nested = nested !== undefined ? nested : false;
+		this.nestedItem = nestedItem;
 
         return this;
     }
@@ -124,7 +124,7 @@ var Tempo = (function (tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== null && (this.nested || !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template') !== null && (this.nested && this.nestedItem === children[i].getAttribute('data-template') || !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
                 }
             }
@@ -137,10 +137,10 @@ var Tempo = (function (tempo) {
 
             // Clear display: none;
             if (element.style.removeAttribute) {
-                element.style.removeAttribute ("display");
+                element.style.removeAttribute("display");
             }
             else {
-                element.style.removeProperty ("display");
+                element.style.removeProperty("display");
             }
 
             // Remapping container element in case template
@@ -148,6 +148,7 @@ var Tempo = (function (tempo) {
             this.container = node.parentNode;
 
             // Element is a template
+			var nonDefault = false;
             for (var a = 0; a < element.attributes.length; a++) {
                 var attr = element.attributes[a];
                 // If attribute
@@ -160,11 +161,14 @@ var Tempo = (function (tempo) {
                     }
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
                     element.removeAttribute(attr.name);
+					nonDefault = true;
                 }
             }
 
             // Setting as default template, last one wins
-            this.defaultTemplate = element;
+            if (!nonDefault) {
+				this.defaultTemplate = element;
+			}
         },
 
         templateFor: function (item) {
@@ -240,14 +244,22 @@ var Tempo = (function (tempo) {
             if (template && item) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
 
+<<<<<<< HEAD
                 // var nestedDeclaration = template.innerHTML.match(/data-template=\"(.*?)\"/);
 				var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
+=======
+                var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
+>>>>>>> master
 
 				if (nestedDeclaration) {
 					for (var i = 0; i < nestedDeclaration.length; i++) {
 						var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
 
+<<<<<<< HEAD
 						var t = new Templates(true);
+=======
+						var t = new Templates(true, nested);
+>>>>>>> master
 	                    t.parse(template);
 
 	                    var r = new Renderer(t);
