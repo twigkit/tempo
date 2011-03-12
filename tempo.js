@@ -123,7 +123,7 @@ var Tempo = (function (tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' && !utils.isNested(children[i]))) {
+                if (children[i].getAttribute('data-template', 0) !== null && (this.nestedItem === children[i].getAttribute('data-template', 0) || children[i].getAttribute('data-template', 0) === '' && !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
                 }
             }
@@ -132,7 +132,7 @@ var Tempo = (function (tempo) {
 			if (this.defaultTemplate === null) {
 				// Creating a template inside the container
 				var el = document.createElement('div');
-				el.setAttribute('data-template', '');
+				el.setAttribute('data-template', '', 0);
 				el.innerHTML = this.container.innerHTML;
 				
 				// Clearing container before adding the wrapped contents
