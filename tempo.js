@@ -313,10 +313,11 @@ var Tempo = (function (tempo) {
                     }
 
                     condition = condition.replace(/&amp;/g, '&');
+					alert(condition);
                     condition = condition.replace(new RegExp(member_regex, 'gi'), function (match) {
                         return 'item.' + match;
                     });
-					alert(condition);
+					
                     if (eval(condition)) {
                         return content;
                     }
