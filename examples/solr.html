@@ -212,14 +212,13 @@
 
 <div id="solr-breadcrumbs" class="row">
 	<ul data-template>
-		{{if q !== '*:*'}}<li>{{q}}</li>{{endif}}
+		{{if q !== '*:*'}}<li><a href="#" onclick="query('');">&#215;</a>{{q}}</li>{{endif}}
 		<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">&#215;</a>{{value}}</li>
 	</ul>
 </div>
 
 <!-- Main Body -->
 <div id="mainbody" class="row">
-	<div data-template>
 	<!-- Search Results -->
 	<div class="column grid_8">
 		<h2>{{response.numFound}} results found</h2>
@@ -252,7 +251,6 @@
 				</ul>
 			</li>
 		</ul>
-	</div>
 	</div>
 </div>
 
