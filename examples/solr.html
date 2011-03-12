@@ -85,11 +85,16 @@
 			font-size: 1.5em;
 			color: #333;
 		}
-		ol li p, ol li p a {
+		ol li p {
 			margin: 0;
 			font-size: 0.9em;
 			color: #999;
 			text-transform: uppercase;
+		}
+		ol li p a {
+			color: #999;
+			text-decoration: none;
+			border-bottom: 1px solid #ccc;
 		}
 		ol li p a:hover {
 			color: #333;
@@ -179,7 +184,7 @@
 				success: function(data) {
 					// Render the query breadcrumbs
 					breadcrumbsTemplate.render(solrjs.params);
-					// Render the primary response and associated results
+					// Render the primary response, associated results and facets
 					responseTemplate.render(data);
 				}
 			});
