@@ -14,7 +14,6 @@ TempoEvent.Types = {
 };
 
 
-
 var Tempo = (function (tempo) {
 
     /*!
