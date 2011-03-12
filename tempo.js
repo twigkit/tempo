@@ -132,7 +132,7 @@ var Tempo = (function (tempo) {
 			if (this.defaultTemplate === null) {
 				// Creating a template inside the container
 				var el = document.createElement('div');
-				el.setAttribute('data-template', '')
+				el.setAttribute('data-template', '');
 				el.innerHTML = this.container.innerHTML;
 				
 				// Clearing container before adding the wrapped contents
