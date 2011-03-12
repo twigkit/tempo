@@ -277,6 +277,7 @@ var Tempo = (function (tempo) {
 
                 // Tags
                 for (var p in renderer.tags) {
+					alert(renderer.tags[p].regex)
                     html = html.replace(new RegExp(renderer.tags[p].regex, 'gi'), renderer.tags[p].handler(renderer, item));
                 }
 
