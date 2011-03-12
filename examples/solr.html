@@ -46,25 +46,22 @@
 		}
 		
 		/* breadcrumbs */
-		ul#solr-breadcrumbs {
+		#solr-breadcrumbs ul {
 			margin-top: 1em;
 			margin-bottom: 2em;
 			padding-bottom: 0.5em;
 		}
-		ul#solr-breadcrumbs li {
+		#solr-breadcrumbs ul li {
 			display: block;
 			float: left;
-			margin-right: 1px;
+			margin-right: 15px;
+			text-transform: capitalize;
 		}
-		ul#solr-breadcrumbs li a {
+		#solr-breadcrumbs ul li a {
 			color: #999;
+			font-size: 1.3em;
 			text-decoration: none;
-		}
-		ul#solr-breadcrumbs li:before {
-			content: "\0020 \0020 \0020 \00BB \0020";
-			color: #999;
-			font-size: 1.25em;
-			font-family: Georgia;
+			margin: 0 8px 0 0;
 		}
 		
 		/* search results */
@@ -205,8 +202,8 @@
 
 <div id="solr-breadcrumbs" class="row">
 	<ul data-template>
-		<li><a href="#" onclick="query('');">{{q}}</a></li>
-		<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">{{value}}</a></li>
+		{{if q !== '*:*'}}<li><a href="#" onclick="query('');">&#215;</a>{{q}}</li>{{endif}}
+		<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">&#215;</a>{{value}}</li>
 	</ul>
 </div>
 
