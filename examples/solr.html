@@ -63,7 +63,7 @@
 			margin: 0 8px 0 0;
 		}
 		#solr-breadcrumbs ul li a:hover {
-			color: #444;
+			color: #333;
 		}
 		
 		/* search results */
@@ -85,11 +85,14 @@
 			font-size: 1.5em;
 			color: #333;
 		}
-		ol li p {
+		ol li p, ol li p a {
 			margin: 0;
 			font-size: 0.9em;
 			color: #999;
 			text-transform: uppercase;
+		}
+		ol li p a:hover {
+			color: #333;
 		}
 		
 		/* faceted navigation */
@@ -219,7 +222,7 @@
 		<ol>
 			<li data-template="response.docs">
 				<h3>{{title}}</h3>
-				<p>by {{creator}}</p>
+				<p>by <a href="#" onclick='addFilter("creator", "{{creator}}");'>{{creator}}</a></p>
 			</li>
 		</ol>
 	</div>
