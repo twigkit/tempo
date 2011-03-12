@@ -300,7 +300,7 @@ var Tempo = (function (tempo) {
         },
 
         tags : [
-            // If tag
+            // If tag (using a workaround for the dotall modifier to match multilines [\\s\\S])
             {'regex': '\\{\\{if ([\\s\\S]*?)\\}\\}([\\s\\S]*?)\\{\\{endif\\}\\}', 'handler': function (renderer, item) {
                 return function (match, condition, content) {
                     var member_regex = '';
