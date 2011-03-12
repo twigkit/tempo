@@ -301,7 +301,7 @@ var Tempo = (function (tempo) {
 
         tags : [
             // If tag
-            {'regex': '\\{\\{if (.*?)\\}\\}(.*?)\\{\\{endif\\}\\}', 'handler': function (renderer, item) {
+            {'regex': '\\{\\{if ([\\s\\S]*?)\\}\\}([\\s\\S]*?)\\{\\{endif\\}\\}', 'handler': function (renderer, item) {
                 return function (match, condition, content) {
                     var member_regex = '';
                     for (var member in item) {
