@@ -52,7 +52,6 @@
 			// Nested template
 			Tempo.prepare('nested-marx-brothers').render(data);
 			
-
 			// Multiple templates
 			Tempo.prepare('more-marx-brothers').render(data);
 
@@ -83,36 +82,6 @@
 	Tempo &gt; The Simple JavaScript Template Engine
 </h1>
 
-<h2>
-	Usage
-</h2>
-
-<h3>
-	JavaScript
-</h3>
-		<pre>
-    /*
-     * element : ID or an instance of an HTMLElement
-     * data    : An array of objects
-     */
-    Tempo.prepare( element ).render( data );
-</pre>
-<h3>
-	HTML
-</h3>
-
-<p>
-	Any tag with data-template attribute will be considered a template
-</p>
-
-<h2>
-	Examples
-</h2>
-
-<p>
-	The following examples will use this sample data
-</p>
-
 <h3>
 	Simple template
 </h3>
@@ -121,6 +90,7 @@
 	<li data-template>{{nickname}} {{name.last}} {{age}} {{actor}}
 	</li>
 </ol>
+
 <h3>
 	Nested templates
 </h3>
@@ -141,31 +111,6 @@
 <h3>
 	Template selectors
 </h3>
-<h4>
-	JavaScript
-</h4>
-		<pre>
-    Tempo.prepare('more-marx-brothers').render(data);
-</pre>
-<h4>
-	HTML
-</h4>
-		<pre>
-    &lt;style&gt;
-        li.brother.Groucho { color: red; }
-        li#Gummo {text-decoration: line-through;}
-    &lt;/style&gt;
-
-    &lt;ul id="more-marx-brothers"&gt;
-        &lt;li data-template data-if-nickname="Groucho" class="brother {{nickname}}"&gt;{{nickname}} (aka {{name.first}}) was grumpy!&lt;/li&gt;
-        &lt;li data-template data-if-actor class="brother"&gt;{{name.first}}, nicknamed '&lt;i&gt;{{nickname}} {{name.last}}&lt;/i&gt;' was born on {{born}}&lt;/li&gt;
-        &lt;!-- Default template --&gt;
-        &lt;li data-template id="{{nickname}}" class="brother"&gt;{{name.first}} {{name.last}} was not in any movies!&lt;/li&gt;
-    &lt;/ul&gt;
-</pre>
-<h4>
-	Output
-</h4>
 <ul id="more-marx-brothers">
 	<li data-template id="{{nickname}}" class="brother">{{name.first}} {{name.last}} was not in any movies!
 	</li>
@@ -176,58 +121,10 @@
 		was born on {{born}}
 	</li>
 </ul>
+
 <h3>
 	More complex templates
 </h3>
-<h4>
-	JavaScript
-</h4>
-	<pre>
-        Tempo.prepare('complex-marx-brothers').render(data);
-	</pre>
-<h4>
-	HTML
-</h4>
-	<pre>
-    	&lt;table id=&quot;complex-marx-brothers&quot;&gt;
-			&lt;thead&gt;
-				&lt;tr&gt;
-					&lt;th&gt;
-						Last Name
-					&lt;/th&gt;
-					&lt;th&gt;
-						First Name
-					&lt;/th&gt;
-					&lt;th&gt;
-						DOB
-					&lt;/th&gt;
-					&lt;th&gt;
-						Grumpy
-					&lt;/th&gt;
-				&lt;/tr&gt;
-			&lt;/thead&gt;
-			&lt;tbody&gt;
-				&lt;tr data-template=&quot;&quot;&gt;
-					&lt;td&gt;
-						{{name.last}}
-					&lt;/td&gt;
-					&lt;td&gt;
-						&lt;a href=&quot;#&quot; onclick=&quot;alert(&#x27;{{nickname}}&#x27;); return false;&quot;&gt;{{name.first}}&lt;/a&gt;
-					&lt;/td&gt;
-					&lt;td&gt;
-						{{born}}
-					&lt;/td&gt;
-					&lt;td&gt;
-						{{if nickname == &#x27;Groucho&#x27; &amp;amp;&amp;amp; name.last == &#x27;Marx&#x27;}}&lt;span&gt;X&lt;/span&gt;{{endif}}
-					&lt;/td&gt;
-				&lt;/tr&gt;
-			&lt;/tbody&gt;
-		&lt;/table&gt;
-	</pre>
-<h4>
-	Output
-</h4>
-
 <table id="complex-marx-brothers">
 	<thead>
 		<tr>
@@ -257,7 +154,7 @@
 				{{born}}
 			</td>
 			<td>
-				{{if nickname == 'Groucho' &amp;&amp; name.last == 'Marx'}}<span>X</span>{{endif}}
+				{{if nickname == 'Groucho' && name.last == 'Marx'}}<span>X</span>{{endif}}
 			</td>
 		</tr>
 	</tbody>
@@ -267,37 +164,6 @@
 <h3>
 	Using with jQuery for AJAX
 </h3>
-<h4>
-	JavaScript
-</h4>
-		<pre>
-    var twitter = Tempo.prepare('jquery-ajax-twitter');
-    $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
-            twitter.render(data.results);
-        });
-</pre>
-<h4>
-	HTML
-</h4>
-		<pre>
-    &lt;style&gt;
-        .tweet img { float: left; height: 48px; width: 48px;}
-        .tweet div { margin-left: 58px;}
-    &lt;/style&gt;
-
-    &lt;div id="jquery-ajax-twitter"&gt;
-        &lt;div data-template class="tweet"&gt;
-            &lt;img src="{{profile_image_url}}" /&gt;
-            &lt;div&gt;
-                &lt;a href="http://twitter.com/{{from_user}}"&gt;{{from_user}}&lt;/a&gt; ({{created_at}})
-                &lt;p&gt;{{text}}&lt;/p&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-</pre>
-<h4>
-	Output
-</h4>
 
 <div id="jquery-ajax-twitter">
 	<div data-template class="tweet">
