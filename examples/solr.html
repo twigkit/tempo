@@ -212,7 +212,7 @@
 
 <div id="solr-breadcrumbs" class="row">
 	<ul data-template>
-		<li>{{if q !== '*:*'}}-<a href="#" onclick="query('');">&#215;</a>{{q}}{{endif}}</li>
+		<li>{{if q !== '*:*'}}<a href="#" onclick="query('');">&#215;</a>{{q}}{{endif}}</li>
 		<li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">&#215;</a>{{value}}</li>
 	</ul>
 </div>
