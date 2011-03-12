@@ -41,5 +41,5 @@ SolrJS.prototype = {
 		this.params.q = '';
 		this.params = {};
 		this.params.fq = [];
-	},
+	}
 }
