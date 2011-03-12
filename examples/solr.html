@@ -212,40 +212,40 @@
 
 <!-- Main Body -->
 <div id="mainbody" class="row">
-		<!-- Search Results -->
-		<div class="column grid_8">
-			<h2>{{response.numFound}} results found</h2>
+	
+	<!-- Search Results -->
+	<div class="column grid_8">
+		<h2>{{response.numFound}} results found</h2>
 
-			<ol>
-				<li data-template="response.docs">
-					<h3>{{title}}</h3>
-					<p>by {{creator}}</p>
-				</li>
-			</ol>
-		</div>
+		<ol>
+			<li data-template="response.docs">
+				<h3>{{title}}</h3>
+				<p>by {{creator}}</p>
+			</li>
+		</ol>
+	</div>
 
-		<!-- Faceted Navigation -->
-		<div id="solr-facets" class="column grid_3">
-			<ul>
-				<li>
-					<h3>Subjects</h3>
-					<ul>
-						<li data-template="facet_counts.facet_fields.subject">
-							<a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<h3>Languages</h3>
-					<ul>
-						<li data-template="facet_counts.facet_fields.language">
-							<a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-
+	<!-- Faceted Navigation -->
+	<div id="solr-facets" class="column grid_3">
+		<ul>
+			<li>
+				<h3>Subjects</h3>
+				<ul>
+					<li data-template="facet_counts.facet_fields.subject">
+						<a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<h3>Languages</h3>
+				<ul>
+					<li data-template="facet_counts.facet_fields.language">
+						<a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </div>
 
 

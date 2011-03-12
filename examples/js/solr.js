@@ -43,24 +43,3 @@ SolrJS.prototype = {
 		this.params.fq = [];
 	},
 }
-
-SolrJS.prototype.response = {
-		getFacetsAsArray : function(facet_fields) {
-		var facets = [];
-
-		for (var field in facet_fields) {
-			var f = {'name' : field};
-
-			var facet = [];
-			var i = 0;
-			while (i < facet_fields[field].length) {
-				facet.push({'field': field, 'label': facet_fields[field][i++], 'count': facet_fields[field][i++]});
-			}
-			f['facet'] = facet;
-
-			facets.push(f);
-		}
-
-		return facets;
-	}
-}

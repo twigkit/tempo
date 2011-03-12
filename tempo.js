@@ -128,12 +128,17 @@ var Tempo = (function (tempo) {
                 }
             }
 
+			// If there is no default template (data-template) then create one from container
 			if (this.defaultTemplate === null) {
+				// Creating a template inside the container
 				var el = document.createElement('div');
-				el.innerHTML = this.container.innerHTML;
-				this.container.innerHTML = '';
 				el.setAttribute('data-template', '')
+				el.innerHTML = this.container.innerHTML;
 				
+				// Clearing container before adding the wrapped contents
+				this.container.innerHTML = '';
+				
+				// There is now a default template present with a data-template attribute
 				this.container.appendChild(el);
 				this.createTemplate(el);
 			}
