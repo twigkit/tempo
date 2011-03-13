@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tempo :: Dribbble Example</title>
+
+	<!-- Import the 1KB CSS Grid -->
+	<link rel="stylesheet" href="css/grid.css" type="text/css" media="screen">
+
+	<!-- Import styles for the universal footer -->
+	<link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
+
+	<style type="text/css" media="screen">
+		/* reset and basic typography */
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Helvetica, Arial, sans-serif;
+		}
+		h1, h2, ol#dribbble p {
+			font-family: Georgia, "Times New Roman", serif;
+			font-weight: normal;
+		}
+		h2.hits {
+			text-align: right;
+		}
+		ol {
+			margin: 0;
+			padding: 0;
+			list-style: none outside none;
+		}
+		
+		/* header */
+		#header {
+			background-color: black;
+			margin-bottom: 2em;
+		}
+		h1 {
+			color: white;
+			padding: 0.667em 0;
+			margin: 0;
+			text-align: center;
+		}
+
+		/* tweets */
+		div#dribbble.loading {
+			padding: 6em 0;
+			background: url('images/loading.gif') no-repeat center;
+		}
+		ol#dribbbles li {
+			padding: 1.25em 0;
+			border-bottom: 1px solid #e9e9e9;
+		}
+		ol#dribbbles h2 {
+			font-size: 1.5em;
+			color: #666;
+		}
+		ol#dribbbles h2 a {
+			text-decoration: none;
+			color: #666;
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 2px;
+		}
+		ol#dribbbles h2 a:hover {
+			color: #333;
+		}
+		ol#dribbbles img.player {
+			float: left;
+			margin-right: 15px;
+		}
+		ol#dribbbles p.name {
+			padding-top: 6px;
+		}
+		
+		.image img {
+			float: right;
+			padding: 5px;
+			border: 1px solid #e9e9e9;
+			margin-right: 20px;
+		}
+
+	</style>
+	
+	<!-- Import Tempo -->
+	<script type="text/javascript" src="../tempo.js"></script>
+	
+	<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			var dribbble = Tempo.prepare('dribbble').notify(function(event) {
+				if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+					$('div#dribbble').toggleClass('loading');
+				}
+			});
+			dribbble.starting();
+			$.getJSON("http://api.dribbble.com/shots/popular?callback=?", function(data) {
+				dribbble.render(data);
+			});
+		});
+	</script>
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-10163369-2']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+</head>
+<body>
+
+
+<!-- Header -->
+<div id="header">
+	<div class="row">
+		<div class="column grid_12">
+			<h1>Tempo can Dribbble!</h1>
+		</div>
+	</div>
+</div>
+
+<div id="dribbble" class="row">
+	<h2 class="hits">{{total}} found</h2>
+
+	<ol id="dribbbles">
+		<li class="row" data-template="shots">
+			<div class="column grid_4 image">
+				<img src="{{image_url}}" height="150" width="200" />
+			</div>
+			<div class="column grid_8">
+				<h2><a href="{{url}}">{{title}}</a> ({{views_count}})</h2>
+				
+				<img src="{{player.avatar_url}}" class="player" height="30" width="30" />
+				<p class="name">Created by <b>{{player.name}}</b>, {{player.likes_received_count}} likes.
+			</div>
+		</li>
+	</ol>
+</div>
+
+
+<!-- Universal Footer -->
+<ul id="tempo-actions">	
+	<li><a href="http://twigkit.github.com/tempo/">Back to the Overview</a></li>
+	<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+	<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
+</ul>
+<div id="footer">
+	<div class="row">
+		<p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> and <a href="http://twitter.com/tylertate">Tyler Tate</a> on Twitter.</p>
+	</div>
+</div>
+
+
+</body>
+</html>
