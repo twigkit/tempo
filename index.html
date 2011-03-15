@@ -65,12 +65,13 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo</h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.1<span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
 					<li><a href="examples/twitter">Twitter Example</a></li>
+					<li><a href="examples/solr">Solr Example</a></li>
 					<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
 				</ul>
 			</nav>
@@ -169,6 +170,8 @@ var data = [
 				<h5>element</h5>
 				<p class="h5">The <strong>ID</strong> of the HTML element (or the element itself) containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
 				
+				<p>If the container does not contain a default (that is without conditions and not nested) <code>data-template</code> the entire contents of the container will be considered to represent the template.</p>
+				
 				<h4>renderer.render()</h4>
 				<p>The Tempo.prepare() function returns an instance of a renderer. Once the JSON data is available, run the <code>render(data)</code> function to add the data to the page.</p>
 
@@ -203,9 +206,40 @@ Tempo.prepare('marx-brothers').render(data);
 						<li data-template="">Zeppo Marx</li>
 					</ol>
 				</div>
+				
+				<p>If the JSON data represents an array of arrays (which can not be referenced by field/member name) for example:</p>
+				
+				<div class="example">
+					var data = [ 
+						['Leonard','Marx'], 
+						['Adolph','Marx'], 
+						['Julius Henry','Marx'], 
+						['Milton','Marx'], 
+						['Herbert','Marx']
+					 ];
+				</div>
+				
+				<p>You can reference array elements with the following notation:</p>
+				
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+	&lt;li <em>data-template</em>&gt;<em>{{[0]}}</em> <em>{{[1]}}</em>&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+
+				<p>The above example would be rendered as:</p>
+				<div class="example">
+					<ol id="marx-brothers1">
+						<li data-template="">Leonard Marx</li>
+						<li data-template="">Adolph Marx</li>
+						<li data-template="">Julius Henry Marx</li>
+						<li data-template="">Milton Marx</li>
+						<li data-template="">Herbert Marx</li>
+					</ol>
+				</div>
 			
 				<h4>Nested data-templates</h4>
-				<p>Data templates can even be nested within other data templates.</p>
+				<p>Data templates can even be nested within other data templates. Multiple nested templates are supported.</p>
 <pre>
 &lt;li <em>data-template</em>&gt;
     <em>{{nickname}}</em> <em>{{name.last}}</em>
@@ -243,7 +277,7 @@ Tempo.prepare('marx-brothers').render(data);
 					</ol>
 				</div>
 
-				<h4>Conditionals</h4>
+				<h4>Conditional Templates</h4>
 				<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
 &lt;ul id="marx-brothers3"&gt;
@@ -263,6 +297,12 @@ Tempo.prepare('marx-brothers').render(data);
 						<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
 					</ul>
 				</div>
+				
+				<h4>Template Tags</h4>
+				<p>Tempo also supports tag blocks.</p>
+				
+				<h5><code>{{if <i>javascript-expression</i>}} ... {{endif}}</code></h5>
+				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true.</p>
 
 				<a id="css"></a>
 				<h3>CSS</h3>
@@ -331,6 +371,7 @@ $.getJSON(url, function(data) {
 		<ul>
 			<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
 			<li><a href="examples/twitter.html">Twitter Example</a></li>
+			<li><a href="examples/solr">Solr Example</a></li>
 			<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
 		</ul>
 	</nav>
