@@ -100,22 +100,24 @@
 			<h3><span>2.</span> Compose the data template inline in HTML</h3>
 <pre>
 &lt;ol id=&quot;tweets&quot;&gt;
-	&lt;li <em>data-template</em>&gt;
-		&lt;img src=&quot;<em>{{profile_image_url}}</em>&quot; /&gt;
-		&lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
-		&lt;p&gt;<em>{{text}}</em>&lt;/p&gt;
-	&lt;/li&gt;
+    &lt;li <em>data-template</em>&gt;
+        &lt;img src=&quot;<em>{{profile_image_url}}</em>&quot; /&gt;
+        &lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
+        &lt;p&gt;<em>{{text}}</em>&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li data-template-fallback&gt;Sorry, JavaScript required!&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
 			<h3><span>3.</span> Booyah!</h3>
 
 			<div class="example">
 				<ol id="tweets">
-					<li data-template>
+					<li data-template style="display: none;">
 						<img src="{{profile_image_url}}" />
 						<h3>{{from_user}}</h3>
 						<p>{{text}}</p>
 					</li>
+                    <li data-template-fallback>Sorry, JavaScript required!</li>
 				</ol>
 			</div>
 
@@ -149,11 +151,11 @@
 				<p>Tempo takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
 <pre>
 var data = [
-	{'name':{'first':'Leonard','last':'Marx'},'nickname':'Chico','born':'March 21, 1887','actor': true,'solo_endeavours':[{'title':'Papa Romani'}]},
-	{'name':{'first':'Adolph','last':'Marx'},'nickname':'Harpo','born':'November 23, 1888','actor':true,'solo_endeavours':[{'title':'Too Many Kisses','rating':'favourite'},{'title':'Stage Door Canteen'}]},
-	{'name':{'first':'Julius Henry','last':'Marx'},'nickname':'Groucho','born': 'October 2, 1890','actor':true,'solo_endeavours':[{'title':'Copacabana'},{'title':'Mr. Music','rating':'favourite'},{'title':'Double Dynamite'}]},
-	{'name':{'first':'Milton','last':'Marx'},'nickname':'Gummo','born':'October 23, 1892'},
-	{'name':{'first':'Herbert','last':'Marx'},'nickname':'Zeppo','born':'February 25, 1901','actor':true,'solo_endeavours':[{'title':'A Kiss in the Dark'}]}
+    {'name':{'first':'Leonard','last':'Marx'},'nickname':'Chico','born':'March 21, 1887','actor': true,'solo_endeavours':[{'title':'Papa Romani'}]},
+    {'name':{'first':'Adolph','last':'Marx'},'nickname':'Harpo','born':'November 23, 1888','actor':true,'solo_endeavours':[{'title':'Too Many Kisses','rating':'favourite'},{'title':'Stage Door Canteen'}]},
+    {'name':{'first':'Julius Henry','last':'Marx'},'nickname':'Groucho','born': 'October 2, 1890','actor':true,'solo_endeavours':[{'title':'Copacabana'},{'title':'Mr. Music','rating':'favourite'},{'title':'Double Dynamite'}]},
+    {'name':{'first':'Milton','last':'Marx'},'nickname':'Gummo','born':'October 23, 1892'},
+    {'name':{'first':'Herbert','last':'Marx'},'nickname':'Zeppo','born':'February 25, 1901','actor':true,'solo_endeavours':[{'title':'A Kiss in the Dark'}]}
 ];
 </pre>
 			
@@ -193,7 +195,7 @@ Tempo.prepare('marx-brothers').render(data);
 				<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.</p>
 <pre>
 &lt;ol id=&quot;marx-brothers&quot;&gt;
-	&lt;li <em>data-template</em>&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/li&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
 				<p>The above example would be rendered as:</p>
@@ -223,7 +225,7 @@ Tempo.prepare('marx-brothers').render(data);
 				
 <pre>
 &lt;ol id=&quot;marx-brothers&quot;&gt;
-	&lt;li <em>data-template</em>&gt;<em>{{[0]}}</em> <em>{{[1]}}</em>&lt;/li&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{[0]}}</em> <em>{{[1]}}</em>&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
 
@@ -281,11 +283,11 @@ Tempo.prepare('marx-brothers').render(data);
 				<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
 &lt;ul id="marx-brothers3"&gt;
-	&lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
-	&lt;li <em>data-template</em> <em>data-if-actor</em>&gt;<em>{{name.first}}</em>, nicknamed '&lt;i&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/i&gt;' was born on <em>{{born}}</em>&lt;/li&gt;
-	
-	&lt;!-- Default template --&gt;
-	&lt;li <em>data-template</em>&gt;<em>{{name.first}}</em> <em>{{name.last}}</em> was not in any movies!&lt;/li&gt;
+    &lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
+    &lt;li <em>data-template</em> <em>data-if-actor</em>&gt;<em>{{name.first}}</em>, nicknamed '&lt;i&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/i&gt;' was born on <em>{{born}}</em>&lt;/li&gt;
+
+    &lt;!-- Default template --&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{name.first}}</em> <em>{{name.last}}</em> was not in any movies!&lt;/li&gt;
 &lt;/ul&gt;
 </pre>
 				<div class="example">
@@ -295,6 +297,24 @@ Tempo.prepare('marx-brothers').render(data);
 						<li>Groucho (aka Julius Henry) was grumpy!</li>
 						<li>Milton Marx was not in any movies!</li>
 						<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
+					</ul>
+				</div>
+
+                <a id="template-fallback"></a>
+                <h4>Fallback Template</h4>
+				<p>Use the <code>data-template-fallback</code> attribute to identify HTML containers you would like to show if JavaScript is disabled.</p>
+
+<pre>
+&lt;ul id=&quot;marx-brothers&quot;&gt;
+    &lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+    &lt;li <em>data-template-fallback</em>&gt;Sorry, JavaScript required!</em>&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+                <p>If JavaScript is disabled in the browser the above example would be rendered as:</p>
+				<div class="example">
+					<ul id="marx-brothers">
+						<li data-template-fallback>Sorry, JavaScript required!</li>
 					</ul>
 				</div>
 				
@@ -307,12 +327,12 @@ Tempo.prepare('marx-brothers').render(data);
 				<a id="css"></a>
 				<h3>CSS</h3>
 				<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
-				<p>Coming soon: Tempo 1.2 will support <code>data-template-fallback</code> which will be shown if JavaScript is not enabled.</p>
+				<p>Use the <code><a href="#template-fallback">data-template-fallback</a></code> attribute to identify HTML containers that should be shown when JavaScript is disabled.</p>
 <pre>
 &lt;ol id=&quot;tweets&quot;&gt;
-	&lt;li data-template <em>style=&quot;display: none;&quot;</em>&gt;
-		...
-	&lt;/li&gt;
+    &lt;li data-template <em>style=&quot;display: none;&quot;</em>&gt;
+        ...
+    &lt;/li&gt;
 &lt;/ol&gt;
 </pre>
 				
@@ -322,7 +342,7 @@ Tempo.prepare('marx-brothers').render(data);
 <pre>
 var twitter = Tempo.<em>prepare</em>('tweets');
 $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
-	twitter.<em>render</em>(data.results);
+    twitter.<em>render</em>(data.results);
 });
 </pre>
 				<a id="advanced"></a>
@@ -354,13 +374,13 @@ $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=
 				
 <pre>
 var twitter = Tempo.prepare('tweets').<em>notify</em>( function (event) {
-	if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
-		$('#tweets').toggleClass('loading');
-	}
+    if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+        $('#tweets').toggleClass('loading');
+    }
 });
 twitter.<em>starting</em>();
 $.getJSON(url, function(data) {
-	twitter.render(data.results);
+    twitter.render(data.results);
 });
 </pre>
 				

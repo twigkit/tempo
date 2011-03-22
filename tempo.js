@@ -125,6 +125,9 @@ var Tempo = (function (tempo) {
             for (var i = 0; i < children.length; i++) {
                 if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' && !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
+                } else if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template-fallback') !== null) {
+                    // Hiding the fallback template
+                    children[i].style.setProperty('display', 'none');
                 }
             }
 
@@ -151,10 +154,10 @@ var Tempo = (function (tempo) {
 
             // Clear display: none;
             if (element.style.removeAttribute) {
-                element.style.removeAttribute("display");
+                element.style.removeAttribute('display');
             }
             else {
-                element.style.removeProperty("display");
+                element.style.removeProperty('display');
             }
 
             // Remapping container element in case template
