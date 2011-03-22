@@ -127,7 +127,7 @@ var Tempo = (function (tempo) {
                     this.createTemplate(children[i]);
                 } else if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
-                    children[i].style.setProperty('display', 'none');
+                    children[i].style.display = 'none';
                 }
             }
 
