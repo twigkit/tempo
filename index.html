@@ -86,7 +86,7 @@
 				<li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
 				<li>Itty-bitty footprint, lightning-fast rendering!</li>
 				<li>No dependencies - Works with or without jQuery</li>
-				<li>Degrades <a href="#css">gracefully</a> if JavaScript is not enabled</li>
+				<li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
 				<li>Supports nested and conditional templates</li>
 			</ul>
 		</section>
@@ -303,10 +303,11 @@ Tempo.prepare('marx-brothers').render(data);
                 <a id="template-fallback"></a>
                 <h4>Fallback Template</h4>
 				<p>Use the <code>data-template-fallback</code> attribute to identify HTML containers you would like to show if JavaScript is disabled.</p>
+				<p>Note that the primary template should have <code>style="display: none;"</code> added inline. This will get removed when the template is rendered.</p>
 
 <pre>
 &lt;ul id=&quot;marx-brothers&quot;&gt;
-    &lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+    &lt;li <em>data-template style="display: none;"</em>&gt;{{nickname}} {{name.last}}&lt;/li&gt;
     &lt;li <em>data-template-fallback</em>&gt;Sorry, JavaScript required!</em>&lt;/li&gt;
 &lt;/ul&gt;
 </pre>
