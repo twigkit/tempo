@@ -279,7 +279,7 @@ var Tempo = (function (tempo) {
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
-                for (var p in renderer.tags) {
+                for (var p = 0; p < renderer.tags.length; p++) {
                     html = html.replace(new RegExp(renderer.tags[p].regex, 'gi'), renderer.tags[p].handler(renderer, item));
                 }
 
