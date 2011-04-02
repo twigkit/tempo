@@ -273,7 +273,7 @@ article#usage div.usage section.usage {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 72.73%;
+  width: 81.25%;
 }
 article#usage div.usage section.usage h3 {
   clear: both;
@@ -301,14 +301,28 @@ article#usage div.usage aside#advert {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 22.916%;
+  width: 14.583%;
 }
 article#usage div.usage aside#advert .ad {
   margin: 4.7em 0 0 0;
   float: right;
 }
+@media screen and (max-device-width: 960px) {
+  article#usage div.usage section.usage {
+    width: 72.73%;
+  }
+  article#usage div.usage aside#advert {
+    width: 22.916%;
+  }
+}
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
+    display: none;
+  }
+  article#usage div.usage section.usage {
+    width: 97.917%;
+  }
+  article#usage div.usage aside#advert {
     display: none;
   }
 }

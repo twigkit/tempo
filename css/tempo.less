@@ -322,7 +322,7 @@ article#usage {
 	
 		section.usage {
 			.column;
-			width: @9g;
+			width: @10g;
 			
 			h3 {
 				clear: both;
@@ -348,7 +348,7 @@ article#usage {
 		}
 		aside#advert {
 			.column;
-			width: @3g;
+			width: @2g;
 			
 			.ad {
 				margin:4.7em 0 0 0;
@@ -357,8 +357,22 @@ article#usage {
 		}
 	}
 }
+@media screen and (max-device-width: 960px) {
+	article#usage div.usage section.usage {
+		width: @9g;
+	}
+	article#usage div.usage aside#advert {
+		width: @3g;
+	}
+}
 @media screen and (max-device-width: 480px) {
 	article#usage header div section nav {
+		display: none;
+	}
+	article#usage div.usage section.usage {
+		width: @12g;
+	}
+	article#usage div.usage aside#advert {
 		display: none;
 	}
 }
