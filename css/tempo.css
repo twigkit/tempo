@@ -307,7 +307,7 @@ article#usage div.usage aside#advert .ad {
   margin: 4.7em 0 0 0;
   float: right;
 }
-@media screen and (max-device-width: 960px) {
+@media screen and (max-width: 900px) {
   article#usage div.usage section.usage {
     width: 72.73%;
   }
@@ -353,11 +353,6 @@ body .one .bsa_it_ad {
   padding: 0 15px 0 10px;
   width: 130px;
   text-align: left;
-}
-body .one .bsa_it_ad:hover img {
-  -moz-box-shadow: 0 0 3px #000;
-  -webkit-box-shadow: 0 0 3px #000;
-  box-shadow: 0 0 3px #000;
 }
 body .one .bsa_it_ad .bsa_it_i {
   display: block;
