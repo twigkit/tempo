@@ -273,7 +273,7 @@ article#usage div.usage section.usage {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 97.917%;
+  width: 72.73%;
 }
 article#usage div.usage section.usage h3 {
   clear: both;
@@ -295,6 +295,14 @@ article#usage div.usage section.usage .h5 {
 article#usage div.usage section.usage ul.h5 {
   margin-top: -1em;
   margin-left: 5em;
+}
+article#usage div.usage aside#advert {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 22.916%;
+  position: relative;
 }
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
