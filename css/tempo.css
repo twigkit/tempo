@@ -302,7 +302,6 @@ article#usage div.usage aside#advert {
   float: left;
   display: inline;
   width: 22.916%;
-  position: relative;
 }
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
@@ -322,4 +321,45 @@ nav#actions2 ul {
 }
 nav#actions2 ul li a {
   padding: 1em;
+}
+body .adpacks {
+  background: #fff;
+  padding: 15px;
+  margin: 15px 0 0;
+  border: 3px solid #eee;
+}
+body .one .bsa_it_ad {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  padding: 0 15px 0 10px;
+  margin: 0;
+  text-align: left;
+}
+body .one .bsa_it_ad:hover img {
+  -moz-box-shadow: 0 0 3px #000;
+  -webkit-box-shadow: 0 0 3px #000;
+  box-shadow: 0 0 3px #000;
+}
+body .one .bsa_it_ad .bsa_it_i {
+  display: block;
+  padding: 0;
+  float: right;
+  margin: 0 0 5px;
+}
+body .one .bsa_it_ad .bsa_it_i img {
+  padding: 0;
+  border: none;
+}
+body .one .bsa_it_ad .bsa_it_t {
+  padding: 6px 0 0 0;
+}
+body .one .bsa_it_p {
+  display: none;
+}
+body #bsap_aplink, body #bsap_aplink:hover {
+  display: block;
+  font-size: 10px;
+  margin: 12px 15px 0;
+  text-align: left;
 }
