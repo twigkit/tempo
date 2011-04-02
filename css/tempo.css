@@ -315,7 +315,10 @@ article#usage div.usage aside#advert .ad {
     width: 22.916%;
   }
 }
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 700px) {
+  article#usage header div section nav {
+    display: none;
+  }
   article#usage div.usage section.usage {
     width: 97.917%;
   }
