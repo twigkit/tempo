@@ -303,6 +303,10 @@ article#usage div.usage aside#advert {
   display: inline;
   width: 22.916%;
 }
+article#usage div.usage aside#advert .ad {
+  margin: 4.7em 0 0 0;
+  float: right;
+}
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
     display: none;
@@ -333,7 +337,7 @@ body .one .bsa_it_ad {
   border: none;
   font-family: inherit;
   padding: 0 15px 0 10px;
-  margin: 0;
+  width: 130px;
   text-align: left;
 }
 body .one .bsa_it_ad:hover img {
@@ -344,7 +348,7 @@ body .one .bsa_it_ad:hover img {
 body .one .bsa_it_ad .bsa_it_i {
   display: block;
   padding: 0;
-  float: right;
+  float: none;
   margin: 0 0 5px;
 }
 body .one .bsa_it_ad .bsa_it_i img {
@@ -360,6 +364,6 @@ body .one .bsa_it_p {
 body #bsap_aplink, body #bsap_aplink:hover {
   display: block;
   font-size: 10px;
-  margin: 12px 15px 0;
+  margin: 8px 12px 0;
   text-align: left;
 }
