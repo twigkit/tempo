@@ -77,7 +77,7 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.2</span></h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.3</span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
@@ -198,6 +198,29 @@ Tempo.prepare( <em>element</em> ).render( <em>data</em> );
 Tempo.prepare('marx-brothers').render(data);
 </pre>
 
+                <h4>renderer.append()</h4>
+				<p>Renderer methods all return an instance of the renderer (a la fluent) so you can chain calls to it. The <code>append(data)</code> function will render the data you pass in and append it to the container.</p>
+
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to append.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.append( more_brothers )</em>;
+</pre>
+
+                <h4>renderer.prepend()</h4>
+				<p>The <code>prepend(data)</code> function will render the data you pass in and insert it before others in the container.</p>
+
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to prepend.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.prepend( brothers_we_didnt_know_about )</em>;
+</pre>
+
+                <h4>renderer.clear()</h4>
+				<p>The <code>clear()</code> function will empty the container, allowing you to render the data again.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
+</pre>
 				<a id="html"></a>
 				<h3>HTML</h3>
 				<h4>data-template</h4>

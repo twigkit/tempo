@@ -228,34 +228,6 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        render : function (data) {
-            // Check if starting event was manually fired
-            if (!this.started) {
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
-            }
-
-            utils.clearContainer(this.templates.container);
-			
-            if (data) {
-                // If object then wrapping in an array
-                if (utils.typeOf(data) === 'object') {
-                    data = [data];
-                }
-
-                var fragment = document.createDocumentFragment();
-
-                for (var i = 0; i < data.length; i++) {
-                    this.renderItem(this, data[i], fragment);
-                }
-
-                this.templates.container.appendChild(fragment);
-            }
-
-            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
-
-            return this;
-        },
-
         renderItem : function (renderer, item, fragment) {
             var template = renderer.templates.templateFor(item);
             if (template && item) {
@@ -279,7 +251,7 @@ var Tempo = (function (tempo) {
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
-                for (var p in renderer.tags) {
+                for (var p = 0; p < renderer.tags.length; p++) {
                     html = html.replace(new RegExp(renderer.tags[p].regex, 'gi'), renderer.tags[p].handler(renderer, item));
                 }
 
@@ -300,6 +272,73 @@ var Tempo = (function (tempo) {
                 
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, item, template));
             }
+        },
+
+        _createFragment : function (data) {
+            if (data) {
+                var fragment = document.createDocumentFragment();
+
+                // If object then wrapping in an array
+                if (utils.typeOf(data) === 'object') {
+                    data = [data];
+                }
+
+                for (var i = 0; i < data.length; i++) {
+                    this.renderItem(this, data[i], fragment);
+                }
+
+                return fragment;
+            }
+
+            return null;
+        },
+
+        render : function (data) {
+            // Check if starting event was manually fired
+            if (!this.started) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+            }
+
+            this.clear();
+            this.append(data);
+
+            return this;
+        },
+
+        append : function (data) {
+            // Check if starting event was manually fired
+            if (!this.started) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+            }
+
+            var fragment = this._createFragment(data);
+            if (fragment !== null) {
+                this.templates.container.appendChild(fragment);
+            }
+
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
+
+            return this;
+        },
+
+        prepend : function (data) {
+            // Check if starting event was manually fired
+            if (!this.started) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+            }
+
+            var fragment = this._createFragment(data);
+            if (fragment !== null) {
+                this.templates.container.insertBefore(fragment, this.templates.container.firstChild);
+            }
+
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
+
+            return this;
+        },
+
+        clear : function (data) {
+            utils.clearContainer(this.templates.container);
         },
 
         tags : [
