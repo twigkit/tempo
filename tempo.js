@@ -21,18 +21,45 @@ var Tempo = (function (tempo) {
      * Helpers
      */
     var utils = {
+		pad : function (val, pad, size) {
+			while (val.length < size) {
+				val = pad + val;
+			}
+			return val;
+		},
+		trim : function (str) {
+			return str.replace(/^\s*([\S\s]*?)\s*$/, '$1');
+		},
+
         startsWith : function (str, prefix) {
             return (str.indexOf(prefix) === 0);
         },
 
-        replaceVariable : function (item, str) {
-            return str.replace(/\{\{([A-Za-z0-9\._\[\]]*?)\}\}/g, function (match, variable) {
+        replaceVariable : function (renderer, item, str) {
+            return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
 				var val = null;
 				if (utils.typeOf(item) === 'array') {
 					val = eval('item' + variable);
 				} else {
 					val = eval('item.' + variable);
 				}
+
+				// Handle filters
+				if (args !== undefined) {
+					var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
+					for (var i = 0; i < filters.length; i++) {
+						var filter = utils.trim(filters[i]);
+						var filter_args = '';
+						// If there is a space, there must be arguments
+						if (filter.indexOf(' ') > -1) {
+							filter_args = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
+							filter_args = filter_args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+							filter = filter.substring(0, filter.indexOf(' '));
+						}
+						val = renderer.filters[filter](val, filter_args);
+					}
+				}
+
                 if (val !== undefined) {
                     return val;
                 }
@@ -137,10 +164,10 @@ var Tempo = (function (tempo) {
 				var el = document.createElement('div');
 				el.setAttribute('data-template', '');
 				el.innerHTML = this.container.innerHTML;
-				
+
 				// Clearing container before adding the wrapped contents
 				this.container.innerHTML = '';
-				
+
 				// There is now a default template present with a data-template attribute
 				this.container.appendChild(el);
 				this.createTemplate(el);
@@ -256,20 +283,20 @@ var Tempo = (function (tempo) {
                 }
 
                 // Content
-                html = utils.replaceVariable(item, html);
+                html = utils.replaceVariable(this, item, html);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
-                    template.className = utils.replaceVariable(item, template.className);
+                    template.className = utils.replaceVariable(this, item, template.className);
                 }
 
                 // Template id
                 if (template.getAttribute('id')) {
-                    template.id = utils.replaceVariable(item, template.id);
+                    template.id = utils.replaceVariable(this, item, template.id);
                 }
 
                 fragment.appendChild(utils.getElement(template, html));
-                
+
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, item, template));
             }
         },
@@ -347,10 +374,12 @@ var Tempo = (function (tempo) {
                 return function (match, condition, content) {
                     var member_regex = '';
                     for (var member in item) {
-                        if (member_regex.length > 0) {
-                            member_regex += '|';
-                        }
-                        member_regex += member;
+						if (item.hasOwnProperty(member)) {
+	                        if (member_regex.length > 0) {
+	                            member_regex += '|';
+	                        }
+	                        member_regex += member;
+						}
                     }
 
                     condition = condition.replace(/&amp;/g, '&');
@@ -366,7 +395,78 @@ var Tempo = (function (tempo) {
                 };
             }
             }
-        ]
+        ],
+
+		filters : {
+			'upper' : function (value, args) {
+				return value.toUpperCase();
+			},
+			'lower' : function (value, args) {
+				return value.toLowerCase();
+			},
+			'trim' : function (value, args) {
+				return utils.trim(value);
+			},
+			'replace' : function (value, args) {
+				if (value !== undefined && args.length === 2) {
+					return value.replace(new RegExp(args[0], 'g'), args[1]);
+				}
+				return value;
+			},
+			'append' : function (value, args) {
+				if (value !== undefined && args.length === 1) {
+					return value + '' + args[0];
+				}
+				return value;
+			},
+			'prepend' : function (value, args) {
+				if (value !== undefined && args.length === 1) {
+					return args[0] + '' + value;
+				}
+				return value;
+			},
+			'date' : function (value, args) {
+				if (value !== undefined && args.length === 1) {
+					var date = new Date(value);
+					var format = args[0];
+					if (format === 'localedate') {
+						return date.toLocaleDateString();
+					} else if (format === 'localetime') {
+						return date.toLocaleTimeString();
+					} else if (format === 'time') {
+						return date.toDateString();
+					} else if (format === 'time') {
+						return date.toTimeString();
+					} else {
+						var DATE_PATTERNS = {
+							'YYYY'	: function (date) { return date.getFullYear(); },
+							'YY' 	: function (date) { return date.getFullYear().toFixed().substring(2); },
+							'M' 	: function (date) { return date.getMonth() + 1 },
+							'D' 	: function (date) { return date.getDay(); },
+							'HH' 	: function (date) { return utils.pad(date.getHours().toFixed(), '0', 2); },
+							'H' 	: function (date) { return date.getHours(); },
+							'mm' 	: function (date) { return utils.pad(date.getMinutes().toFixed(), '0', 2); },
+							'm' 	: function (date) { return date.getMinutes(); },
+							'ss' 	: function (date) { return utils.pad(date.getSeconds().toFixed(), '0', 2); },
+							's' 	: function (date) { return date.getSeconds(); },
+							'SSS' 	: function (date) { return utils.pad(date.getMilliseconds().toFixed(), '0', 3); },
+							'S' 	: function (date) { return date.getMilliseconds(); },
+							'a'		: function (date) { return date.getHours() < 12 ? 'AM' : 'PM' }
+						};
+						format = format.replace(/Y{2,4}|D|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
+							if (DATE_PATTERNS.hasOwnProperty(match)) {
+								return DATE_PATTERNS[match](date);
+							}
+							return match;
+						});
+
+						return format;
+					}
+				}
+
+				return '';
+			}
+		}
     };
 
 
