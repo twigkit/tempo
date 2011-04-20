@@ -483,11 +483,17 @@ var Tempo = (function (tempo) {
                             'YY' : function (date) {
                                 return date.getFullYear().toFixed().substring(2);
                             },
+							'MM' : function (date) {
+								return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
+                            },
                             'M' : function (date) {
                                 return date.getMonth() + 1;
                             },
+							'DD' : function (date) {
+                                return utils.pad(date.getDate().toFixed(), '0', 2);
+                            },
                             'D' : function (date) {
-                                return date.getDay();
+                                return date.getDate();
                             },
                             'HH' : function (date) {
                                 return utils.pad(date.getHours().toFixed(), '0', 2);
@@ -517,7 +523,7 @@ var Tempo = (function (tempo) {
                                 return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
-                        format = format.replace(/Y{2,4}|D|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
+                        format = format.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
                             if (DATE_PATTERNS.hasOwnProperty(match)) {
                                 return DATE_PATTERNS[match](date);
                             }
