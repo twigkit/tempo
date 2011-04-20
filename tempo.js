@@ -36,62 +36,65 @@ var Tempo = (function (tempo) {
 
         replaceVariables : function (renderer, item, str) {
             return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
-				try {
-	                var val = null;
+                try {
+                    var val = null;
 
-	                if (utils.typeOf(item) === 'array') {
-	                    val = eval('item' + variable);
-	                } else {
-	                    val = eval('item.' + variable);
-	                }
+                    if (utils.typeOf(item) === 'array') {
+                        val = eval('item' + variable);
+                    } else {
+                        val = eval('item.' + variable);
+                    }
 
-	                // Handle filters
-	                if (args !== undefined) {
-	                    var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
-	                    for (var i = 0; i < filters.length; i++) {
-	                        var filter = utils.trim(filters[i]);
-	                        var filter_args = '';
-	                        // If there is a space, there must be arguments
-	                        if (filter.indexOf(' ') > -1) {
-	                            filter_args = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
-	                            filter_args = filter_args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-	                            filter = filter.substring(0, filter.indexOf(' '));
-	                        }
-	                        val = renderer.filters[filter](val, filter_args);
-	                    }
-	                }
+                    // Handle filters
+                    if (args !== undefined) {
+                        var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
+                        for (var i = 0; i < filters.length; i++) {
+                            var filter = utils.trim(filters[i]);
+                            var filter_args = [];
+                            // If there is a space, there must be arguments
+                            if (filter.indexOf(' ') > -1) {
+                                var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
+                                filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+                                filter = filter.substring(0, filter.indexOf(' '));
+                            }
+                            val = renderer.filters[filter](val, filter_args);
+                        }
+                    }
 
-	                if (val !== undefined) {
-	                    return val;
-	                }
-				} catch (err) {}
+                    if (val !== undefined) {
+                        return val;
+                    }
+                } catch (err) {
+                }
 
                 return '';
             });
         },
 
-		replaceObjects : function (renderer, item, str) {
-			return str.replace(/(?:__\.)([A-Za-z0-9\._\[\]]+)/g, function (match, variable, args) {
-				try {
-	                var val = null;
+        replaceObjects : function (renderer, item, str) {
+            return str.replace(/(?:__[\.]?)([A-z_\[\]][A-Za-z0-9\._\[\]]+)/g, function (match, variable, args) {
+                try {
+                    var val = null;
 
-	                if (utils.typeOf(item) === 'array') {
-	                    val = eval('item' + variable);
-	                } else {
-	                    val = eval('item.' + variable);
-	                }
-	                if (val !== undefined) {
-						if (utils.typeOf(val) === 'string') {
-							return '\'' + val + '\'';
-						} else {
-							return val;
-						}
-	                }
-				} catch (err) {}
+                    if (utils.typeOf(item) === 'array') {
+                        val = eval('item' + variable);
+                    } else {
+                        val = eval('item.' + variable);
+                    }
+
+                    if (val !== undefined) {
+                        if (utils.typeOf(val) === 'string') {
+                            return '\'' + val + '\'';
+                        } else {
+                            return val;
+                        }
+                    }
+                } catch (err) {
+                }
 
                 return undefined;
             });
-		},
+        },
 
         clearContainer : function (el) {
             if (el !== undefined && el.childNodes !== undefined) {
@@ -311,8 +314,8 @@ var Tempo = (function (tempo) {
                 // Content
                 html = utils.replaceVariables(this, item, html);
 
-				// JavaScript objects
-				html = utils.replaceObjects(this, item, html);
+                // JavaScript objects
+                html = utils.replaceObjects(this, item, html);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
@@ -454,15 +457,15 @@ var Tempo = (function (tempo) {
                 }
                 return value;
             },
-			'default' : function (value, args) {
-				if (value !== undefined && value !== null) {
-					return value;
-				}
-				if (args.length === 1) {
-					return args[0];
-				}
-				return value;
-			},
+            'default' : function (value, args) {
+                if (value !== undefined && value !== null) {
+                    return value;
+                }
+                if (args.length === 1) {
+                    return args[0];
+                }
+                return value;
+            },
             'date' : function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     var date = new Date(value);
@@ -483,13 +486,13 @@ var Tempo = (function (tempo) {
                             'YY' : function (date) {
                                 return date.getFullYear().toFixed().substring(2);
                             },
-							'MM' : function (date) {
-								return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
+                            'MM' : function (date) {
+                                return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
                             },
                             'M' : function (date) {
                                 return date.getMonth() + 1;
                             },
-							'DD' : function (date) {
+                            'DD' : function (date) {
                                 return utils.pad(date.getDate().toFixed(), '0', 2);
                             },
                             'D' : function (date) {
