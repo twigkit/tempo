@@ -35,33 +35,37 @@ var Tempo = (function (tempo) {
         },
 
         replaceVariable : function (renderer, item, str) {
-            return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
-                var val = null;
-                if (utils.typeOf(item) === 'array') {
-                    val = eval('item' + variable);
-                } else {
-                    val = eval('item.' + variable);
-                }
+            return str.replace(/\{\{[ ]?(?:\_\_\.)?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
+				try {
+	                var val = null;
 
-                // Handle filters
-                if (args !== undefined) {
-                    var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
-                    for (var i = 0; i < filters.length; i++) {
-                        var filter = utils.trim(filters[i]);
-                        var filter_args = '';
-                        // If there is a space, there must be arguments
-                        if (filter.indexOf(' ') > -1) {
-                            filter_args = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
-                            filter_args = filter_args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-                            filter = filter.substring(0, filter.indexOf(' '));
-                        }
-                        val = renderer.filters[filter](val, filter_args);
-                    }
-                }
+	                if (utils.typeOf(item) === 'array') {
+	                    val = eval('item' + variable);
+	                } else {
+	                    val = eval('item.' + variable);
+	                }
 
-                if (val !== undefined) {
-                    return val;
-                }
+	                // Handle filters
+	                if (args !== undefined) {
+	                    var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
+	                    for (var i = 0; i < filters.length; i++) {
+	                        var filter = utils.trim(filters[i]);
+	                        var filter_args = '';
+	                        // If there is a space, there must be arguments
+	                        if (filter.indexOf(' ') > -1) {
+	                            filter_args = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
+	                            filter_args = filter_args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+	                            filter = filter.substring(0, filter.indexOf(' '));
+	                        }
+	                        val = renderer.filters[filter](val, filter_args);
+	                    }
+	                }
+
+	                if (val !== undefined) {
+	                    return val;
+	                }
+				} catch (err) {}
+				
                 return '';
             });
         },
