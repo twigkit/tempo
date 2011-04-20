@@ -93,7 +93,6 @@
 			});
 			twitter.starting();
 			$.getJSON("http://search.twitter.com/search.json?q='groucho'&rpp=10&callback=?", function(data) {
-                console.log(data.results)
 				twitter.render(data.results);
 			});
 		});
