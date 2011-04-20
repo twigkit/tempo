@@ -276,7 +276,7 @@
                 <li data-template="response.docs">
                     <h3>{{title}}</h3>
 
-                    <p>by <a href="#" onclick='addFilter("creator", "{{creator}}");'>{{creator}}</a></p>
+                    <p>by <a href="#" onclick='addFilter("creator", __.creator[0]);'>{{creator}}</a></p>
                 </li>
             </ol>
         </div>
@@ -288,7 +288,7 @@
                     <h3>Subjects</h3>
                     <ul>
                         <li data-template="facet_counts.facet_fields.subject">
-                            <a href="#" onclick='addFilter("subject", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+                            <a href="#" onclick='addFilter("subject", __[0]);'>{{[0]}}</a> <span>{{[1]}}</span>
                         </li>
                     </ul>
                 </li>
@@ -296,7 +296,7 @@
                     <h3>Languages</h3>
                     <ul>
                         <li data-template="facet_counts.facet_fields.language">
-                            <a href="#" onclick='addFilter("language", "{{[0]}}");'>{{[0]}}</a> <span>{{[1]}}</span>
+                            <a href="#" onclick='addFilter("language", __[0]);'>{{[0]}}</a> <span>{{[1]}}</span>
                         </li>
                     </ul>
                 </li>
