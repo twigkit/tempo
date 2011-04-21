@@ -20,6 +20,19 @@ var Tempo = (function (tempo) {
      * Helpers
      */
     var utils = {
+        memberRegex : function (obj) {
+            var member_regex = '';
+            for (var member in obj) {
+                if (obj.hasOwnProperty(member)) {
+                    if (member_regex.length > 0) {
+                        member_regex += '|';
+                    }
+                    member_regex += member;
+                }
+            }
+            return member_regex;
+        },
+
         pad : function (val, pad, size) {
             while (val.length < size) {
                 val = pad + val;
@@ -72,7 +85,8 @@ var Tempo = (function (tempo) {
         },
 
         replaceObjects : function (renderer, item, str) {
-            return str.replace(/(?:__[\.]?)([A-z_\[\]][A-Za-z0-9\._\[\]]+)/g, function (match, variable, args) {
+            var regex = new RegExp('(?:__[\\.]?)((' + utils.memberRegex(item) + ')([A-Za-z0-9\\._\\[\\]]+)?)', 'g');
+            return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = null;
 
@@ -93,6 +107,15 @@ var Tempo = (function (tempo) {
                 }
 
                 return undefined;
+            });
+        },
+
+        applyAttributeSetters : function (renderer, item, str) {
+            return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+                if (data_value !== '') {
+                    return attr + '="' + data_value + '"';
+                }
+                return match;
             });
         },
 
@@ -327,6 +350,8 @@ var Tempo = (function (tempo) {
                     template.id = utils.replaceVariables(this, item, template.id);
                 }
 
+                html = utils.applyAttributeSetters(this, item, html);
+
                 fragment.appendChild(utils.getElement(template, html));
 
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, item, template));
@@ -404,15 +429,7 @@ var Tempo = (function (tempo) {
             // If tag (using a workaround for the dotall modifier to match multilines [\\s\\S])
             {'regex': '\\{\\{if ([\\s\\S]*?)\\}\\}([\\s\\S]*?)\\{\\{endif\\}\\}', 'handler': function (renderer, item) {
                 return function (match, condition, content) {
-                    var member_regex = '';
-                    for (var member in item) {
-                        if (item.hasOwnProperty(member)) {
-                            if (member_regex.length > 0) {
-                                member_regex += '|';
-                            }
-                            member_regex += member;
-                        }
-                    }
+                    var member_regex = utils.memberRegex(item);
 
                     condition = condition.replace(/&amp;/g, '&');
                     condition = condition.replace(new RegExp(member_regex, 'gi'), function (match) {

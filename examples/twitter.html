@@ -80,7 +80,7 @@
 	</style>
 	
 	<!-- Import Tempo -->
-	<script type="text/javascript" src="../tempo.min.js"></script>
+	<script type="text/javascript" src="../tempo.js"></script>
 	
 	<!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
@@ -116,7 +116,7 @@
 <ol id="tweets">
 	<li class="row" data-template style="display: none;">
 		<div class="column grid_4 user">
-			<img src="{{profile_image_url}}" height="48" width="48" />
+			<img src="http://a1.twimg.com/sticky/default_profile_images/default_profile_4_bigger.png" data-src="{{profile_image_url}}" height="48" width="48" />
 			<h3>{{ from_user }}</h3>
 		</div>
 		<p class="column grid_8 text">
