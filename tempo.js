@@ -474,7 +474,7 @@ var Tempo = (function (tempo) {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
                         return date.toLocaleTimeString();
-                    } else if (format === 'time') {
+                    } else if (format === 'date') {
                         return date.toDateString();
                     } else if (format === 'time') {
                         return date.toTimeString();
