@@ -397,7 +397,20 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 				<h5><code>{{if <i>javascript-expression</i>}} ... {{endif}}</code></h5>
 				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true.</p>
 
-				<a id="css"></a>
+                <h4>Inline JavaScript Member Injection</h4>
+                <p>If you're using scripts inline in your template, you can access JSON object members. You reference these via the <code>__</code> variable.</p>
+
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__.nickname</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
+</pre>
+
+                <p>Similarly you can reference array elements:</p>
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__[0]</em>); return false;&quot;&gt;{{[0]}}&lt;/a&gt;
+</pre>
+
+                <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes.</p>
+
 				<h3>CSS</h3>
 				<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
 				<p>Use the <code><a href="#template-fallback">data-template-fallback</a></code> attribute to identify HTML containers that should be shown when JavaScript is disabled.</p>
@@ -458,7 +471,12 @@ $.getJSON(url, function(data) {
 </pre>
 
                 <h4>Binding event handlers</h4>
-				<p>...</p>
+				<p>
+                    Note that if you've bound event listeners to elements in your template, these will <b>not</b> be cloned when the template is used. In order to do this you have two options. <br/>
+                </p>
+                <p>
+                    You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
+                </p>
 			</section>
 			<aside id="advert">
 				<div class="ad">
