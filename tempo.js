@@ -47,10 +47,15 @@ var Tempo = (function (tempo) {
             return (str.indexOf(prefix) === 0);
         },
 
-        replaceVariables : function (renderer, item, str) {
+        replaceVariables : function (renderer, _tempo, item, str) {
             return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
                 try {
                     var val = null;
+
+                    // Handling tempo_info variable
+                    if (utils.startsWith(variable, '_tempo.')) {
+                        return eval(variable);
+                    }
 
                     if (utils.typeOf(item) === 'array') {
                         val = eval('item' + variable);
@@ -84,11 +89,16 @@ var Tempo = (function (tempo) {
             });
         },
 
-        replaceObjects : function (renderer, item, str) {
-            var regex = new RegExp('(?:__[\\.]?)((' + utils.memberRegex(item) + ')([A-Za-z0-9\\._\\[\\]]+)?)', 'g');
+        replaceObjects : function (renderer, _tempo, item, str) {
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = null;
+
+                    // Handling tempo_info variable
+                    if (utils.startsWith(variable, '_tempo.')) {
+                        return eval(variable);
+                    }
 
                     if (utils.typeOf(item) === 'array') {
                         val = eval('item' + variable);
@@ -307,7 +317,7 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        renderItem : function (renderer, item, fragment) {
+        renderItem : function (renderer, tempo_info, item, fragment) {
             var template = renderer.templates.templateFor(item);
             if (template && item) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
@@ -335,19 +345,19 @@ var Tempo = (function (tempo) {
                 }
 
                 // Content
-                html = utils.replaceVariables(this, item, html);
+                html = utils.replaceVariables(this, tempo_info, item, html);
 
                 // JavaScript objects
-                html = utils.replaceObjects(this, item, html);
+                html = utils.replaceObjects(this, tempo_info, item, html);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
-                    template.className = utils.replaceVariables(this, item, template.className);
+                    template.className = utils.replaceVariables(this, tempo_info, item, template.className);
                 }
 
                 // Template id
                 if (template.getAttribute('id')) {
-                    template.id = utils.replaceVariables(this, item, template.id);
+                    template.id = utils.replaceVariables(this, tempo_info, item, template.id);
                 }
 
                 html = utils.applyAttributeSetters(this, item, html);
@@ -360,6 +370,7 @@ var Tempo = (function (tempo) {
 
         _createFragment : function (data) {
             if (data) {
+                var tempo_info = {};
                 var fragment = document.createDocumentFragment();
 
                 // If object then wrapping in an array
@@ -368,7 +379,8 @@ var Tempo = (function (tempo) {
                 }
 
                 for (var i = 0; i < data.length; i++) {
-                    this.renderItem(this, data[i], fragment);
+                    tempo_info.index = i;
+                    this.renderItem(this, tempo_info, data[i], fragment);
                 }
 
                 return fragment;
