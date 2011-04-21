@@ -29,6 +29,9 @@
 			font-family: Helvetica;
 			font-weight: bold;
 		}
+        ol#tweets li p span {
+			font-size: 0.8em;
+		}
 		ol#tweets li p {
 			font-size: 0.9em;
 			color: #666;
@@ -91,7 +94,6 @@
 			<ul id="why">
 				<li>Clear separation of concerns: no HTML in your JavaScript files, and no JavaScript in your HTML</li>
 				<li>It makes AJAX content easier to work with</li>
-				<li>It's as friendly as a bunny rabbit (which are quite friendly)</li>
 			</ul>
 			<h3>Key Features</h3>
 			<ul id="features">
@@ -100,6 +102,8 @@
 				<li>No dependencies - Works with or without jQuery</li>
 				<li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
 				<li>Supports nested and conditional templates</li>
+                <li>Support for <a href="#filter-functions">filter and formatting</a> functions</li>
+                <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</a></li>
 			</ul>
 		</section>
 		<aside id="example">
@@ -115,7 +119,7 @@
     &lt;li <em>data-template</em>&gt;
         &lt;img src=&quot;<em>{{profile_image_url}}</em>&quot; /&gt;
         &lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
-        &lt;p&gt;<em>{{text}}</em>&lt;/p&gt;
+        &lt;p&gt;<em>{{text}}</em>&lt;span&gt;<em>{{created_at|date 'HH:mm on EEEE'}}</em>&lt;/span&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li <em>data-template-fallback</em>&gt;Sorry, JavaScript required!&lt;/li&gt;
 &lt;/ol&gt;
@@ -127,7 +131,7 @@
 					<li data-template style="display: none;">
 						<img src="{{profile_image_url}}" />
 						<h3>{{from_user}}</h3>
-						<p>{{text}}</p>
+						<p>{{text}}<span>, {{created_at | date 'HH:mm on EEEE'}}</span></p>
 					</li>
                     <li data-template-fallback>Sorry, JavaScript required!</li>
 				</ol>
@@ -354,7 +358,8 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 					</ul>
 				</div>
 
-                <h4>Filter Functions</h4>
+                <a id="filter-functions"></a>
+                <h4>Filter and Formatting Functions</h4>
                 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
                 <h5><code>{{ field | <em>default 'default value'</em> }}</code></h5>
@@ -373,6 +378,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
                     <li><code>SSS or S</code>: milliseconds.</li>
                     <li><code>a</code>: AM/PM.</li>
                 </ul>
+                <p class="h5">If you would like to use any of the format characters verbatim in the pattern then use <code>\</code> to escape: <code>{{ some_date | date '\at HH:mm' }}</code>. In this case the <code>a</code> is not replaced with AM/PM.</p>
                 
                 <h5><code>{{ field | <em>replace 'regex_pattern', 'replacement'</em> }}</code></h5>
                 <p class="h5">Replace all occurrences of the pattern (supports regular expressions) with the replacement. Replacement string can contain backreferences. See <a href="examples/twitter.html">Twitter code sample</a> for an example.</p>
@@ -398,7 +404,8 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 				<h5><code>{{if <i>javascript-expression</i>}} ... {{endif}}</code></h5>
 				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true.</p>
 
-                <h4>Inline JavaScript Member Injection</h4>
+                <a id="inline-injection"></a>
+                <h4>Variable injection for inline scripts</h4>
                 <p>If you're using scripts inline in your template, you can access JSON object members. You reference these via the <code>__</code> variable.</p>
 
 <pre>
