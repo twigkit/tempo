@@ -543,11 +543,13 @@ var Tempo = (function (tempo) {
                                 return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
-                        format = format.replace(/Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
-                            if (DATE_PATTERNS.hasOwnProperty(match)) {
-                                return DATE_PATTERNS[match](date);
+                        format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
+                            if (!escape) {
+                                if (DATE_PATTERNS.hasOwnProperty(pattern)) {
+                                    return DATE_PATTERNS[pattern](date);
+                                }
                             }
-                            return match;
+                            return pattern;
                         });
 
                         return format;
