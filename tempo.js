@@ -64,7 +64,7 @@ var Tempo = (function (tempo) {
                     }
 
                     // Handle filters
-                    if (args !== undefined) {
+                    if (args !== undefined && args !== '') {
                         var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
                         for (var i = 0; i < filters.length; i++) {
                             var filter = utils.trim(filters[i]);
@@ -76,6 +76,7 @@ var Tempo = (function (tempo) {
                                 filter = filter.substring(0, filter.indexOf(' '));
                             }
                             val = renderer.filters[filter](val, filter_args);
+
                         }
                     }
 

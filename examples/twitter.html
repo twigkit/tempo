@@ -117,10 +117,10 @@
 	<li class="row" data-template style="display: none;">
 		<div class="column grid_4 user">
 			<img src="images/tweeter.png" data-src="{{profile_image_url}}" height="48" width="48" />
-			<h3>{{ from_user }}</h3>
+			<h3>{{from_user}}</h3>
 		</div>
 		<p class="column grid_8 text">
-            {{ text | replace '@([A-z0-9_]+)', '@<a href="http://twitter.com/$1">$1</a>' }}<span class="time">, {{ created_at | date '\at HH:mm on EEEE' }}</span>
+            {{text | replace '@([A-z0-9_]+)', '@<a href="http://twitter.com/$1">$1</a>'}}<span class="time">, {{created_at | date '\at HH:mm on EEEE' }}</span>
         </p>
 	</li>
     <li class="error" data-template-fallback>
