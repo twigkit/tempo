@@ -479,12 +479,20 @@ var Tempo = (function (tempo) {
                     } else if (format === 'time') {
                         return date.toTimeString();
                     } else {
+                        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                        var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
                             'YYYY' : function (date) {
                                 return date.getFullYear();
                             },
                             'YY' : function (date) {
                                 return date.getFullYear().toFixed().substring(2);
+                            },
+                            'MMMM' : function (date) {
+                                return MONTHS[date.getMonth()];
+                            },
+                            'MMM' : function (date) {
+                                return MONTHS[date.getMonth()].substring(0, 3);
                             },
                             'MM' : function (date) {
                                 return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
@@ -497,6 +505,15 @@ var Tempo = (function (tempo) {
                             },
                             'D' : function (date) {
                                 return date.getDate();
+                            },
+                            'EEEE' : function (date) {
+                                return DAYS[date.getDay()];
+                            },
+                            'EEE' : function (date) {
+                                return DAYS[date.getDay()].substring(0, 3);
+                            },
+                            'E' : function (date) {
+                                return date.getDay();
                             },
                             'HH' : function (date) {
                                 return utils.pad(date.getHours().toFixed(), '0', 2);
@@ -526,7 +543,7 @@ var Tempo = (function (tempo) {
                                 return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
-                        format = format.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
+                        format = format.replace(/Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a/g, function (match) {
                             if (DATE_PATTERNS.hasOwnProperty(match)) {
                                 return DATE_PATTERNS[match](date);
                             }
