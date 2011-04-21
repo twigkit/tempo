@@ -93,16 +93,17 @@
 			<h3>Why use Tempo?</h3>
 			<ul id="why">
 				<li>Clear separation of concerns: no HTML in your JavaScript files, and no JavaScript in your HTML</li>
-				<li>It makes AJAX content easier to work with</li>
+				<li>It makes working with AJAX/JSON content a piece of cake</li>
+                <li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
 			</ul>
 			<h3>Key Features</h3>
 			<ul id="features">
-				<li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
+
 				<li>Itty-bitty footprint, lightning-fast rendering!</li>
-				<li>No dependencies - Works with or without jQuery</li>
+				<li>No dependencies - Use with or without jQuery</li>
 				<li>Supports nested and conditional templates</li>
-                <li>Support for <a href="#filter-functions">filter and formatting</a> functions</li>
-                <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</a></li>
+                <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
+                <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
                 <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
 			</ul>
 		</section>
@@ -117,7 +118,7 @@
 <pre>
 &lt;ol id=&quot;tweets&quot;&gt;
     &lt;li <em>data-template</em>&gt;
-        &lt;img src=&quot;<em>{{profile_image_url}}</em>&quot; /&gt;
+        &lt;img <em>src</em>="default.png" <em>data-src</em>="<em>{{profile_image_url}}</em>" /&gt;
         &lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
         &lt;p&gt;<em>{{text}}</em>&lt;span&gt;<em>{{created_at|date 'HH:mm on EEEE'}}</em>&lt;/span&gt;&lt;/p&gt;
     &lt;/li&gt;
@@ -129,7 +130,7 @@
 			<div class="example">
 				<ol id="tweets">
 					<li data-template style="display: none;">
-						<img src="{{profile_image_url}}" />
+						<img src="examples/images/tweeter.png" data-src="{{profile_image_url}}" />
 						<h3>{{from_user}}</h3>
 						<p>{{text}}<span>, {{created_at | date 'HH:mm on EEEE'}}</span></p>
 					</li>
@@ -397,6 +398,15 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 
                 <h5><code>{{ field | <em>prepend 'some prefix&amp;nbsp;'</em> }}</code></h5>
                 <p class="h5">If the field value is not empty, then prepend the string to the value. Helpful if you don't want the prefix to show up in the template if the field is undefined or null. Use &amp;nbsp; if you need before or after the prefix.</p>
+
+                <a id="attribute-setters"></a>
+                <h4>Attribute Setters</h4>
+				<p>If an HTML element attribute in a template is immediately followed by a second attribute with the same name, prefixed with <code>data-</code>, then as long as the second one is not empty will the value of the original be replaced with the value of the latter.</p>
+                <p>In the following example, will the reference to <code>default_image.png</code> be replaced by an actual field value if one exists. Notice here that the <code>.png</code> suffix is only added if the field is not empty.</p>
+
+<pre>
+&lt;img <em>src</em>="<em>default_image.png</em>" <em>data-src</em>="<em>{{actual_image_if_exists | append '.png'}}</em>" ... /&gt;
+</pre>
 
 				<h4>Template Tags</h4>
 				<p>Tempo also supports tag blocks.</p>
