@@ -60,6 +60,7 @@
 		}
 
         ol#tweets p span.time {
+            font-size: 0.7em;
 			color: #bbb;
 		}
 
@@ -119,7 +120,7 @@
 			<h3>{{ from_user }}</h3>
 		</div>
 		<p class="column grid_8 text">
-            {{ text | replace '@([A-z0-9_]+)', '@<a href="http://twitter.com/$1">$1</a>' }}<span class="time">, at {{ created_at | date 'HH:mm' }}</span>
+            {{ text | replace '@([A-z0-9_]+)', '@<a href="http://twitter.com/$1">$1</a>' }}<span class="time">, {{ created_at | date '\at HH:mm on EEEE' }}</span>
         </p>
 	</li>
     <li class="error" data-template-fallback>
