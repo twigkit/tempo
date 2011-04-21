@@ -409,7 +409,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 &lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__[0]</em>); return false;&quot;&gt;{{[0]}}&lt;/a&gt;
 </pre>
 
-                <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes.</p>
+                <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes, otherwise type is preserved.</p>
 
 				<h3>CSS</h3>
 				<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
