@@ -495,6 +495,22 @@ $.getJSON(url, function(data) {
                 <p>
                     You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
                 </p>
+
+                <h4>Tempo Renderer Information - the <code>_tempo</code> variable</h4>
+				<p>You can access information about the rendering process via the <code>_tempo</code> variable.</p>
+
+				<h5>_tempo.index</h5>
+				<p class="h5">The <code>index</code> variable tells you how many iterations of a given template have been carried out. This is a zero (0) based index. Nested templates have a separate counter.
+                <p>The following example adds the iteration count to the <code>class</code> attribute, prefixed with '<code>item-</code>':</p>
+<pre>
+&lt;ol id=&quot;marx-brothers&quot; class=&quot;item-<em>{{_tempo.index}}</em>&quot;&gt;
+    &lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+                <p>This example shows how to access the iteration counter using inline JavaScript injection:</p>
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__._tempo.index</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
+</pre>
 			</section>
 			<aside id="advert">
 				<div class="ad">
