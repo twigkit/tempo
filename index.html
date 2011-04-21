@@ -152,7 +152,6 @@
 							<li><a href="#json">JSON</a></li>
 							<li><a href="#javascript">JavaScript</a></li>
 							<li><a href="#html">HTML</a></li>
-							<li><a href="#css">CSS</a></li>
 							<li><a href="#jquery">jQuery</a></li>
 							<li><a href="#advanced">Advanced Topics</a></li>
 						</ul>
@@ -343,7 +342,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
                 <a id="template-fallback"></a>
                 <h4>Fallback Template</h4>
 				<p>Use the <code>data-template-fallback</code> attribute to identify HTML containers you would like to show if JavaScript is disabled.</p>
-				<p>Note that the primary template should have <code>style="display: none;"</code> added inline. This will get removed when the template is rendered.</p>
+                <p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
 
 <pre>
 &lt;ul id=&quot;marx-brothers&quot;&gt;
@@ -428,17 +427,6 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 </pre>
 
                 <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes, otherwise type is preserved.</p>
-
-				<h3>CSS</h3>
-				<p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your data templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
-				<p>Use the <code><a href="#template-fallback">data-template-fallback</a></code> attribute to identify HTML containers that should be shown when JavaScript is disabled.</p>
-<pre>
-&lt;ol id=&quot;tweets&quot;&gt;
-    &lt;li data-template <em>style=&quot;display: none;&quot;</em>&gt;
-        ...
-    &lt;/li&gt;
-&lt;/ol&gt;
-</pre>
 				
 				<a id="jquery"></a>
 				<h3>Using Tempo with jQuery</h3>
