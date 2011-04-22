@@ -6,7 +6,8 @@ test('memberRegex', function() {
 });
 
 test('pad', function() {
-	equals(utils.pad('3', '0', 3), '003', 'Padding string with zeros');
+	same(utils.pad('3', '0', 3), '003', 'Padding string with zeros');
+	same(utils.pad(3, '0', 3), '003', 'Padding integer with zeros');
 });
 
 test('trim', function() {
