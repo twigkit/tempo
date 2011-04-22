@@ -607,6 +607,10 @@ var Tempo = (function (tempo) {
         return new Renderer(templates);
     };
 
+	tempo.test = function() {
+		return {'utils' : utils};
+	}
+
     return tempo;
 
 })(Tempo || {});
