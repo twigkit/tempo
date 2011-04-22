@@ -608,7 +608,7 @@ var Tempo = (function (tempo) {
     };
 
 	tempo.test = function() {
-		return {'utils' : utils};
+		return {'utils' : utils, 'renderer' : new Renderer(null)};
 	}
 
     return tempo;
