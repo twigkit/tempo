@@ -61,6 +61,7 @@ test('default', function() {
 
 test('date', function() {
 	var date = new Date(1283359805000);
+	equals(filters.date(undefined, []), '', 'Undefined date');
 	equals(filters.date(date, ['localedate']), '1 September 2010', 'Date to localedate');
 	equals(filters.date(date, ['localetime']), '17:50:05 GMT+01:00', 'Date to localetime');
 	equals(filters.date(date, ['date']), 'Wed Sep 01 2010', 'Date to date');
