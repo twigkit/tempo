@@ -20,6 +20,21 @@ test('startsWith', function() {
 	ok(!utils.startsWith('hello', 'lo'), 'Checking if string starts with correctly returns false');
 });
 
+module('Tags');
+var tags = Tempo.test().renderer.tags;
+
+test('if/endif', function() {
+	var item = {'foo':'bar', 'zoo':'doo'};
+	
+	var str = "This is{{if foo === 'bar'}} right{{endif}}";
+	str = str.replace(new RegExp(tags[0].regex, 'gi'), tags[0].handler(undefined, item));
+	equals(str, 'This is right', 'If conditional matches');
+	
+	str = "This is{{if foo !== 'bar'}} right{{endif}}";
+	str = str.replace(new RegExp(tags[0].regex, 'gi'), tags[0].handler(undefined, item));
+	equals(str, 'This is', 'If conditional does not match');
+});
+
 module('Filters');
 var filters = Tempo.test().renderer.filters;
 
@@ -68,4 +83,10 @@ test('date', function() {
 	equals(filters.date(date, ['time']), '17:50:05 GMT+0100 (BST)', 'Date to localetime');
 	equals(filters.date(date, ['YYYY YY MMMM MMM MM M EEEE EEE E DD D HH H mm m ss s SSS S a']), '2010 10 September Sep 09 9 Wednesday Wed 3 01 1 17 17 50 50 05 5 000 0 PM', 'Date to formatted with pattern');
 	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
+});
+
+module('Templates');
+test('prepare', function() {
+	var template = Tempo.prepare('container');
+	ok(template !== undefined, 'Template was created from element ID');
 });
