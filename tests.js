@@ -56,5 +56,15 @@ test('default', function() {
 	equals(filters['default'](undefined, ['foo']), 'foo', 'Default value for undefined');
 	equals(filters['default'](null, ['foo']), 'foo', 'Default value for null');
 	equals(filters['default']('bar', ['foo']), 'bar', 'Default value should not be used');
-	same(filters['default'](undefined, []), 'undefined', 'No default value, returns original even if empty');
+	same(filters['default'](undefined, []), undefined, 'No default value, returns original even if empty');
+});
+
+test('date', function() {
+	var date = new Date(1283359805000);
+	equals(filters.date(date, ['localedate']), '1 September 2010', 'Date to localedate');
+	equals(filters.date(date, ['localetime']), '17:50:05 GMT+01:00', 'Date to localetime');
+	equals(filters.date(date, ['date']), 'Wed Sep 01 2010', 'Date to date');
+	equals(filters.date(date, ['time']), '17:50:05 GMT+0100 (BST)', 'Date to localetime');
+	equals(filters.date(date, ['YYYY YY MMMM MMM MM M EEEE EEE DD D HH H mm m ss s SSS S a']), '2010 10 September Sep 09 9 Wednesday Wed 01 1 17 17 50 50 05 5 000 0 PM', 'Date to formatted with pattern');
+	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
 });
