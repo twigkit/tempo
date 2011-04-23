@@ -20,6 +20,10 @@ test('startsWith', function() {
 	ok(!utils.startsWith('hello', 'lo'), 'Checking if string starts with correctly returns false');
 });
 
+test('equalsIgnoreCase', function() {
+	ok(utils.equalsIgnoreCase('HeLlO', 'hElLo'), 'Equals ignore case with different case strings');
+});
+
 module('Tags');
 var tags = Tempo.test().renderer.tags;
 
