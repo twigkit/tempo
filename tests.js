@@ -39,6 +39,7 @@ test('trim', function() {
 test('replace', function() {
 	equals(filters.replace('foot simpson', ['foo', 'bar']), 'bart simpson', 'Replacing simple value');
 	equals(filters.replace('foo 123 bar', ['([0-9]+)', '|$1|']), 'foo |123| bar', 'Replacing value with backreference');
+	equals(filters.replace(undefined, ['([0-9]+)', '|$1|']), undefined, 'Trying to replace in undefined value');
 });
 
 test('append', function() {
@@ -55,4 +56,5 @@ test('default', function() {
 	equals(filters['default'](undefined, ['foo']), 'foo', 'Default value for undefined');
 	equals(filters['default'](null, ['foo']), 'foo', 'Default value for null');
 	equals(filters['default']('bar', ['foo']), 'bar', 'Default value should not be used');
+	same(filters['default'](undefined, []), 'undefined', 'No default value, returns original even if empty');
 });
