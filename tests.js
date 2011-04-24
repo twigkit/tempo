@@ -1,3 +1,6 @@
+/*!
+ *  Utils tests
+ */
 module('Utils');
 var utils = Tempo.test().utils;
 
@@ -24,6 +27,17 @@ test('equalsIgnoreCase', function() {
 	ok(utils.equalsIgnoreCase('HeLlO', 'hElLo'), 'Equals ignore case with different case strings');
 });
 
+test('clearContainer', function() {
+	var el = document.getElementById('container');
+	ok($(el).children('li').length === 3, 'Container has three elements (2 templates, one regular)');
+	utils.clearContainer(el);
+	ok($(el).children('li').length === 2, 'Did not remove data-template elements');
+});
+
+
+/*!
+ * Tags tests
+ */
 module('Tags');
 var tags = Tempo.test().renderer.tags;
 
@@ -39,6 +53,10 @@ test('if/endif', function() {
 	equals(str, 'This is', 'If conditional does not match');
 });
 
+
+/*!
+ * Filters tests
+ */
 module('Filters');
 var filters = Tempo.test().renderer.filters;
 
@@ -89,6 +107,10 @@ test('date', function() {
 	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
 });
 
+
+/*!
+ * Templates tests
+ */
 module('Templates');
 test('prepare', function() {
 	var template = Tempo.prepare('container');

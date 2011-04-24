@@ -1,3 +1,8 @@
+/*!
+ * Tempo Template Engine 1.4
+ *
+ * http://tempojs.com/
+ */
 function TempoEvent(type, item, element) {
     this.type = type;
     this.item = item;
@@ -607,9 +612,9 @@ var Tempo = (function (tempo) {
         return new Renderer(templates);
     };
 
-	tempo.test = function() {
-		return {'utils' : utils, 'renderer' : new Renderer(null)};
-	}
+	tempo.test = function () {
+		return { 'utils' : utils, 'renderer' : new Renderer(null) };
+	};
 
     return tempo;
 
