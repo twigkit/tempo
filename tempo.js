@@ -462,14 +462,15 @@ var Tempo = (function (tempo) {
                     return 'item.' + match;
                 });
 
+                var blocks = body.split(/\{%[ ]?else[ ]?%\}/);
+
                 if (eval(expr)) {
-                    return body;
+                    return blocks[0];
+                } else if (blocks.length > 1) {
+                    return blocks[1];
                 }
 
                 return '';
-            },
-            'link' : function(renderer, item, match, args, body) {
-                return '<a href="' + args[0] + '" ' + args[1] + '>' + body + '</a>';
             }
         },
 
