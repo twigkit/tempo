@@ -10,7 +10,6 @@ test('memberRegex', function() {
 
 test('pad', function() {
 	same(utils.pad('3', '0', 3), '003', 'Padding string with zeros');
-	same(utils.pad(3, '0', 3), '003', 'Padding integer with zeros');
 });
 
 test('trim', function() {
@@ -39,19 +38,6 @@ test('clearContainer', function() {
  * Tags tests
  */
 module('Tags');
-var tags = Tempo.test().renderer.tags;
-
-test('if/endif', function() {
-	var item = {'foo':'bar', 'zoo':'doo'};
-	
-	var str = "This is{{if foo === 'bar'}} right{{endif}}";
-	str = str.replace(new RegExp(tags[0].regex, 'gi'), tags[0].handler(undefined, item));
-	equals(str, 'This is right', 'If conditional matches');
-	
-	str = "This is{{if foo !== 'bar'}} right{{endif}}";
-	str = str.replace(new RegExp(tags[0].regex, 'gi'), tags[0].handler(undefined, item));
-	equals(str, 'This is', 'If conditional does not match');
-});
 
 
 /*!

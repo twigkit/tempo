@@ -167,7 +167,7 @@
     </style>
 
     <!-- Import Tempo -->
-    <script type="text/javascript" src="../tempo.min.js"></script>
+    <script type="text/javascript" src="../tempo.js"></script>
 
     <!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
@@ -240,9 +240,9 @@
 
 <div id="solr-breadcrumbs" class="row">
     <ul data-template style="display: none;">
-        {{if q !== '*:*'}}
+        {% if q !== '*:*' %}
         <li><a href="#" onclick="query('');">&#215;</a>{{q}}</li>
-        {{endif}}
+        {% endif %}
         <li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">
             &#215;</a>{{value}}
         </li>
