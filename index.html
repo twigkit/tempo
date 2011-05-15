@@ -80,7 +80,7 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.4</span></h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.5</span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
@@ -98,7 +98,6 @@
 			</ul>
 			<h3>Key Features</h3>
 			<ul id="features">
-
 				<li>Itty-bitty footprint, lightning-fast rendering!</li>
 				<li>No dependencies - Use with or without jQuery</li>
 				<li>Supports nested and conditional templates</li>
@@ -229,6 +228,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 				<h3>HTML</h3>
 				<h4>data-template</h4>
 				<p>Any tag with the <code>data-template</code> attribute will be flagged as a data template.</p>
+                <p>For compliance the full (non-minimized) form is also supported: <code>data-template="data-template"</code>.</p>
 			
 				<h4>{{fields}}</h4>
 				<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.</p>
