@@ -1,3 +1,8 @@
+/*!
+ * Tempo Template Engine 1.5
+ *
+ * http://tempojs.com/
+ */
 function TempoEvent(type, item, element) {
     this.type = type;
     this.item = item;
@@ -45,89 +50,6 @@ var Tempo = (function (tempo) {
 
         startsWith : function (str, prefix) {
             return (str.indexOf(prefix) === 0);
-        },
-
-        replaceVariables : function (renderer, _tempo, item, str) {
-            return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
-                try {
-                    var val = null;
-
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
-
-                    if (utils.typeOf(item) === 'array') {
-                        val = eval('item' + variable);
-                    } else {
-                        val = eval('item.' + variable);
-                    }
-
-                    // Handle filters
-                    if (args !== undefined && args !== '') {
-                        var filters = utils.trim(utils.trim(args).substring(1)).split(/\|/);
-                        for (var i = 0; i < filters.length; i++) {
-                            var filter = utils.trim(filters[i]);
-                            var filter_args = [];
-                            // If there is a space, there must be arguments
-                            if (filter.indexOf(' ') > -1) {
-                                var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
-                                filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-                                filter = filter.substring(0, filter.indexOf(' '));
-                            }
-                            val = renderer.filters[filter](val, filter_args);
-
-                        }
-                    }
-
-                    if (val !== undefined) {
-                        return val;
-                    }
-                } catch (err) {
-                }
-
-                return '';
-            });
-        },
-
-        replaceObjects : function (renderer, _tempo, item, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9\\._\\[\\]]+)?)', 'g');
-            return str.replace(regex, function (match, variable, args) {
-                try {
-                    var val = null;
-
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
-
-                    if (utils.typeOf(item) === 'array') {
-                        val = eval('item' + variable);
-                    } else {
-                        val = eval('item.' + variable);
-                    }
-
-                    if (val !== undefined) {
-                        if (utils.typeOf(val) === 'string') {
-                            return '\'' + val + '\'';
-                        } else {
-                            return val;
-                        }
-                    }
-                } catch (err) {
-                }
-
-                return undefined;
-            });
-        },
-
-        applyAttributeSetters : function (renderer, item, str) {
-            return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
-                if (data_value !== '') {
-                    return attr + '="' + data_value + '"';
-                }
-                return match;
-            });
         },
 
         clearContainer : function (el) {
@@ -213,7 +135,7 @@ var Tempo = (function (tempo) {
             var children = container.getElementsByTagName('*');
 
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' && !utils.isNested(children[i]))) {
+                if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' || children[i].getAttribute('data-template') === 'data-template' && !utils.isNested(children[i]))) {
                     this.createTemplate(children[i]);
                 } else if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
@@ -309,6 +231,102 @@ var Tempo = (function (tempo) {
             return this;
         },
 
+        _replaceVariables : function (renderer, _tempo, item, str) {
+            return str.replace(/\{\{[ ]?([A-Za-z0-9$\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
+                try {
+                    var val = null;
+
+                    // Handling tempo_info variable
+                    if (utils.startsWith(variable, '_tempo.')) {
+                        return eval(variable);
+                    }
+
+                    if (utils.typeOf(item) === 'array') {
+                        val = eval('item' + variable);
+                    } else {
+                        val = eval('item.' + variable);
+                    }
+
+                    // Handle filters
+                    var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
+                    if (args !== undefined && args !== '') {
+                        var filters = utils.trim(utils.trim(args).substring(1)).split(filterSplitter);
+                        for (var i = 0; i < filters.length; i++) {
+                            var filter = utils.trim(filters[i]);
+                            var filter_args = [];
+                            // If there is a space, there must be arguments
+                            if (filter.indexOf(' ') > -1) {
+                                var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
+                                filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+                                filter = filter.substring(0, filter.indexOf(' '));
+                            }
+                            val = renderer.filters[filter](val, filter_args);
+
+                        }
+                    }
+
+                    if (val !== undefined) {
+                        return val;
+                    }
+                } catch (err) {
+                }
+
+                return '';
+            });
+        },
+
+        _replaceObjects : function (renderer, _tempo, item, str) {
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            return str.replace(regex, function (match, variable, args) {
+                try {
+                    var val = null;
+
+                    // Handling tempo_info variable
+                    if (utils.startsWith(variable, '_tempo.')) {
+                        return eval(variable);
+                    }
+
+                    if (utils.typeOf(item) === 'array') {
+                        val = eval('item' + variable);
+                    } else {
+                        val = eval('item.' + variable);
+                    }
+
+                    if (val !== undefined) {
+                        if (utils.typeOf(val) === 'string') {
+                            return '\'' + val + '\'';
+                        } else {
+                            return val;
+                        }
+                    }
+                } catch (err) {
+                }
+
+                return undefined;
+            });
+        },
+
+        _applyAttributeSetters : function (renderer, item, str) {
+            return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+                if (data_value !== '') {
+                    return attr + '="' + data_value + '"';
+                }
+                return match;
+            });
+        },
+
+        _applyTags : function (renderer, item, str) {
+            return str.replace(/\{%[ ]?([\s\S]*?)( [\s\S]*?)?[ ]?%\}(([\s\S]*?)(?=\{%[ ]?end\1[ ]?%\}))?/g, function (match, tag, args, body) {
+                if (renderer.tags.hasOwnProperty(tag)) {
+                    args = args.substring(args.indexOf(' ')).replace(/^[ ]*|[ ]*$/g, '');
+                    filter_args = args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+                    return renderer.tags[tag](item, match, filter_args, body);
+                } else {
+                    return '';
+                }
+            });
+        },
+
         starting : function () {
             // Use this to manually fire the RENDER_STARTING event e.g. just before you issue an AJAX request
             // Useful if you're not calling prepare immediately before render
@@ -341,27 +359,25 @@ var Tempo = (function (tempo) {
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
-                for (var p = 0; p < renderer.tags.length; p++) {
-                    html = html.replace(new RegExp(renderer.tags[p].regex, 'gi'), renderer.tags[p].handler(renderer, item));
-                }
+                html = this._applyTags(this, item, html);
 
                 // Content
-                html = utils.replaceVariables(this, tempo_info, item, html);
+                html = this._replaceVariables(this, tempo_info, item, html);
 
                 // JavaScript objects
-                html = utils.replaceObjects(this, tempo_info, item, html);
+                html = this._replaceObjects(this, tempo_info, item, html);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
-                    template.className = utils.replaceVariables(this, tempo_info, item, template.className);
+                    template.className = this._replaceVariables(this, tempo_info, item, template.className);
                 }
 
                 // Template id
                 if (template.getAttribute('id')) {
-                    template.id = utils.replaceVariables(this, tempo_info, item, template.id);
+                    template.id = this._replaceVariables(this, tempo_info, item, template.id);
                 }
 
-                html = utils.applyAttributeSetters(this, item, html);
+                html = this._applyAttributeSetters(this, item, html);
 
                 fragment.appendChild(utils.getElement(template, html));
 
@@ -438,26 +454,26 @@ var Tempo = (function (tempo) {
             utils.clearContainer(this.templates.container);
         },
 
-        tags : [
-            // If tag (using a workaround for the dotall modifier to match multilines [\\s\\S])
-            {'regex': '\\{\\{if ([\\s\\S]*?)\\}\\}([\\s\\S]*?)\\{\\{endif\\}\\}', 'handler': function (renderer, item) {
-                return function (match, condition, content) {
-                    var member_regex = utils.memberRegex(item);
+        tags : {
+            'if' : function(item, match, args, body) {
+                var member_regex = utils.memberRegex(item);
 
-                    condition = condition.replace(/&amp;/g, '&');
-                    condition = condition.replace(new RegExp(member_regex, 'gi'), function (match) {
-                        return 'item.' + match;
-                    });
+                var expr = args[0].replace(/&amp;/g, '&');
+                expr = expr.replace(new RegExp(member_regex, 'gi'), function (match) {
+                    return 'item.' + match;
+                });
 
-                    if (eval(condition)) {
-                        return content;
-                    }
+                var blocks = body.split(/\{%[ ]?else[ ]?%\}/);
 
-                    return '';
-                };
+                if (eval(expr)) {
+                    return blocks[0];
+                } else if (blocks.length > 1) {
+                    return blocks[1];
+                }
+
+                return '';
             }
-            }
-        ],
+        },
 
         filters : {
             'upper' : function (value, args) {
@@ -605,6 +621,10 @@ var Tempo = (function (tempo) {
         templates.parse(container);
 
         return new Renderer(templates);
+    };
+
+    tempo.test = function () {
+        return { 'utils' : utils, 'renderer' : new Renderer(null) };
     };
 
     return tempo;

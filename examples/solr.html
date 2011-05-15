@@ -256,9 +256,9 @@
 
 <div id="solr-breadcrumbs" class="row">
     <ul data-template style="display: none;">
-        {{if q !== '*:*'}}
+        {% if q !== '*:*' %}
         <li><a href="#" onclick="query('');">&#215;</a>{{q}}</li>
-        {{endif}}
+        {% endif %}
         <li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">
             &#215;</a>{{value}}
         </li>
