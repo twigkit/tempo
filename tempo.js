@@ -232,7 +232,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceVariables : function (renderer, _tempo, item, str) {
-            return str.replace(/\{\{[ ]?([A-Za-z0-9\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
+            return str.replace(/\{\{[ ]?([A-Za-z0-9$\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
                 try {
                     var val = null;
 
@@ -275,7 +275,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects : function (renderer, _tempo, item, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = null;
