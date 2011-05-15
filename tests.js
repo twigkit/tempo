@@ -93,6 +93,9 @@ test('date', function () {
 	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
 });
 
+test('filters member regex', function () {
+    equals(utils.memberRegex(filters), 'upper|lower|trim|replace|append|prepend|default|date', 'Regex of all filter names');
+});
 
 /*!
  * Templates tests
