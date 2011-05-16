@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 1.5
+ * Tempo Template Engine 1.6
  *
  * http://tempojs.com/
  */
@@ -120,11 +120,32 @@ var Tempo = (function (tempo) {
         }
     };
 
-    function Templates(nestedItem) {
+    function Templates(params, nestedItem) {
+        this.params = params;
         this.defaultTemplate = null;
         this.namedTemplates = {};
         this.container = null;
+
         this.nestedItem = nestedItem !== undefined ? nestedItem : null;
+
+        this.var_brace_left = '\\{\\{';
+        this.var_brace_right = '\\}\\}';
+        this.tag_brace_left = '\\{%';
+        this.tag_brace_right = '%\\}';
+
+        if (typeof params !== 'undefined') {
+            for (var prop in params) {
+                if (prop === 'var_braces') {
+                    this.var_brace_left = params[prop].substring(0, params[prop].length / 2);
+                    this.var_brace_right = params[prop].substring(params[prop].length / 2);
+                } else if (prop === 'tag_braces') {
+                    this.tag_brace_left = params[prop].substring(0, params[prop].length / 2);
+                    this.tag_brace_right = params[prop].substring(params[prop].length / 2);
+                } else if (typeof this[prop] !== 'undefined') {
+                    this[prop] = params[prop];
+                }
+            }
+        }
 
         return this;
     }
@@ -200,9 +221,9 @@ var Tempo = (function (tempo) {
             }
         },
 
-        templateFor: function (item) {
+        templateFor: function (i) {
             for (var templateName in this.namedTemplates) {
-                if (eval('item.' + templateName)) {
+                if (eval('i.' + templateName)) {
                     return this.namedTemplates[templateName].cloneNode(true);
                 }
             }
@@ -220,6 +241,8 @@ var Tempo = (function (tempo) {
         this.templates = templates;
         this.listener = undefined;
         this.started = false;
+        this.varRegex = new RegExp(this.templates.var_brace_left + '[ ]?([A-Za-z0-9$\\._\\[\\]]*?)([ ]?\\|[ ]?.*?)?[ ]?' + this.templates.var_brace_right, 'g');
+        this.tagRegex = new RegExp(this.templates.tag_brace_left + '[ ]?([\\s\\S]*?)( [\\s\\S]*?)?[ ]?' + this.templates.tag_brace_right + '(([\\s\\S]*?)(?=' + this.templates.tag_brace_left + '[ ]?end\\1[ ]?' + this.templates.tag_brace_right + '))?', 'g');
 
         return this;
     }
@@ -231,100 +254,100 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        _replaceVariables : function (renderer, _tempo, item, str) {
-            return str.replace(/\{\{[ ]?([A-Za-z0-9$\._\[\]]*?)([ ]?\|[ ]?.*?)?[ ]?\}\}/g, function (match, variable, args) {
-                try {
-                    var val = null;
+        _replaceVariables : function (renderer, _tempo, i, str) {
+            return str.replace(this.varRegex, function (match, variable, args) {
+                        try {
+                            var val = null;
 
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
-
-                    if (utils.typeOf(item) === 'array') {
-                        val = eval('item' + variable);
-                    } else {
-                        val = eval('item.' + variable);
-                    }
-
-                    // Handle filters
-                    var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
-                    if (args !== undefined && args !== '') {
-                        var filters = utils.trim(utils.trim(args).substring(1)).split(filterSplitter);
-                        for (var i = 0; i < filters.length; i++) {
-                            var filter = utils.trim(filters[i]);
-                            var filter_args = [];
-                            // If there is a space, there must be arguments
-                            if (filter.indexOf(' ') > -1) {
-                                var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
-                                filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-                                filter = filter.substring(0, filter.indexOf(' '));
+                            // Handling tempo_info variable
+                            if (utils.startsWith(variable, '_tempo.')) {
+                                return eval(variable);
                             }
-                            val = renderer.filters[filter](val, filter_args);
 
+                            if (utils.typeOf(i) === 'array') {
+                                val = eval('i' + variable);
+                            } else {
+                                val = eval('i.' + variable);
+                            }
+
+                            // Handle filters
+                            var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
+                            if (args !== undefined && args !== '') {
+                                var filters = utils.trim(utils.trim(args).substring(1)).split(filterSplitter);
+                                for (var p = 0; p < filters.length; p++) {
+                                    var filter = utils.trim(filters[p]);
+                                    var filter_args = [];
+                                    // If there is a space, there must be arguments
+                                    if (filter.indexOf(' ') > -1) {
+                                        var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
+                                        filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
+                                        filter = filter.substring(0, filter.indexOf(' '));
+                                    }
+                                    val = renderer.filters[filter](val, filter_args);
+
+                                }
+                            }
+
+                            if (val !== undefined) {
+                                return val;
+                            }
+                        } catch (err) {
                         }
-                    }
 
-                    if (val !== undefined) {
-                        return val;
-                    }
-                } catch (err) {
-                }
-
-                return '';
-            });
+                        return '';
+                    });
         },
 
-        _replaceObjects : function (renderer, _tempo, item, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(item) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+        _replaceObjects : function (renderer, _tempo, i, str) {
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
-                try {
-                    var val = null;
+                        try {
+                            var val = null;
 
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
+                            // Handling tempo_info variable
+                            if (utils.startsWith(variable, '_tempo.')) {
+                                return eval(variable);
+                            }
 
-                    if (utils.typeOf(item) === 'array') {
-                        val = eval('item' + variable);
-                    } else {
-                        val = eval('item.' + variable);
-                    }
+                            if (utils.typeOf(i) === 'array') {
+                                val = eval('i' + variable);
+                            } else {
+                                val = eval('i.' + variable);
+                            }
 
-                    if (val !== undefined) {
-                        if (utils.typeOf(val) === 'string') {
-                            return '\'' + val + '\'';
-                        } else {
-                            return val;
+                            if (val !== undefined) {
+                                if (utils.typeOf(val) === 'string') {
+                                    return '\'' + val + '\'';
+                                } else {
+                                    return val;
+                                }
+                            }
+                        } catch (err) {
                         }
-                    }
-                } catch (err) {
-                }
 
-                return undefined;
-            });
+                        return undefined;
+                    });
         },
 
         _applyAttributeSetters : function (renderer, item, str) {
             return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
-                if (data_value !== '') {
-                    return attr + '="' + data_value + '"';
-                }
-                return match;
-            });
+                        if (data_value !== '') {
+                            return attr + '="' + data_value + '"';
+                        }
+                        return match;
+                    });
         },
 
         _applyTags : function (renderer, item, str) {
-            return str.replace(/\{%[ ]?([\s\S]*?)( [\s\S]*?)?[ ]?%\}(([\s\S]*?)(?=\{%[ ]?end\1[ ]?%\}))?/g, function (match, tag, args, body) {
-                if (renderer.tags.hasOwnProperty(tag)) {
-                    args = args.substring(args.indexOf(' ')).replace(/^[ ]*|[ ]*$/g, '');
-                    filter_args = args.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-                    return renderer.tags[tag](item, match, filter_args, body);
-                } else {
-                    return '';
-                }
-            });
+            return str.replace(this.tagRegex, function (match, tag, args, body) {
+                        if (renderer.tags.hasOwnProperty(tag)) {
+                            args = args.substring(args.indexOf(' ')).replace(/^[ ]*|[ ]*$/g, '');
+                            var filter_args = args.split(/(?:['"])[ ]?,[ ]?(?:['"])/);
+                            return renderer.tags[tag](renderer, item, match, filter_args, body);
+                        } else {
+                            return '';
+                        }
+                    });
         },
 
         starting : function () {
@@ -336,21 +359,21 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        renderItem : function (renderer, tempo_info, item, fragment) {
-            var template = renderer.templates.templateFor(item);
-            if (template && item) {
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, item, template));
+        renderItem : function (renderer, tempo_info, i, fragment) {
+            var template = renderer.templates.templateFor(i);
+            if (template && i) {
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
 
                 var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
                 if (nestedDeclaration) {
-                    for (var i = 0; i < nestedDeclaration.length; i++) {
-                        var nested = nestedDeclaration[i].match(/"(.*?)"/)[1];
+                    for (var p = 0; p < nestedDeclaration.length; p++) {
+                        var nested = nestedDeclaration[p].match(/"(.*?)"/)[1];
 
-                        var t = new Templates(nested);
+                        var t = new Templates(renderer.templates.params, nested);
                         t.parse(template);
 
                         var r = new Renderer(t);
-                        r.render(eval('item.' + nested));
+                        r.render(eval('i.' + nested));
                     }
                 }
 
@@ -359,29 +382,29 @@ var Tempo = (function (tempo) {
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
 
                 // Tags
-                html = this._applyTags(this, item, html);
+                html = this._applyTags(this, i, html);
 
                 // Content
-                html = this._replaceVariables(this, tempo_info, item, html);
+                html = this._replaceVariables(this, tempo_info, i, html);
 
                 // JavaScript objects
-                html = this._replaceObjects(this, tempo_info, item, html);
+                html = this._replaceObjects(this, tempo_info, i, html);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
-                    template.className = this._replaceVariables(this, tempo_info, item, template.className);
+                    template.className = this._replaceVariables(this, tempo_info, i, template.className);
                 }
 
                 // Template id
                 if (template.getAttribute('id')) {
-                    template.id = this._replaceVariables(this, tempo_info, item, template.id);
+                    template.id = this._replaceVariables(this, tempo_info, i, template.id);
                 }
 
-                html = this._applyAttributeSetters(this, item, html);
+                html = this._applyAttributeSetters(this, i, html);
 
                 fragment.appendChild(utils.getElement(template, html));
 
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, item, template));
+                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, i, template));
             }
         },
 
@@ -455,15 +478,16 @@ var Tempo = (function (tempo) {
         },
 
         tags : {
-            'if' : function(item, match, args, body) {
-                var member_regex = utils.memberRegex(item);
+            'if' : function (renderer, i, match, args, body) {
+                var member_regex = utils.memberRegex(i);
 
                 var expr = args[0].replace(/&amp;/g, '&');
                 expr = expr.replace(new RegExp(member_regex, 'gi'), function (match) {
-                    return 'item.' + match;
-                });
+                            return 'i.' + match;
+                        });
 
-                var blocks = body.split(/\{%[ ]?else[ ]?%\}/);
+                var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
+                var blocks = body.split(blockRegex);
 
                 if (eval(expr)) {
                     return blocks[0];
@@ -590,13 +614,13 @@ var Tempo = (function (tempo) {
                             }
                         };
                         format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
-                            if (!escape) {
-                                if (DATE_PATTERNS.hasOwnProperty(pattern)) {
-                                    return DATE_PATTERNS[pattern](date);
-                                }
-                            }
-                            return pattern;
-                        });
+                                    if (!escape) {
+                                        if (DATE_PATTERNS.hasOwnProperty(pattern)) {
+                                            return DATE_PATTERNS[pattern](date);
+                                        }
+                                    }
+                                    return pattern;
+                                });
 
                         return format;
                     }
@@ -612,19 +636,21 @@ var Tempo = (function (tempo) {
      * Prepare a container for rendering, gathering templates and
      * clearing afterwards.
      */
-    tempo.prepare = function (container) {
+    tempo.prepare = function (container, params) {
         if (typeof container === 'string') {
             container = document.getElementById(container);
         }
 
-        var templates = new Templates();
+        var templates = new Templates(params);
         templates.parse(container);
 
         return new Renderer(templates);
     };
 
-    tempo.test = function () {
-        return { 'utils' : utils, 'renderer' : new Renderer(null) };
+    tempo.test = {
+        'utils' : utils,
+        'templates': new Templates({}),
+        'renderer' : new Renderer(new Templates({}))
     };
 
     return tempo;

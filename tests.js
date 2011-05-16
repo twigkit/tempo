@@ -2,7 +2,7 @@
  *  Utils tests
  */
 module('Utils');
-var utils = Tempo.test().utils;
+var utils = Tempo.test.utils;
 
 test('memberRegex', function () {
 	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), 'foo|zoo', 'Created RegEx testing for object members');
@@ -44,7 +44,7 @@ module('Tags');
  * Filters tests
  */
 module('Filters');
-var filters = Tempo.test().renderer.filters;
+var filters = Tempo.test.renderer.filters;
 
 test('upper', function () {
 	equals(filters.upper('Hello'), 'HELLO', 'Uppercase filter');
@@ -110,7 +110,7 @@ test('prepare', function() {
  * Renderer tests
  */
 module('Renderer');
-var renderer = Tempo.test().renderer;
+var renderer = Tempo.test.renderer;
 var item = {'$foo': 'bar'};
 var str = 'Sample {{ $foo }} string.';
 test('_replaceVariables', function () {
