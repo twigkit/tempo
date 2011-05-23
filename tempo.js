@@ -44,6 +44,7 @@ var Tempo = (function (tempo) {
             }
             return val;
         },
+
         trim : function (str) {
             return str.replace(/^\s*([\S\s]*?)\s*$/, '$1');
         },
