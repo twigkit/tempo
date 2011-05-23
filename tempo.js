@@ -53,12 +53,8 @@ var Tempo = (function (tempo) {
         },
 
         clearContainer : function (el) {
-            if (el !== undefined && el.childNodes !== undefined) {
-                for (var i = el.childNodes.length; i >= 0; i--) {
-                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && el.childNodes[i].getAttribute('data-template') !== null) {
-                        el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
-                    }
-                }
+            if (el !== undefined) {
+                el.innerHTML = '';
             }
         },
 
