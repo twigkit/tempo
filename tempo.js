@@ -22,6 +22,11 @@ TempoEvent.Types = {
 var Tempo = (function (tempo) {
 
     /*!
+     * Constants
+     */
+    var NUMBER_FORMAT_REGEX = /(\d+)(\d{3})/;
+
+    /*!
      * Helpers
      */
     var utils = {
@@ -497,6 +502,17 @@ var Tempo = (function (tempo) {
         },
 
         filters : {
+            'format' : function (value, args) {
+                var x = (value + '').split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+
+                while (NUMBER_FORMAT_REGEX.test(x1)) {
+                    x1 = x1.replace(NUMBER_FORMAT_REGEX, '$1' + ',' + '$2');
+                }
+                
+                return x1 + x2;
+            },
             'upper' : function (value, args) {
                 return value.toUpperCase();
             },
