@@ -80,7 +80,7 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.5</span></h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.6</span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
@@ -104,6 +104,7 @@
                 <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
                 <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
                 <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
+                <li>Configurable syntax for greater compatibility</li>
 			</ul>
 		</section>
 		<aside id="example">
@@ -362,6 +363,12 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
                 <h4>Filter and Formatting Functions</h4>
                 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
+                <h5><code>{{ field | <em>truncate 25</em> [, 'optional_suffix'] }}</code></h5>
+                <p class="h5">If the value of this field is longer than 25 characters, then truncate to the length provided. If a second argument is provided then it is used as the suffix instead of the default ellipsis (...).</p>
+
+                <h5><code>{{ field | <em>format</em> }}</code></h5>
+                <p class="h5">Currently only formats numbers like 100000.25 by adding commas: 100,000.25</p>
+                
                 <h5><code>{{ field | <em>default 'default value'</em> }}</code></h5>
                 <p class="h5">If the field is undefined, or null, then show the default value specified.</p>
 
@@ -483,6 +490,14 @@ $.getJSON(url, function(data) {
                 <p>
                     You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
                 </p>
+
+                <h4>Configuring the surrounding brace syntax</h4>
+				<p>
+                    To make it easier to use Tempo with other frameworks such as Django, you can configure it to use braces other than the default <code>{{ ... }}</code> and <code>{% ... %}</code>.
+                </p>
+<pre>
+    
+</pre>
 
                 <h4>Tempo Renderer Information - the <code>_tempo</code> variable</h4>
 				<p>You can access information about the rendering process via the <code>_tempo</code> variable.</p>
