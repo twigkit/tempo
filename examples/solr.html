@@ -1,223 +1,239 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Tempo :: Solr Example</title>
+<meta charset="UTF-8">
+<title>Tempo :: Solr Example</title>
 
-    <!-- Import the 1KB CSS Grid -->
-    <link rel="stylesheet" href="css/grid.css" type="text/css" media="screen">
+<!-- Import the 1KB CSS Grid -->
+<link rel="stylesheet" href="css/grid.css" type="text/css" media="screen">
 
-    <!-- Import styles for the universal footer -->
-    <link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
+<!-- Import styles for the universal footer -->
+<link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
 
-    <style type="text/css" media="screen">
-        /* reset and basic typography */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Helvetica, Arial, sans-serif;
-        }
+<style type="text/css" media="screen">
+    /* reset and basic typography */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Helvetica, Arial, sans-serif;
+    }
 
-        h1, h2, #solr-facets h3 {
-            font-family: Georgia;
-            font-weight: normal;
-        }
+    h1, h2, #solr-facets h3 {
+        font-family: Georgia;
+        font-weight: normal;
+    }
 
-        ol, ul {
-            margin: 0;
-            padding: 0;
-            list-style: none outside none;
-        }
+    ol, ul {
+        margin: 0;
+        padding: 0;
+        list-style: none outside none;
+    }
 
-        /* header */
-        #header {
-            background-color: black;
-        }
+    /* header */
+    #header {
+        background-color: black;
+    }
 
-        h1 {
-            color: white;
-        }
+    h1 {
+        color: white;
+    }
 
-        form {
-            float: right;
-        }
+    form {
+        float: right;
+    }
 
-        form input {
-            font-size: 1em;
-            margin-top: 1.8em;
-        }
+    form input {
+        font-size: 1em;
+        margin-top: 1.8em;
+    }
 
-        form #query {
-            width: 15em;
-        }
+    form #query {
+        width: 15em;
+    }
 
-        div.error {
-            margin: 50px 0 30px 0;
-            font-family: Georgia, "Times New Roman", serif;
-            text-align: center;
-            font-size: 1.5em;
-        }
+    div.error {
+        margin: 50px 0 30px 0;
+        font-family: Georgia, "Times New Roman", serif;
+        text-align: center;
+        font-size: 1.5em;
+    }
 
-        /* breadcrumbs */
-        #solr-breadcrumbs ul {
-            margin: 1em 1em 2em 1em;
-            padding-bottom: 0.5em;
-        }
+    /* breadcrumbs */
+    #solr-breadcrumbs ul {
+        margin: 1em 1em 2em 1em;
+        padding-bottom: 0.5em;
+    }
 
-        #solr-breadcrumbs ul li {
-            display: block;
-            float: left;
-            margin-right: 15px;
-            text-transform: capitalize;
-        }
+    #solr-breadcrumbs ul li {
+        display: block;
+        float: left;
+        margin-right: 15px;
+        text-transform: capitalize;
+    }
 
-        #solr-breadcrumbs ul li a {
-            color: #999;
-            font-size: 1.3em;
-            text-decoration: none;
-            margin: 0 8px 0 0;
-        }
+    #solr-breadcrumbs ul li a {
+        color: #999;
+        font-size: 1.3em;
+        text-decoration: none;
+        margin: 0 8px 0 0;
+    }
 
-        #solr-breadcrumbs ul li a:hover {
-            color: #333;
-        }
+    #solr-breadcrumbs ul li a:hover {
+        color: #333;
+    }
 
-        /* search results */
-        h2 {
-            color: #999;
-            padding: 0 0 0.5em 0;
-            margin: 0;
-            border-bottom: 1px solid #ccc;
-        }
+    /* search results */
+    h2 {
+        color: #999;
+        padding: 0 0 0.5em 0;
+        margin: 0;
+        border-bottom: 1px solid #ccc;
+    }
 
-        ol li {
-            padding: 1.25em 0;
-            border-bottom: 1px solid #e9e9e9;
-            text-align: center;
-        }
+    ol li {
+        padding: 1.25em 0;
+        border-bottom: 1px solid #e9e9e9;
+        text-align: center;
+    }
 
-        ol li h3 {
-            margin: 0 0 0.25em 0;
-            font-family: Georgia;
-            font-weight: normal;
-            font-size: 1.5em;
-            color: #333;
-        }
+    ol li h3 {
+        margin: 0 0 0.25em 0;
+        font-family: Georgia;
+        font-weight: normal;
+        font-size: 1.5em;
+        color: #333;
+    }
 
-        ol li p {
-            margin: 0;
-            font-size: 0.9em;
-            color: #999;
-            text-transform: uppercase;
-        }
+    ol li p {
+        margin: 0;
+        font-size: 0.9em;
+        color: #999;
+        text-transform: uppercase;
+    }
 
-        ol li p a {
-            color: #999;
-            text-decoration: none;
-            border-bottom: 1px solid #ccc;
-        }
+    ol li p a {
+        color: #999;
+        text-decoration: none;
+        border-bottom: 1px solid #ccc;
+    }
 
-        ol li p a:hover {
-            color: #333;
-        }
+    ol li p a:hover {
+        color: #333;
+    }
 
-        /* faceted navigation */
-        #solr-facets {
-            border-left: 1px dotted #ccc;
-            padding-left: 49px;
-            margin-left: 40px;
-        }
+    /* faceted navigation */
+    #solr-facets {
+        border-left: 1px dotted #ccc;
+        padding-left: 49px;
+        margin-left: 40px;
+    }
 
-        #solr-facets h3 {
-            text-transform: capitalize;
-            color: #999;
-            padding: 0 0 0.7em 0;
-            margin: 0.3em 0 0 0;
-            border-bottom: 1px solid #ccc;
-        }
+    #solr-facets h3 {
+        text-transform: capitalize;
+        color: #999;
+        padding: 0 0 0.7em 0;
+        margin: 0.3em 0 0 0;
+        border-bottom: 1px solid #ccc;
+    }
 
-        #solr-facets ul {
-            margin-bottom: 2em;
-        }
+    #solr-facets ul {
+        margin-bottom: 2em;
+    }
 
-        #solr-facets ul li li {
-            text-transform: capitalize;
-            padding: 0.33em 0;
-            font-size: 0.95em;
-            border-bottom: 1px solid #e9e9e9;
-        }
+    #solr-facets ul li li {
+        text-transform: capitalize;
+        padding: 0.33em 0;
+        font-size: 0.95em;
+        border-bottom: 1px solid #e9e9e9;
+    }
 
-        #solr-facets ul li li:hover {
-            background-color: #f2f2f2;
-        }
+    #solr-facets ul li li:hover {
+        background-color: #f2f2f2;
+    }
 
-        #solr-facets ul li span {
-            color: #999;
-            font-family: Georgia;
-        }
+    #solr-facets ul li span {
+        color: #999;
+        font-family: Georgia;
+    }
 
-        #solr-facets ul li a {
-            color: black;
-            text-decoration: none;
-        }
+    #solr-facets ul li a {
+        color: black;
+        text-decoration: none;
+    }
 
-        #solr-facets ul li a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    #solr-facets ul li a:hover {
+        text-decoration: underline;
+    }
+</style>
 
-    <!-- Import Tempo -->
-    <script type="text/javascript" src="../tempo.min.js"></script>
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
 
-    <!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-    <script type="text/javascript" src="js/solr.js"></script>
+<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/solr.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
-        var responseTemplate;
+    var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
+    var responseTemplate;
 
-        $(document).ready(function() {
-            // Prepare templates
-            breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-            responseTemplate = Tempo.prepare('mainbody');
+    $(document).ready(function() {
+        // Prepare templates
+        breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
+        responseTemplate = Tempo.prepare('mainbody');
 
-            // Default query
-            query('');
+        // Default query
+        query('');
+    });
+
+    function query(q) {
+        // Search request
+        solrjs.q(q != undefined && q != '' ? q : '*:*');
+        _request();
+    }
+
+    function addFilter(field, value) {
+        solrjs.add_fq(field, value);
+        _request();
+    }
+
+    function removeFilter(field, value) {
+        solrjs.remove_fq(field, value);
+        _request();
+    }
+
+    function _request() {
+        responseTemplate.starting();
+        $.ajax({
+            url: solrjs.url(),
+            dataType: 'jsonp',
+            jsonp: 'json.wrf',
+            success: function(data) {
+                // Render the query breadcrumbs
+                breadcrumbsTemplate.render(solrjs.params);
+                // Render the primary response, associated results and facets
+                responseTemplate.render(data);
+            }
         });
+    }
+</script>
+<script type="text/javascript">
 
-        function query(q) {
-            // Search request
-            solrjs.q(q != undefined && q != '' ? q : '*:*');
-            _request();
-        }
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10163369-2']);
+    _gaq.push(['_trackPageview']);
 
-        function addFilter(field, value) {
-            solrjs.add_fq(field, value);
-            _request();
-        }
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 
-        function removeFilter(field, value) {
-            solrjs.remove_fq(field, value);
-            _request();
-        }
-
-        function _request() {
-            responseTemplate.starting();
-            $.ajax({
-                url: solrjs.url(),
-                dataType: 'jsonp',
-                jsonp: 'json.wrf',
-                success: function(data) {
-                    // Render the query breadcrumbs
-                    breadcrumbsTemplate.render(solrjs.params);
-                    // Render the primary response, associated results and facets
-                    responseTemplate.render(data);
-                }
-            });
-        }
-    </script>
+</script>
 </head>
 <body>
 
@@ -241,9 +257,9 @@
 <div id="solr-breadcrumbs" class="row">
     <ul data-template style="display: none;">
         {% if q !== '*:*' %}
-        <li><a href="#" onclick="query('');">&#215;</a>{{q}}</li>
+        <li><a href="#" onclick="query(''); return false;">&#215;</a>{{q}}</li>
         {% endif %}
-        <li data-template="fq"><a href="#" onclick='removeFilter("{{field}}", "{{value}}");' title="{{field}}">
+        <li data-template="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">
             &#215;</a>{{value}}
         </li>
     </ul>
@@ -260,7 +276,7 @@
                 <li data-template="response.docs">
                     <h3>{{title}}</h3>
 
-                    <p>by <a href="#" onclick='addFilter("creator", __.creator[0]);'>{{creator}}</a></p>
+                    <p>by <a href="#" onclick="addFilter('creator', __.creator[0]); return false;">{{creator}}</a></p>
                 </li>
             </ol>
         </div>
@@ -272,7 +288,7 @@
                     <h3>Subjects</h3>
                     <ul>
                         <li data-template="facet_counts.facet_fields.subject">
-                            <a href="#" onclick="addFilter('subject', __[0]);">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
+                            <a href="#" onclick="addFilter('subject', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
                         </li>
                     </ul>
                 </li>
@@ -280,7 +296,7 @@
                     <h3>Languages</h3>
                     <ul>
                         <li data-template="facet_counts.facet_fields.language">
-                            <a href="#" onclick="addFilter('language', __[0]);">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
+                            <a href="#" onclick="addFilter('language', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
                         </li>
                     </ul>
                 </li>
@@ -295,15 +311,13 @@
 
 <!-- Universal Footer -->
 <ul id="tempo-actions">
-    <li><a href="http://twigkit.github.com/tempo/">Back to the Overview</a></li>
+    <li><a href="http://tempojs.com/">Back to the Overview</a></li>
     <li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
     <li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
 </ul>
 <div id="footer">
     <div class="row">
-        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a
-                href="http://twitter.com/mrolafsson">Stefan Olafsson</a> and <a href="http://twitter.com/tylertate">Tyler
-            Tate</a> on Twitter.</p>
+        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
     </div>
 </div>
 
