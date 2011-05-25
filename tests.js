@@ -2,7 +2,7 @@
  *  Utils tests
  */
 module('Utils');
-var utils = Tempo.test().utils;
+var utils = Tempo.test.utils;
 
 test('memberRegex', function () {
 	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), 'foo|zoo', 'Created RegEx testing for object members');
@@ -30,7 +30,7 @@ test('clearContainer', function () {
 	var el = document.getElementById('container');
 	ok($(el).children('li').length === 3, 'Container has three elements (2 templates, one regular)');
 	utils.clearContainer(el);
-	ok($(el).children('li').length === 2, 'Did not remove data-template elements');
+	ok($(el).children('li').length === 0, 'All child elements removed');
 });
 
 
@@ -44,7 +44,20 @@ module('Tags');
  * Filters tests
  */
 module('Filters');
-var filters = Tempo.test().renderer.filters;
+var filters = Tempo.test.renderer.filters;
+
+test('truncate', function () {
+	equals(filters['truncate'](undefined, []), undefined, 'No value');
+    equals(filters['truncate']('Hello world!', [8]), 'Hello...', 'Truncating');
+    equals(filters['truncate']('Hello world!', [20]), 'Hello world!', 'No truncation');
+});
+
+test('format', function () {
+	equals(filters['format'](undefined, []), undefined, 'No value');
+    equals(filters['format'](100, []), '100', 'No formatting required');
+    equals(filters['format'](1000, []), '1,000', 'No formatting required');
+    equals(filters['format'](1000000.10, []), '1,000,000.1', 'No formatting required');
+});
 
 test('upper', function () {
 	equals(filters.upper('Hello'), 'HELLO', 'Uppercase filter');
@@ -94,7 +107,7 @@ test('date', function () {
 });
 
 test('filters member regex', function () {
-    equals(utils.memberRegex(filters), 'upper|lower|trim|replace|append|prepend|default|date', 'Regex of all filter names');
+    equals(utils.memberRegex(filters), 'truncate|format|upper|lower|trim|replace|append|prepend|default|date', 'Regex of all filter names');
 });
 
 /*!
@@ -110,7 +123,7 @@ test('prepare', function() {
  * Renderer tests
  */
 module('Renderer');
-var renderer = Tempo.test().renderer;
+var renderer = Tempo.test.renderer;
 var item = {'$foo': 'bar'};
 var str = 'Sample {{ $foo }} string.';
 test('_replaceVariables', function () {
