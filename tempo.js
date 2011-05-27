@@ -517,7 +517,7 @@ var Tempo = (function (tempo) {
                         rep = args[1];
                     }
                     if (value.length > len - 3) {
-                        return value.substr(0, len - 3) + '...';
+                        return value.substr(0, len - 3) + rep;
                     }
                     return value;
                 }
