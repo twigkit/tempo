@@ -575,6 +575,8 @@ var Tempo = (function (tempo) {
                 if (value !== undefined && args.length === 1) {
                     var date = new Date(value);
                     var format = args[0];
+                    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                     if (format === 'localedate') {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
@@ -583,9 +585,26 @@ var Tempo = (function (tempo) {
                         return date.toDateString();
                     } else if (format === 'time') {
                         return date.toTimeString();
+                    } else if (format === 'relativedate') {
+						var currdate = new Date();
+						if (date.getFullYear() == currdate.getFullYear()) {
+							if (date.getMonth() == currdate.getMonth()) {
+								var day = date.getDate(), today = currdate.getDate();
+								switch(day) {
+									case today:
+										return "today";
+									case today - 1:
+										return "yesterday";
+									case today + 1:
+										return "tomorrow";
+									default:
+										return MONTHS[date.getMonth()] + " " + day;
+								}
+							} else // return MMMM D
+								return MONTHS[date.getMonth()] + " " + date.getDate();
+						} else // return full date in format MMMM D, YYYY
+							return MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
                     } else {
-                        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
                             'YYYY' : function (date) {
                                 return date.getFullYear();
