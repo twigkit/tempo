@@ -587,9 +587,10 @@ var Tempo = (function (tempo) {
                         return date.toTimeString();
                     } else if (format === 'relativedate') {
 						var currdate = new Date();
-						if (date.getFullYear() == currdate.getFullYear()) {
-							if (date.getMonth() == currdate.getMonth()) {
-								var day = date.getDate(), today = currdate.getDate();
+						if (date.getFullYear() === currdate.getFullYear()) {
+							var day = date.getDate(), today = currdate.getDate();
+							if (date.getMonth() === currdate.getMonth()) {
+								// month and year match, check if day matches or is within +/- 1 range
 								switch(day) {
 									case today:
 										return "today";
@@ -597,12 +598,20 @@ var Tempo = (function (tempo) {
 										return "yesterday";
 									case today + 1:
 										return "tomorrow";
-									default:
+									default: // return MMMM D
 										return MONTHS[date.getMonth()] + " " + day;
 								}
-							} else // return MMMM D
-								return MONTHS[date.getMonth()] + " " + date.getDate();
-						} else // return full date in format MMMM D, YYYY
+							} else {
+								// months do not match, but check if given date is at end of previous month and today is 1st day of current month
+								if (date.getMonth() === currdate.getMonth() - 1 && new Date(currdate.getFullYear(), currdate.getMonth(), 0).getDate() === day && today === 1)
+									return "yesterday";
+								// similarly, check if today is end of current month and given date is 1st day of next month
+								else if (currdate.getMonth() === date.getMonth() - 1 && new Date(date.getFullYear(), date.getMonth(), 0).getDate() === today && day === 1)
+									return "tomorrow";
+								else // return MMMM D
+									return MONTHS[date.getMonth()] + " " + day;
+							}
+						} else // years don't even match, so return full date in format MMMM D, YYYY
 							return MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
                     } else {
                         var DATE_PATTERNS = {
