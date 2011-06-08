@@ -37,7 +37,7 @@ var Tempo = (function (tempo) {
                     if (member_regex.length > 0) {
                         member_regex += '|';
                     }
-                    member_regex += member;
+                    member_regex += member+'(?!\\w)';
                 }
             }
             return member_regex;
