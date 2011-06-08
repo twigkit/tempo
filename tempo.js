@@ -37,7 +37,7 @@ var Tempo = (function (tempo) {
                     if (member_regex.length > 0) {
                         member_regex += '|';
                     }
-                    member_regex += member+'(?!\\w)';
+                    member_regex += '[^a-zA-Z0-9_\\.\\$]'+member+'(?!\\w)';
                 }
             }
             return member_regex;
@@ -488,8 +488,8 @@ var Tempo = (function (tempo) {
                 var member_regex = utils.memberRegex(i);
 
                 var expr = args[0].replace(/&amp;/g, '&');
-                expr = expr.replace(new RegExp(member_regex, 'gi'), function (match) {
-                    return 'i.' + match;
+                expr = (' '+expr).replace(new RegExp(member_regex, 'gi'), function (match) {
+                    return match.substr(0,1) + 'i.' + match.substr(1);
                 });
 
                 var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
