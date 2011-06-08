@@ -572,7 +572,7 @@ var Tempo = (function (tempo) {
                 return value;
             },
             'date' : function (value, args) {
-                if (value !== undefined && args.length === 1) {
+                if (value !== undefined && args.length > 0) {
                     var date = new Date(value);
                     var format = args[0];
                     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -586,6 +586,17 @@ var Tempo = (function (tempo) {
                     } else if (format === 'time') {
                         return date.toTimeString();
                     } else if (format === 'relativedate') {
+						var reldates = {
+							today: "Today",
+							yesterday: "Yesterday",
+							tomorrow: "Tomorrow"
+						};
+						if (args[1] === "lower")
+							reldates = {
+								today: "today",
+								yesterday: "yesterday",
+								tomorrow: "tomorrow"
+							};
 						var currdate = new Date();
 						if (date.getFullYear() === currdate.getFullYear()) {
 							var day = date.getDate(), today = currdate.getDate();
@@ -593,21 +604,21 @@ var Tempo = (function (tempo) {
 								// month and year match, check if day matches or is within +/- 1 range
 								switch(day) {
 									case today:
-										return "today";
+										return reldates.today;
 									case today - 1:
-										return "yesterday";
+										return reldates.yesterday;
 									case today + 1:
-										return "tomorrow";
+										return reldates.tomorrow;
 									default: // return MMMM D
 										return MONTHS[date.getMonth()] + " " + day;
 								}
 							} else {
 								// months do not match, but check if given date is at end of previous month and today is 1st day of current month
 								if (date.getMonth() === currdate.getMonth() - 1 && new Date(currdate.getFullYear(), currdate.getMonth(), 0).getDate() === day && today === 1)
-									return "yesterday";
+									return reldates.yesterday;
 								// similarly, check if today is end of current month and given date is 1st day of next month
 								else if (currdate.getMonth() === date.getMonth() - 1 && new Date(date.getFullYear(), date.getMonth(), 0).getDate() === today && day === 1)
-									return "tomorrow";
+									return reldates.tomorrow;
 								else // return MMMM D
 									return MONTHS[date.getMonth()] + " " + day;
 							}
