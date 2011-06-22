@@ -5,7 +5,7 @@ module('Utils');
 var utils = Tempo.test.utils;
 
 test('memberRegex', function () {
-	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), 'foo|zoo', 'Created RegEx testing for object members');
+	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), '(foo|zoo)(?!\\w)', 'Created RegEx testing for object members');
 });
 
 test('pad', function () {
@@ -108,7 +108,7 @@ test('date', function () {
 });
 
 test('filters member regex', function () {
-    equals(utils.memberRegex(filters), 'truncate|format|upper|lower|trim|replace|append|prepend|default|date', 'Regex of all filter names');
+    equals(utils.memberRegex(filters), '(truncate|format|upper|lower|trim|replace|append|prepend|default|date)(?!\\w)', 'Regex of all filter names');
 });
 
 /*!
@@ -125,7 +125,7 @@ test('prepare', function() {
  */
 module('Renderer');
 var renderer = Tempo.test.renderer;
-var item = {'$foo': 'bar'};
+var item = {'$fooD': 'burger', '$foo': 'bar'};
 var str = 'Sample {{ $foo }} string.';
 test('_replaceVariables', function () {
     equals(renderer._replaceVariables(renderer, {}, item, str), 'Sample bar string.');

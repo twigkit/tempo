@@ -31,16 +31,16 @@ var Tempo = (function (tempo) {
      */
     var utils = {
         memberRegex : function (obj) {
-            var member_regex = '';
+            var member_regex = '(';
             for (var member in obj) {
                 if (obj.hasOwnProperty(member)) {
-                    if (member_regex.length > 0) {
+                    if (member_regex.length > 1) {
                         member_regex += '|';
                     }
                     member_regex += member;
                 }
             }
-            return member_regex;
+            return member_regex + ')'+'(?!\\w)';
         },
 
         pad : function (val, pad, size) {
