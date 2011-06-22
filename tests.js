@@ -30,7 +30,7 @@ test('clearContainer', function () {
 	var el = document.getElementById('container');
 	ok($(el).children('li').length === 3, 'Container has three elements (2 templates, one regular)');
 	utils.clearContainer(el);
-	ok($(el).children('li').length === 0, 'All child elements removed');
+	ok($(el).children('li').length === 2, 'All template elements removed');
 });
 
 
