@@ -37,7 +37,7 @@ var Tempo = (function (tempo) {
                     if (member_regex.length > 0) {
                         member_regex += '|';
                     }
-                    member_regex += member;
+                    member_regex += '[^a-zA-Z0-9_\\.\\$]'+member+'(?!\\w)';
                 }
             }
             return member_regex;
@@ -488,8 +488,8 @@ var Tempo = (function (tempo) {
                 var member_regex = utils.memberRegex(i);
 
                 var expr = args[0].replace(/&amp;/g, '&');
-                expr = expr.replace(new RegExp(member_regex, 'gi'), function (match) {
-                    return 'i.' + match;
+                expr = (' '+expr).replace(new RegExp(member_regex, 'gi'), function (match) {
+                    return match.substr(0,1) + 'i.' + match.substr(1);
                 });
 
                 var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
@@ -572,9 +572,11 @@ var Tempo = (function (tempo) {
                 return value;
             },
             'date' : function (value, args) {
-                if (value !== undefined && args.length === 1) {
+                if (value !== undefined && args.length > 0) {
                     var date = new Date(value);
                     var format = args[0];
+                    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                     if (format === 'localedate') {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
@@ -583,9 +585,46 @@ var Tempo = (function (tempo) {
                         return date.toDateString();
                     } else if (format === 'time') {
                         return date.toTimeString();
+                    } else if (format === 'relativedate') {
+						var reldates = {
+							today: "Today",
+							yesterday: "Yesterday",
+							tomorrow: "Tomorrow"
+						};
+						if (args[1] === "lower")
+							reldates = {
+								today: "today",
+								yesterday: "yesterday",
+								tomorrow: "tomorrow"
+							};
+						var currdate = new Date();
+						if (date.getFullYear() === currdate.getFullYear()) {
+							var day = date.getDate(), today = currdate.getDate();
+							if (date.getMonth() === currdate.getMonth()) {
+								// month and year match, check if day matches or is within +/- 1 range
+								switch(day) {
+									case today:
+										return reldates.today;
+									case today - 1:
+										return reldates.yesterday;
+									case today + 1:
+										return reldates.tomorrow;
+									default: // return MMMM D
+										return MONTHS[date.getMonth()] + " " + day;
+								}
+							} else {
+								// months do not match, but check if given date is at end of previous month and today is 1st day of current month
+								if (date.getMonth() === currdate.getMonth() - 1 && new Date(currdate.getFullYear(), currdate.getMonth(), 0).getDate() === day && today === 1)
+									return reldates.yesterday;
+								// similarly, check if today is end of current month and given date is 1st day of next month
+								else if (currdate.getMonth() === date.getMonth() - 1 && new Date(date.getFullYear(), date.getMonth(), 0).getDate() === today && day === 1)
+									return reldates.tomorrow;
+								else // return MMMM D
+									return MONTHS[date.getMonth()] + " " + day;
+							}
+						} else // years don't even match, so return full date in format MMMM D, YYYY
+							return MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
                     } else {
-                        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
                             'YYYY' : function (date) {
                                 return date.getFullYear();
@@ -626,6 +665,10 @@ var Tempo = (function (tempo) {
                             'H' : function (date) {
                                 return date.getHours();
                             },
+							'h' : function (date) {
+								var hours = date.getHours();
+								return hours < 13 ? (hours === 0 ? 12 : hours) : hours - 12;
+							},
                             'mm' : function (date) {
                                 return utils.pad(date.getMinutes().toFixed(), '0', 2);
                             },
@@ -648,7 +691,7 @@ var Tempo = (function (tempo) {
                                 return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
-                        format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
+                        format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|h|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
                             if (!escape) {
                                 if (DATE_PATTERNS.hasOwnProperty(pattern)) {
                                     return DATE_PATTERNS[pattern](date);
