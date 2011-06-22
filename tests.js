@@ -104,6 +104,7 @@ test('date', function () {
 	equals(filters.date(date, ['time']), '17:50:05 GMT+0100 (BST)', 'Date to localetime');
 	equals(filters.date(date, ['YYYY YY MMMM MMM MM M EEEE EEE E DD D HH H mm m ss s SSS S a']), '2010 10 September Sep 09 9 Wednesday Wed 3 01 1 17 17 50 50 05 5 000 0 PM', 'Date to formatted with pattern');
 	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
+    equals(filters.date(date, ['h:mm a']), '5:50 PM', 'Date to 12 hour clock');
 });
 
 test('filters member regex', function () {

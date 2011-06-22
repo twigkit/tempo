@@ -626,6 +626,10 @@ var Tempo = (function (tempo) {
                             'H' : function (date) {
                                 return date.getHours();
                             },
+                            'h' : function (date) {
+                                var hours = date.getHours();
+                                return hours < 13 ? (hours === 0 ? 12 : hours) : hours - 12;
+                            },
                             'mm' : function (date) {
                                 return utils.pad(date.getMinutes().toFixed(), '0', 2);
                             },
@@ -648,7 +652,7 @@ var Tempo = (function (tempo) {
                                 return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
-                        format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
+                        format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|h|m{1,2}|s{1,2}|S{1,3}|a)/g, function (match, escape, pattern) {
                             if (!escape) {
                                 if (DATE_PATTERNS.hasOwnProperty(pattern)) {
                                     return DATE_PATTERNS[pattern](date);
