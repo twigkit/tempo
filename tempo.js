@@ -175,6 +175,7 @@ var Tempo = (function (tempo) {
                     callback(t.loadedTemplates[file]);
                     document.body.removeChild(el)
                 }
+
             }
         },
         parse: function (container, callback) {

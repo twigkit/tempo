@@ -279,7 +279,7 @@
             <h2>{{response.numFound|format}} results found</h2>
 
             <ol>
-                <li data-template="result.html" data-template-for="response.docs">asdf</li>
+                <li data-template="partials/result.html" data-template-for="response.docs">asdf</li>
             </ol>
         </div>
 
@@ -289,13 +289,13 @@
                 <li>
                     <h3>Subjects</h3>
                     <ul>
-                        <li data-template="facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
+                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
                     </ul>
                 </li>
                 <li>
                     <h3>Languages</h3>
                     <ul>
-                        <li data-template="facet.html" data-template-for="facet_counts.facet_fields.language"></li>
+                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.language"></li>
                     </ul>
                 </li>
             </ul>
