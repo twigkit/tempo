@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 1.6
+ * Tempo Template Engine 2.0
  *
  * http://tempojs.com/
  */
@@ -40,7 +40,7 @@ var Tempo = (function (tempo) {
                     member_regex += member;
                 }
             }
-            return member_regex + ')'+'(?!\\w)';
+            return member_regex + ')' + '(?!\\w)';
         },
 
         pad : function (val, pad, size) {
@@ -61,7 +61,7 @@ var Tempo = (function (tempo) {
         clearContainer : function (el) {
             if (el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
-                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && el.childNodes[i].getAttribute('data-template') !== null) {
+                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
                         el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
                     }
                 }
@@ -71,7 +71,7 @@ var Tempo = (function (tempo) {
         isNested : function (el) {
             var p = el.parentNode;
             while (p) {
-                if (p.getAttribute !== undefined && p.getAttribute('data-template') !== null) {
+                if (p.getAttribute !== undefined && (p.getAttribute('data-template') !== null && p.getAttribute('data-template-for') !== null)) {
                     return true;
                 }
                 p = p.parentNode;
@@ -131,6 +131,7 @@ var Tempo = (function (tempo) {
         this.defaultTemplate = null;
         this.namedTemplates = {};
         this.container = null;
+        this.loadedTemplates = {};
 
         this.nestedItem = nestedItem !== undefined ? nestedItem : null;
 
@@ -157,35 +158,81 @@ var Tempo = (function (tempo) {
     }
 
     Templates.prototype = {
-        parse: function (container) {
+        load : function (file, callback) {
+            if (this.loadedTemplates.hasOwnProperty(file)) {
+                callback(this.loadedTemplates[file]);
+            } else {
+                var el = document.createElement('iframe');
+                el.id = file;
+                el.style.height = 0;
+                el.style.width = 0;
+                el.src = file;
+
+                document.body.appendChild(el);
+                var t = this;
+                el.onload = function() {
+                    t.loadedTemplates[file] = el.contentDocument.body !== undefined ? el.contentDocument.body.innerHTML : el.contentDocument.childNodes[0];
+                    callback(t.loadedTemplates[file]);
+                    document.body.removeChild(el)
+                }
+            }
+        },
+        parse: function (container, callback) {
             this.container = container;
             var children = container.getElementsByTagName('*');
 
+            var ready = true;
+
+            // Preprocessing for referenced templates
             for (var i = 0; i < children.length; i++) {
-                if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && (this.nestedItem === children[i].getAttribute('data-template') || children[i].getAttribute('data-template') === '' || children[i].getAttribute('data-template') === 'data-template' && !utils.isNested(children[i]))) {
-                    this.createTemplate(children[i]);
-                } else if (children[i].getAttribute !== undefined && children[i].getAttribute('data-template-fallback') !== null) {
+                if (callback !== undefined && children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && children[i].getAttribute('data-template-for') !== null && children[i].getAttribute('data-template') !== '') {
+                    var templates = this;
+                    ready = false;
+                    var child = children[i];
+                    this.load(children[i].getAttribute('data-template'), function(el) {
+                        child.removeAttribute('data-template');
+                        child.innerHTML = el;
+                        templates.parse(container, callback);
+                    });
+                    break;
+                } else if (children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
                     children[i].style.display = 'none';
                 }
             }
 
-            // If there is no default template (data-template) then create one from container
-            if (this.defaultTemplate === null) {
-                // Creating a template inside the container
-                var el = document.createElement('div');
-                el.setAttribute('data-template', '');
-                el.innerHTML = this.container.innerHTML;
+            // Parsing
+            if (ready) {
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].getAttribute !== undefined) {
+                        if (children[i].getAttribute('data-template-for') !== null && this.nestedItem === children[i].getAttribute('data-template-for')) {
+                            // Nested template
+                            this.createTemplate(children[i]);
+                        } else if (children[i].getAttribute('data-template') !== null && (children[i].getAttribute('data-template') === '' || children[i].getAttribute('data-template') === 'data-template' && !utils.isNested(children[i]))) {
+                            // Normal template
+                            this.createTemplate(children[i]);
+                        }
+                    }
+                }
 
-                // Clearing container before adding the wrapped contents
-                this.container.innerHTML = '';
+                // If there is no default template (data-template) then create one from container
+                if (this.defaultTemplate === null) {
+                    // Creating a template inside the container
+                    var el = document.createElement('div');
+                    el.setAttribute('data-template', '');
+                    el.innerHTML = this.container.innerHTML;
 
-                // There is now a default template present with a data-template attribute
-                this.container.appendChild(el);
-                this.createTemplate(el);
+                    // Clearing container before adding the wrapped contents
+                    this.container.innerHTML = '';
+
+                    // There is now a default template present with a data-template attribute
+                    this.container.appendChild(el);
+                    this.createTemplate(el);
+                }
+
+                utils.clearContainer(this.container);
+                if (callback !== undefined) callback(this);
             }
-
-            utils.clearContainer(this.container);
         },
 
         createTemplate : function (node) {
@@ -370,19 +417,18 @@ var Tempo = (function (tempo) {
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
 
-                var nestedDeclaration = template.innerHTML.match(/data-template="(.*?)"/g);
+                var nestedDeclaration = template.innerHTML.match(/data-template-for="(.*?)"/g);
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
                         var nested = nestedDeclaration[p].match(/"(.*?)"/)[1];
 
                         var t = new Templates(renderer.templates.params, nested);
-                        t.parse(template);
-
-                        var r = new Renderer(t);
-                        r.render(eval('i.' + nested));
+                        t.parse(template, function(templates) {
+                            var r = new Renderer(templates);
+                            r.render(eval('i.' + nested));
+                        });
                     }
                 }
-
                 // Dealing with HTML as a String from now on (to be reviewed)
                 // Attribute values are escaped in FireFox so making sure there are no escaped tags
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
@@ -680,10 +726,10 @@ var Tempo = (function (tempo) {
             container = document.getElementById(container);
         }
 
-        var templates = new Templates(params);
-        templates.parse(container);
-
-        return new Renderer(templates);
+        var templates = new Templates(null);
+        templates.parse(container, function(t) {
+            params(new Renderer(t));
+        });
     };
 
     tempo.test = {
