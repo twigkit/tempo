@@ -178,7 +178,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        _loadTemplate : function (child, templates, container, callback) {
+        _insertTemplate : function (child, templates, container, callback) {
             return function (el) {
                 child.removeAttribute('data-template');
                 child.innerHTML = el;
@@ -198,7 +198,7 @@ var Tempo = (function (tempo) {
                     var templates = this;
                     ready = false;
                     var child = children[i];
-                    this.load(children[i].getAttribute('data-template'), this._loadTemplate(child, templates, container, callback));
+                    this.load(children[i].getAttribute('data-template'), this._insertTemplate(child, templates, container, callback));
                 } else if (children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
                     children[i].style.display = 'none';
