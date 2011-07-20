@@ -263,10 +263,7 @@
         {% if q !== '*:*' %}
         <li><a href="#" onclick="query(''); return false;">&#215;</a>{{q}}</li>
         {% endif %}
-        <li data-template-for="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;"
-                                      title="{{field}}">
-            &#215;</a>{{value}}
-        </li>
+        <li data-template-for="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">&#215;</a>{{value}}</li>
     </ul>
 </div>
 
@@ -289,15 +286,13 @@
                 <li>
                     <h3>Subjects</h3>
                     <ul>
-                        <li data-template="partials/facet.html"
-                            data-template-for="facet_counts.facet_fields.subject"></li>
+                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
                     </ul>
                 </li>
                 <li>
                     <h3>Languages</h3>
                     <ul>
-                        <li data-template="partials/facet.html"
-                            data-template-for="facet_counts.facet_fields.language"></li>
+                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.language"></li>
                     </ul>
                 </li>
             </ul>
@@ -317,8 +312,7 @@
 </ul>
 <div id="footer">
     <div class="row">
-        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a
-                href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
+        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
     </div>
 </div>
 
