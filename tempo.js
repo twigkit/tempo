@@ -186,7 +186,7 @@ var Tempo = (function (tempo) {
 
             // Preprocessing for referenced templates
             for (var i = 0; i < children.length; i++) {
-                if (callback !== undefined && children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && children[i].getAttribute('data-template-for') !== null && children[i].getAttribute('data-template') !== '') {
+                if (ready === true && callback !== undefined && children[i].getAttribute !== undefined && children[i].getAttribute('data-template') !== null && children[i].getAttribute('data-template-for') !== null && children[i].getAttribute('data-template') !== '') {
                     var templates = this;
                     ready = false;
                     var child = children[i];
@@ -195,7 +195,6 @@ var Tempo = (function (tempo) {
                         child.innerHTML = el;
                         templates.parse(container, callback);
                     });
-                    break;
                 } else if (children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
                     children[i].style.display = 'none';
