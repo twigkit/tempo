@@ -721,15 +721,20 @@ var Tempo = (function (tempo) {
      * Prepare a container for rendering, gathering templates and
      * clearing afterwards.
      */
-    tempo.prepare = function (container, params) {
+    tempo.prepare = function (container, params, callback) {
         if (typeof container === 'string') {
             container = document.getElementById(container);
         }
 
-        var templates = new Templates(null);
-        templates.parse(container, function(t) {
-            params(new Renderer(t));
-        });
+        var templates = new Templates(params);
+        if (callback !== undefined) {
+            templates.parse(container, function(templates) {
+                callback(new Renderer(templates));
+            });
+        } else {
+            templates.parse(container)
+            return new Renderer(templates);
+        }
     };
 
     tempo.test = {

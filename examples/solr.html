@@ -180,11 +180,11 @@
 
     $(document).ready(function() {
         // Prepare templates
-        Tempo.prepare('solr-breadcrumbs', function(t) {
-            breadcrumbsTemplate = t;
+        Tempo.prepare('solr-breadcrumbs', {}, function(template) {
+            breadcrumbsTemplate = template;
         });
-        Tempo.prepare('mainbody', function(t) {
-            responseTemplate = t;
+        Tempo.prepare('mainbody', {}, function(template) {
+            responseTemplate = template;
             // Default query
             query('');
         });
