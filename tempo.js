@@ -170,14 +170,22 @@ var Tempo = (function (tempo) {
 
                 document.body.appendChild(el);
                 var t = this;
-                el.onload = function() {
+                el.onload = function () {
                     t.loadedTemplates[file] = el.contentDocument.body !== undefined ? el.contentDocument.body.innerHTML : el.contentDocument.childNodes[0];
                     callback(t.loadedTemplates[file]);
-                    document.body.removeChild(el)
-                }
-
+                    document.body.removeChild(el);
+                };
             }
         },
+
+        _loadTemplate : function (child, templates, container, callback) {
+            return function (el) {
+                child.removeAttribute('data-template');
+                child.innerHTML = el;
+                templates.parse(container, callback);
+            };
+        },
+
         parse: function (container, callback) {
             this.container = container;
             var children = container.getElementsByTagName('*');
@@ -190,11 +198,7 @@ var Tempo = (function (tempo) {
                     var templates = this;
                     ready = false;
                     var child = children[i];
-                    this.load(children[i].getAttribute('data-template'), function(el) {
-                        child.removeAttribute('data-template');
-                        child.innerHTML = el;
-                        templates.parse(container, callback);
-                    });
+                    this.load(children[i].getAttribute('data-template'), this._loadTemplate(child, templates, container, callback));
                 } else if (children[i].getAttribute('data-template-fallback') !== null) {
                     // Hiding the fallback template
                     children[i].style.display = 'none';
@@ -203,14 +207,14 @@ var Tempo = (function (tempo) {
 
             // Parsing
             if (ready) {
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].getAttribute !== undefined) {
-                        if (children[i].getAttribute('data-template-for') !== null && this.nestedItem === children[i].getAttribute('data-template-for')) {
+                for (var s = 0; s < children.length; s++) {
+                    if (children[s].getAttribute !== undefined) {
+                        if (children[s].getAttribute('data-template-for') !== null && this.nestedItem === children[s].getAttribute('data-template-for')) {
                             // Nested template
-                            this.createTemplate(children[i]);
-                        } else if (children[i].getAttribute('data-template') !== null && (children[i].getAttribute('data-template') === '' || children[i].getAttribute('data-template') === 'data-template' && !utils.isNested(children[i]))) {
+                            this.createTemplate(children[s]);
+                        } else if (children[s].getAttribute('data-template') !== null && (children[s].getAttribute('data-template') === '' || children[s].getAttribute('data-template') === 'data-template' && !utils.isNested(children[s]))) {
                             // Normal template
-                            this.createTemplate(children[i]);
+                            this.createTemplate(children[s]);
                         }
                     }
                 }
@@ -231,7 +235,9 @@ var Tempo = (function (tempo) {
                 }
 
                 utils.clearContainer(this.container);
-                if (callback !== undefined) callback(this);
+                if (callback !== undefined) {
+                    callback(this);
+                }
             }
         },
 
@@ -412,6 +418,13 @@ var Tempo = (function (tempo) {
             return this;
         },
 
+        _renderNestedItem : function (i, nested) {
+            return function (templates) {
+                var r = new Renderer(templates);
+                r.render(eval('i.' + nested));
+            };
+        },
+
         renderItem : function (renderer, tempo_info, i, fragment) {
             var template = renderer.templates.templateFor(i);
             if (template && i) {
@@ -423,10 +436,7 @@ var Tempo = (function (tempo) {
                         var nested = nestedDeclaration[p].match(/"(.*?)"/)[1];
 
                         var t = new Templates(renderer.templates.params, nested);
-                        t.parse(template, function(templates) {
-                            var r = new Renderer(templates);
-                            r.render(eval('i.' + nested));
-                        });
+                        t.parse(template, this._renderNestedItem(i, nested));
                     }
                 }
                 // Dealing with HTML as a String from now on (to be reviewed)
@@ -557,7 +567,7 @@ var Tempo = (function (tempo) {
                     var len = 0;
                     var rep = '...';
                     if (args.length > 0) {
-                        len = parseInt(args[0]);
+                        len = parseInt(args[0], 10);
                     }
                     if (args.length > 1) {
                         rep = args[1];
@@ -728,11 +738,11 @@ var Tempo = (function (tempo) {
 
         var templates = new Templates(params);
         if (callback !== undefined) {
-            templates.parse(container, function(templates) {
+            templates.parse(container, function (templates) {
                 callback(new Renderer(templates));
             });
         } else {
-            templates.parse(container)
+            templates.parse(container);
             return new Renderer(templates);
         }
     };
