@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
 
 <style type="text/css" media="screen">
-    /* reset and basic typography */
+        /* reset and basic typography */
     body {
         margin: 0;
         padding: 0;
@@ -29,7 +29,7 @@
         list-style: none outside none;
     }
 
-    /* header */
+        /* header */
     #header {
         background-color: black;
     }
@@ -58,7 +58,7 @@
         font-size: 1.5em;
     }
 
-    /* breadcrumbs */
+        /* breadcrumbs */
     #solr-breadcrumbs ul {
         margin: 1em 1em 2em 1em;
         padding-bottom: 0.5em;
@@ -82,7 +82,7 @@
         color: #333;
     }
 
-    /* search results */
+        /* search results */
     h2 {
         color: #999;
         padding: 0 0 0.5em 0;
@@ -121,7 +121,7 @@
         color: #333;
     }
 
-    /* faceted navigation */
+        /* faceted navigation */
     #solr-facets {
         border-left: 1px dotted #ccc;
         padding-left: 49px;
@@ -176,15 +176,19 @@
 <script type="text/javascript">
 
     var solrjs = new SolrJS('http://twigkit.com/data/gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
-    var responseTemplate;
+    var responseTemplate, breadcrumbsTemplate;
 
     $(document).ready(function() {
         // Prepare templates
-        breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
-        responseTemplate = Tempo.prepare('mainbody');
+        Tempo.prepare('solr-breadcrumbs', {}, function(template) {
+            breadcrumbsTemplate = template;
 
-        // Default query
-        query('');
+            Tempo.prepare('mainbody', {}, function(template) {
+                responseTemplate = template;
+                // Default query
+                query('');
+            });
+        });
     });
 
     function query(q) {
@@ -255,29 +259,24 @@
 
 
 <div id="solr-breadcrumbs" class="row">
-    <ul data-template style="display: none;">
+    <ul data-template="breadcrumbs" style="display: none;">
         {% if q !== '*:*' %}
         <li><a href="#" onclick="query(''); return false;">&#215;</a>{{q}}</li>
         {% endif %}
-        <li data-template="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">
-            &#215;</a>{{value}}
-        </li>
+        <li data-template-for="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">&#215;</a>{{value}}</li>
     </ul>
 </div>
 
 <!-- Main Body -->
 <div id="mainbody" class="row">
     <div data-template style="display: none;">
+
         <!-- Search Results -->
         <div class="column grid_8">
             <h2>{{response.numFound|format}} results found</h2>
 
             <ol>
-                <li data-template="response.docs">
-                    <h3>{{title}}</h3>
-
-                    <p>by <a href="#" onclick="addFilter('creator', __.creator[0]); return false;">{{creator}}</a></p>
-                </li>
+                <li data-template-file="partials/result.html" data-template-for="response.docs"></li>
             </ol>
         </div>
 
@@ -286,18 +285,14 @@
             <ul>
                 <li>
                     <h3>Subjects</h3>
-                    <ul>
-                        <li data-template="facet_counts.facet_fields.subject">
-                            <a href="#" onclick="addFilter('subject', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
-                        </li>
+                    <ul id="subject">
+                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
                     </ul>
                 </li>
                 <li>
                     <h3>Languages</h3>
-                    <ul>
-                        <li data-template="facet_counts.facet_fields.language">
-                            <a href="#" onclick="addFilter('language', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
-                        </li>
+                    <ul id="language">
+                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.language"></li>
                     </ul>
                 </li>
             </ul>

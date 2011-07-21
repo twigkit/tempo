@@ -5,7 +5,7 @@ module('Utils');
 var utils = Tempo.test.utils;
 
 test('memberRegex', function () {
-	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), 'foo|zoo', 'Created RegEx testing for object members');
+	equals(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), '(foo|zoo)(?!\\w)', 'Created RegEx testing for object members');
 });
 
 test('pad', function () {
@@ -30,7 +30,7 @@ test('clearContainer', function () {
 	var el = document.getElementById('container');
 	ok($(el).children('li').length === 3, 'Container has three elements (2 templates, one regular)');
 	utils.clearContainer(el);
-	ok($(el).children('li').length === 0, 'All child elements removed');
+	ok($(el).children('li').length === 2, 'All template elements removed');
 });
 
 
@@ -104,10 +104,11 @@ test('date', function () {
 	equals(filters.date(date, ['time']), '17:50:05 GMT+0100 (BST)', 'Date to localetime');
 	equals(filters.date(date, ['YYYY YY MMMM MMM MM M EEEE EEE E DD D HH H mm m ss s SSS S a']), '2010 10 September Sep 09 9 Wednesday Wed 3 01 1 17 17 50 50 05 5 000 0 PM', 'Date to formatted with pattern');
 	equals(filters.date(date, ['EEE \\at HH:mm']), 'Wed at 17:50', 'Date to string with escaping');
+    equals(filters.date(date, ['h:mm a']), '5:50 PM', 'Date to 12 hour clock');
 });
 
 test('filters member regex', function () {
-    equals(utils.memberRegex(filters), 'truncate|format|upper|lower|trim|replace|append|prepend|default|date', 'Regex of all filter names');
+    equals(utils.memberRegex(filters), '(truncate|format|upper|lower|trim|replace|append|prepend|default|date)(?!\\w)', 'Regex of all filter names');
 });
 
 /*!
@@ -124,7 +125,7 @@ test('prepare', function() {
  */
 module('Renderer');
 var renderer = Tempo.test.renderer;
-var item = {'$foo': 'bar'};
+var item = {'$fooD': 'burger', '$foo': 'bar'};
 var str = 'Sample {{ $foo }} string.';
 test('_replaceVariables', function () {
     equals(renderer._replaceVariables(renderer, {}, item, str), 'Sample bar string.');
