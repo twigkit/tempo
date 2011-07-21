@@ -3,3 +3,5 @@
 *.iws
 *.ipr
 *.idea
+*.tgz
+node_modules/

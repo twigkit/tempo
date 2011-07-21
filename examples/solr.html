@@ -259,7 +259,7 @@
 
 
 <div id="solr-breadcrumbs" class="row">
-    <ul data-template style="display: none;">
+    <ul data-template="breadcrumbs" style="display: none;">
         {% if q !== '*:*' %}
         <li><a href="#" onclick="query(''); return false;">&#215;</a>{{q}}</li>
         {% endif %}
@@ -276,7 +276,7 @@
             <h2>{{response.numFound|format}} results found</h2>
 
             <ol>
-                <li data-template="partials/result.html" data-template-for="response.docs">asdf</li>
+                <li data-template-file="partials/result.html" data-template-for="response.docs"></li>
             </ol>
         </div>
 
@@ -285,14 +285,14 @@
             <ul>
                 <li>
                     <h3>Subjects</h3>
-                    <ul>
-                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
+                    <ul id="subject">
+                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.subject"></li>
                     </ul>
                 </li>
                 <li>
                     <h3>Languages</h3>
-                    <ul>
-                        <li data-template="partials/facet.html" data-template-for="facet_counts.facet_fields.language"></li>
+                    <ul id="language">
+                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.language"></li>
                     </ul>
                 </li>
             </ul>

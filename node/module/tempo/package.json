@@ -1,0 +1,43 @@
+{
+    "name": "tempo",
+    "version": "0.1.0",
+    "description": "Templating Engine",
+    "keywords": [
+        "template",
+        "html"
+    ],
+    "maintainers": [
+        {
+            "name": "Stefan Olafsson",
+            "email": "stefan@twigkit.com",
+            "web": "http://twigkit.com/"
+        }
+    ],
+    "contributors": [
+        {
+          "name"  : "TwigKit (http://github.com/twigkit)"
+        }
+    ],
+    "bugs": {
+        "mail": "support@twigkit.com",
+        "web": "http://github.com/twigkit/tempo/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://github.com/tmpvar/jsdom/blob/master/LICENSE.txt"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "http://github.com/twigkit/tempo.git"
+        }
+    ],
+    "dependencies": {
+       "jsdom": ">=0.2.0"
+    },
+    "engines" : { "node" : ">=0.1.9" },
+    "main": "./tempo"
+}
+
