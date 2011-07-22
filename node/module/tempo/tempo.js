@@ -1,6 +1,4 @@
-var http = require('http');
 var fs = require('fs');
-var sys = require('sys');
 var jsdom = require('jsdom');
 var tempo = require('./lib/tempo').tempo
 
@@ -19,5 +17,31 @@ tempo.load = function (template, callback) {
 tempo.write = function (res) {
     res.write(_window.document.innerHTML);
 }
+
+var compile = exports.compile = function(str, options) {
+    options = options || {};
+
+    var input = JSON.stringify(str)
+            , filename = options.filename
+            ? JSON.stringify(options.filename)
+            : 'undefined';
+
+    // Adds the fancy stack trace meta info
+    str = [
+        'var __stack = { lineno: 1, input: ' + input + ', filename: ' + filename + ' };',
+        rethrow.toString(),
+        'try {',
+        exports.parse(str, options),
+        '} catch (err) {',
+        '  rethrow(err, __stack.input, __stack.filename, __stack.lineno);',
+        '}'
+    ].join("\n");
+
+    if (options.debug) console.log(str);
+    var fn = new Function('locals, filters, escape', str);
+    return function(locals) {
+        return fn.call(this, locals, filters, utils.escape);
+    }
+};
 
 module.exports = tempo;
