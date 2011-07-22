@@ -749,7 +749,11 @@ var Tempo = (function (tempo) {
      */
     tempo.prepare = function (container, params, callback) {
         if (typeof container === 'string') {
-            container = _window.document.getElementById(container);
+            if (container === '*') {
+                container = _window.document.getElementsByTagName('html')[0];
+            } else {
+                container = _window.document.getElementById(container);
+            }
         }
 
         var templates = new Templates(params);

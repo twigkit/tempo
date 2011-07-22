@@ -5,11 +5,13 @@
 </head>
 <body>
 
-<h1 id="header">{{title}}</h1>
+<h1>{{title}}</h1>
 
-<ul>
-	<li data-template-for="beatles">{{name}}</li>
-</ul>
+<div>
+    <ul>
+        <li data-template-for="beatles">{{name}}</li>
+    </ul>
+</div>
 
 </body>
 </html>

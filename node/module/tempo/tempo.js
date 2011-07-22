@@ -7,10 +7,10 @@ var _window;
 tempo.load = function (template, callback) {
     fs.readFile(template, 'UTF-8', function(err, data) {
         if (err) throw err;
-        jsdom.env(data, [], function(errors, window) {
-            _window = window;
-            callback(tempo.init(window));
-        });
+        document = jsdom(data);
+        _window = document.createWindow();
+
+        callback(tempo.init(_window));
     });
 }
 
@@ -26,7 +26,7 @@ tempo.compile = function(markup, options) {
         document = jsdom(data);
         window = document.createWindow();
 
-        tempo.init(window).prepare(document.children[0]).render(locals);
+        tempo.init(window).prepare(document.getElementsByTagName('html')[0]).render(locals);
 
 		return window.document.innerHTML;
 	};
