@@ -127,6 +127,16 @@ var Tempo = (function (tempo) {
             return typeof(obj);
         },
 
+        hasAttr : function (el, name) {
+            if (el.hasAttribute !== undefined) {
+                return el.hasAttribute(name);
+            } else if (p.getAttribute !== undefined) {
+                return p.getAttribute(name) != null;
+            }
+
+            return false;
+        },
+
         notify : function (listener, event) {
             if (listener !== undefined) {
                 listener(event);
@@ -204,12 +214,12 @@ var Tempo = (function (tempo) {
 
             // Preprocessing for referenced templates
             for (var i = 0; i < children.length; i++) {
-                if (ready === true && callback !== undefined && children[i].getAttribute !== undefined && children[i].getAttribute('data-template-file') !== null) {
+                if (ready === true && callback !== undefined && utils.hasAttr(children[i], 'data-template-file')) {
                     var templates = this;
                     ready = false;
                     var child = children[i];
-                    this.load(children[i].getAttribute('data-template-file'), this._insertTemplate(child, templates, container, callback));
-                } else if (children[i].getAttribute('data-template-fallback') !== null) {
+                    this.load(child.getAttribute('data-template-file'), this._insertTemplate(child, templates, container, callback));
+                } else if (utils.hasAttr(children[i], 'data-template-fallback')) {
                     // Hiding the fallback template
                     children[i].style.display = 'none';
                 }
@@ -219,10 +229,10 @@ var Tempo = (function (tempo) {
             if (ready) {
                 for (var s = 0; s < children.length; s++) {
                     if (children[s].getAttribute !== undefined) {
-                        if (children[s].getAttribute('data-template-for') !== null && this.nestedItem === children[s].getAttribute('data-template-for')) {
+                        if (utils.hasAttr(children[s], 'data-template-for') && this.nestedItem === children[s].getAttribute('data-template-for')) {
                             // Nested template
                             this.createTemplate(children[s]);
-                        } else if (children[s].getAttribute('data-template') !== null && !utils.isNested(children[s])) {
+                        } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
 
                             // Normal template
                             this.createTemplate(children[s]);
@@ -232,17 +242,7 @@ var Tempo = (function (tempo) {
 
                 // If there is no default template (data-template) then create one from container
                 if (this.defaultTemplate === null) {
-                    // Creating a template inside the container
-                    var el = _window.document.createElement('div');
-                    el.setAttribute('data-template', '');
-                    el.innerHTML = this.container.innerHTML;
-
-                    // Clearing container before adding the wrapped contents
-                    this.container.innerHTML = '';
-
-                    // There is now a default template present with a data-template attribute
-                    this.container.appendChild(el);
-                    this.createTemplate(el);
+                    this.createTemplate(container);
                 }
 
                 utils.clearContainer(this.container);

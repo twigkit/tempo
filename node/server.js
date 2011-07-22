@@ -1,27 +1,19 @@
-var tempo = require('tempo')
-
-// Create an instance of an http server
 var app = require('express').createServer();
 
+app.set('view engine', 'tempo');
+app.set('view options', {
+  layout: false
+});
+
 app.get('/', function(req, res) {
-    var data = [
+    var beatles = [
         {'name': 'John'},
         {'name': 'Paul'},
         {'name': 'George'},
         {'name': 'Ringo'}
     ];
 
-    // Load a template file and create an instance of Tempo
-    // Load method supplies an instance of Tempo to the callback function
-    tempo.load('index.html', function(tempo) {
-
-        // Prepare a part of the template and render with data
-        tempo.prepare('names').render(data);
-        // Write the template to the response
-        tempo.write(res);
-
-        res.end();
-    });
+    res.render('members', {'title': 'The Beatles!', 'beatles' : beatles});
 });
 
 app.listen(3000);
