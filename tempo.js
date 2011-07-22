@@ -75,11 +75,7 @@ var Tempo = (function (tempo) {
         isNested : function (el) {
             var p = el.parentNode;
             while (p) {
-                if (p.hasAttribute !== undefined) {
-                    if (p.hasAttribute('data-template') || p.hasAttribute('data-template-for')) {
-                        return true;
-                    }
-                } else if (p.getAttribute !== undefined && (p.getAttribute('data-template') !== null || p.getAttribute('data-template-for') !== null)) {
+                if (this.hasAttr(p, 'data-template') || this.hasAttr(p, 'data-template-for')) {
                     return true;
                 }
                 p = p.parentNode;
@@ -130,8 +126,8 @@ var Tempo = (function (tempo) {
         hasAttr : function (el, name) {
             if (el.hasAttribute !== undefined) {
                 return el.hasAttribute(name);
-            } else if (p.getAttribute !== undefined) {
-                return p.getAttribute(name) != null;
+            } else if (el.getAttribute !== undefined) {
+                return el.getAttribute(name) !== null;
             }
 
             return false;
