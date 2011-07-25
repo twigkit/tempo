@@ -124,10 +124,12 @@ var Tempo = (function (tempo) {
         },
 
         hasAttr : function (el, name) {
-            if (el.hasAttribute !== undefined) {
-                return el.hasAttribute(name);
-            } else if (el.getAttribute !== undefined) {
-                return el.getAttribute(name) !== null;
+            if (el !== undefined) {
+                if (el.hasAttribute !== undefined) {
+                    return el.hasAttribute(name);
+                } else if (el.getAttribute !== undefined) {
+                    return el.getAttribute(name) !== null;
+                }
             }
 
             return false;
@@ -767,6 +769,9 @@ var Tempo = (function (tempo) {
         }
     };
 
+    tempo.exports = {
+        'templates': Templates
+    }
 
     tempo.test = {
         'utils' : utils,

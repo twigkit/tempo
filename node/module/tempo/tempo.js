@@ -4,6 +4,10 @@ var tempo = require('./lib/tempo').tempo
 
 var _window;
 
+tempo.exports.templates.prototype.load = function (file, callback) {
+    return callback(fs.readFileSync(file, 'UTF-8'));
+}
+
 tempo.load = function (template, callback) {
     fs.readFile(template, 'UTF-8', function(err, data) {
         if (err) throw err;
@@ -22,14 +26,15 @@ tempo.compile = function(markup, options) {
     options = options || {};
     var name = options.filename || markup;
     var data = markup;
+    document = jsdom(data);
+    window = document.createWindow();
+
+    var renderer = tempo.init(window).prepare(document.getElementsByTagName('html')[0]);
+
     return function render(locals) {
-        document = jsdom(data);
-        window = document.createWindow();
-
-        tempo.init(window).prepare(document.getElementsByTagName('html')[0]).render(locals);
-
-		return window.document.innerHTML;
-	};
+        renderer.render(locals);
+        return window.document.innerHTML;
+    };
 };
 
 module.exports = tempo;

@@ -7,13 +7,13 @@ app.set('view options', {
 
 app.get('/', function(req, res) {
     var beatles = [
-        {'name': 'John'},
+        {'name': 'John' + new Date()},
         {'name': 'Paul'},
         {'name': 'George'},
         {'name': 'Ringo'}
     ];
 
-    res.render('members', {'title': 'The Beatles!', 'beatles' : beatles});
+    res.render('beatles', {'title': 'The Beatles!', 'beatles' : beatles});
 });
 
 app.listen(3000);
