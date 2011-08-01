@@ -283,18 +283,7 @@
         <!-- Faceted Navigation -->
         <div id="solr-facets" class="column grid_3">
             <ul>
-                <li>
-                    <h3>Subjects</h3>
-                    <ul id="subject">
-                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.subject" data-facet="subject"></li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Languages</h3>
-                    <ul id="language">
-                        <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields.language" data-facet="language"></li>
-                    </ul>
-                </li>
+                <li data-template-file="partials/facet.html" data-template-for="facet_counts.facet_fields" data-from-map></li>
             </ul>
         </div>
     </div>

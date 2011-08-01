@@ -63,7 +63,7 @@ var Tempo = (function (tempo) {
         },
 
         clearContainer : function (el) {
-            if (el !== undefined && el.childNodes !== undefined) {
+            if (el !== null && el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
                     if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
                         el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
@@ -154,6 +154,8 @@ var Tempo = (function (tempo) {
         this.var_brace_right = '\\}\\}';
         this.tag_brace_left = '\\{%';
         this.tag_brace_right = '%\\}';
+
+        this.dataIsMap = false;
 
         this.attributes = {};
 
@@ -283,6 +285,8 @@ var Tempo = (function (tempo) {
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
                     element.removeAttribute(attr.name);
                     nonDefault = true;
+                } else if (attr.name === 'data-from-map') {
+                    this.dataIsMap = true;
                 } else if (utils.startsWith(attr.name, 'data-')) {
                     // Treat as an attribute for template
                     this.attributes[attr.name.substring(5, attr.name.length)] = attr.value;
@@ -378,7 +382,6 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
-                    console.log(err);
                 }
 
                 return '';
@@ -444,6 +447,12 @@ var Tempo = (function (tempo) {
 
         renderItem : function (renderer, tempo_info, i, fragment) {
             var template = renderer.templates.templateFor(i);
+
+            // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
+            if (utils.hasAttr(template, 'data-template-for')) {
+                template.removeAttribute('data-template-for');
+            }
+
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
 
@@ -451,7 +460,6 @@ var Tempo = (function (tempo) {
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
                         var nested = nestedDeclaration[p].match(/"(.*?)"/)[1];
-
                         var t = new Templates(renderer.templates.params, nested);
                         t.parse(template, this._renderNestedItem(i, nested));
                     }
@@ -480,7 +488,7 @@ var Tempo = (function (tempo) {
                 }
 
                 html = this._applyAttributeSetters(this, i, html);
-
+                
                 fragment.appendChild(utils.getElement(template, html));
 
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_COMPLETE, i, template));
@@ -494,7 +502,20 @@ var Tempo = (function (tempo) {
 
                 // If object then wrapping in an array
                 if (utils.typeOf(data) === 'object') {
-                    data = [data];
+                    if (this.templates.dataIsMap) {
+                        var mapped = [];
+                        for (var member in data) {
+                            if (data.hasOwnProperty(member)) {
+                                var pair = {};
+                                pair.key = member;
+                                pair.value = data[member];
+                                mapped.push(pair);
+                            }
+                        }
+                        data = mapped;
+                    } else {
+                        data = [data];
+                    }
                 }
 
                 for (var i = 0; i < data.length; i++) {
