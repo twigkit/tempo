@@ -155,6 +155,8 @@ var Tempo = (function (tempo) {
         this.tag_brace_left = '\\{%';
         this.tag_brace_right = '%\\}';
 
+        this.attributes = {};
+
         if (typeof params !== 'undefined') {
             for (var prop in params) {
                 if (prop === 'var_braces') {
@@ -281,6 +283,9 @@ var Tempo = (function (tempo) {
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
                     element.removeAttribute(attr.name);
                     nonDefault = true;
+                } else if (utils.startsWith(attr.name, 'data-')) {
+                    // Treat as an attribute for template
+                    this.attributes[attr.name.substring(5, attr.name.length)] = attr.value;
                 }
             }
 
@@ -323,21 +328,33 @@ var Tempo = (function (tempo) {
             return this;
         },
 
+        _getValue : function (renderer, variable, i, _tempo) {
+            var val = null;
+            // Handling tempo_info variable
+            if (utils.startsWith(variable, '_tempo.')) {
+                return eval(variable);
+            }
+
+            if (utils.startsWith(variable, 'attr')) {
+                // Handling attributes for template
+                if (variable === 'attr') {
+                    val = renderer.templates.attributes;
+                } else if (utils.startsWith(variable, 'attr.')) {
+                    val = renderer.templates.attributes[variable.substring(5, variable.length)];
+                }
+            } else if (utils.typeOf(i) === 'array') {
+                val = eval('i' + variable);
+            } else {
+                val = eval('i.' + variable);
+            }
+
+            return val;
+        },
+
         _replaceVariables : function (renderer, _tempo, i, str) {
             return str.replace(this.varRegex, function (match, variable, args) {
                 try {
-                    var val = null;
-
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
-
-                    if (utils.typeOf(i) === 'array') {
-                        val = eval('i' + variable);
-                    } else {
-                        val = eval('i.' + variable);
-                    }
+                    var val = renderer._getValue(renderer, variable, i, _tempo);
 
                     // Handle filters
                     var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
@@ -361,6 +378,7 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
+                    console.log(err);
                 }
 
                 return '';
@@ -368,21 +386,10 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects : function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
-                    var val = null;
-
-                    // Handling tempo_info variable
-                    if (utils.startsWith(variable, '_tempo.')) {
-                        return eval(variable);
-                    }
-
-                    if (utils.typeOf(i) === 'array') {
-                        val = eval('i' + variable);
-                    } else {
-                        val = eval('i.' + variable);
-                    }
+                    var val = renderer._getValue(renderer, variable, i, _tempo);
 
                     if (val !== undefined) {
                         if (utils.typeOf(val) === 'string') {
@@ -771,7 +778,7 @@ var Tempo = (function (tempo) {
 
     tempo.exports = {
         'templates': Templates
-    }
+    };
 
     tempo.test = {
         'utils' : utils,
