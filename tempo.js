@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 1.6
+ * Tempo Template Engine 1.7
  *
  * http://tempojs.com/
  */
@@ -336,7 +336,7 @@ var Tempo = (function (tempo) {
         },
 
         _applyAttributeSetters : function (renderer, item, str) {
-            return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+            return str.replace(/([A-z0-9]+?)(?:="[^"']*?" )data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }
