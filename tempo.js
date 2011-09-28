@@ -34,16 +34,16 @@ var Tempo = (function (tempo) {
      */
     var utils = {
         memberRegex: function (obj) {
-            var member_regex = '';
+            var member_regex = '(';
             for (var member in obj) {
                 if (obj.hasOwnProperty(member)) {
-                    if (member_regex.length > 0) {
+                    if (member_regex.length > 1) {
                         member_regex += '|';
                     }
                     member_regex += member;
                 }
             }
-            return member_regex;
+            return member_regex + ')' + '(?!\\w)';
         },
 
         pad: function (val, pad, size) {
@@ -198,11 +198,6 @@ var Tempo = (function (tempo) {
                 }
             }
 
-            // If there is no default template (data-template) then create one from container
-            if (this.defaultTemplate === null) {
-                this.createTemplate(container);
-            }
-
             utils.clearContainer(this.container);
         },
 
@@ -354,7 +349,7 @@ var Tempo = (function (tempo) {
         },
 
         _applyAttributeSetters: function (renderer, item, str) {
-            return str.replace(/([A-z0-9]+?)(?:="[^"']*?" )data-\1="(.*?)"/g, function (match, attr, data_value) {
+            return str.replace(/([A-z0-9]+?)(?:="[^"']*?"[^>]*?)data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }
@@ -420,14 +415,11 @@ var Tempo = (function (tempo) {
                 // JavaScript objects
                 html = this._replaceObjects(this, tempo_info, i, html);
 
-                // Template class attribute
-                if (template.getAttribute('class')) {
-                    template.className = this._replaceVariables(this, tempo_info, i, template.className);
-                }
-
-                // Template id
-                if (template.getAttribute('id')) {
-                    template.id = this._replaceVariables(this, tempo_info, i, template.id);
+                for (var a = 0; a < template.attributes.length; a++) {
+                    var attr = template.attributes[a];
+                    if (attr.specified === true) {
+                        template.setAttribute(attr.name, this._replaceVariables(this, tempo_info, i, attr.value));
+                    }
                 }
 
                 html = this._applyAttributeSetters(this, i, html);
