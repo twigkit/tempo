@@ -21,7 +21,7 @@ TempoEvent.Types = {
 };
 
 
-var Tempo = (function(tempo) {
+var Tempo = (function (tempo) {
     'use strict';
 
     /*!
@@ -33,7 +33,7 @@ var Tempo = (function(tempo) {
      * Helpers
      */
     var utils = {
-        memberRegex: function(obj) {
+        memberRegex: function (obj) {
             var member_regex = '';
             for (var member in obj) {
                 if (obj.hasOwnProperty(member)) {
@@ -46,22 +46,22 @@ var Tempo = (function(tempo) {
             return member_regex;
         },
 
-        pad: function(val, pad, size) {
+        pad: function (val, pad, size) {
             while (val.length < size) {
                 val = pad + val;
             }
             return val;
         },
 
-        trim: function(str) {
+        trim: function (str) {
             return str.replace(/^\s*([\S\s]*?)\s*$/, '$1');
         },
 
-        startsWith: function(str, prefix) {
+        startsWith: function (str, prefix) {
             return (str.indexOf(prefix) === 0);
         },
 
-        clearContainer: function(el) {
+        clearContainer: function (el) {
             if (el !== null && el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
                     if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && el.childNodes[i].getAttribute('data-template') !== null) {
@@ -71,7 +71,7 @@ var Tempo = (function(tempo) {
             }
         },
 
-        isNested: function(el) {
+        isNested: function (el) {
             var p = el.parentNode;
             while (p) {
                 if (p.getAttribute !== undefined && p.getAttribute('data-template') !== null) {
@@ -82,11 +82,11 @@ var Tempo = (function(tempo) {
             return false;
         },
 
-        equalsIgnoreCase: function(str1, str2) {
+        equalsIgnoreCase: function (str1, str2) {
             return str1.toLowerCase() === str2.toLowerCase();
         },
 
-        getElement: function(template, html) {
+        getElement: function (template, html) {
             if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
                 // Wrapping to get around read-only innerHTML
                 var el = document.createElement('div');
@@ -103,7 +103,7 @@ var Tempo = (function(tempo) {
             }
         },
 
-        typeOf: function(obj) {
+        typeOf: function (obj) {
             if (typeof(obj) === "object") {
                 if (obj === null) {
                     return "null";
@@ -122,7 +122,7 @@ var Tempo = (function(tempo) {
             return typeof(obj);
         },
 
-        hasAttr: function(el, name) {
+        hasAttr: function (el, name) {
             if (el !== undefined) {
                 if (el.hasAttribute !== undefined) {
                     return el.hasAttribute(name);
@@ -133,7 +133,14 @@ var Tempo = (function(tempo) {
 
             return false;
         },
-        notify: function(listener, event) {
+
+        removeAttr: function (el, name) {
+            if (el !== undefined) {
+                el.setAttribute(name, '');
+            }
+        },
+
+        notify: function (listener, event) {
             if (listener !== undefined) {
                 listener(event);
             }
@@ -146,7 +153,7 @@ var Tempo = (function(tempo) {
         this.namedTemplates = {};
         this.container = null;
 
-        this.nestedItem = nestedItem !== undefined ? nestedItem: null;
+        this.nestedItem = nestedItem !== undefined ? nestedItem : null;
 
         this.var_brace_left = '\\{\\{';
         this.var_brace_right = '\\}\\}';
@@ -171,7 +178,7 @@ var Tempo = (function(tempo) {
     }
 
     Templates.prototype = {
-        parse: function(container) {
+        parse: function (container) {
 
             this.container = container;
             var children = container.getElementsByTagName('*');
@@ -182,7 +189,6 @@ var Tempo = (function(tempo) {
                         // Nested template
                         this.createTemplate(children[s]);
                     } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
-
                         // Normal template
                         this.createTemplate(children[s]);
                     } else if (utils.hasAttr(children[s], 'data-template-fallback')) {
@@ -200,7 +206,7 @@ var Tempo = (function(tempo) {
             utils.clearContainer(this.container);
         },
 
-        createTemplate: function(node) {
+        createTemplate: function (node) {
             var element = node.cloneNode(true);
 
             // Clear display: none;
@@ -228,7 +234,7 @@ var Tempo = (function(tempo) {
                         val = '\'' + attr.value + '\'';
                     }
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
-                    element.removeAttribute(attr.name);
+                    utils.removeAttr(element, attr.name);
                     nonDefault = true;
                 }
             }
@@ -239,7 +245,7 @@ var Tempo = (function(tempo) {
             }
         },
 
-        templateFor: function(i) {
+        templateFor: function (i) {
             for (var templateName in this.namedTemplates) {
                 if (eval('i.' + templateName)) {
                     return this.namedTemplates[templateName].cloneNode(true);
@@ -266,15 +272,14 @@ var Tempo = (function(tempo) {
     }
 
     Renderer.prototype = {
-        notify: function(listener) {
+        notify: function (listener) {
             this.listener = listener;
 
             return this;
         },
 
-        _replaceVariables: function(renderer, _tempo, i, str) {
-            return str.replace(this.varRegex,
-            function(match, variable, args) {
+        _replaceVariables: function (renderer, _tempo, i, str) {
+            return str.replace(this.varRegex, function (match, variable, args) {
                 try {
                     var val = null;
 
@@ -310,17 +315,16 @@ var Tempo = (function(tempo) {
                     if (val !== undefined) {
                         return val;
                     }
-                } catch(err) {
-                    }
+                } catch (err) {
+                }
 
                 return '';
             });
         },
 
-        _replaceObjects: function(renderer, _tempo, i, str) {
+        _replaceObjects: function (renderer, _tempo, i, str) {
             var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
-            return str.replace(regex,
-            function(match, variable, args) {
+            return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = null;
 
@@ -342,16 +346,15 @@ var Tempo = (function(tempo) {
                             return val;
                         }
                     }
-                } catch(err) {
-                    }
+                } catch (err) {
+                }
 
                 return undefined;
             });
         },
 
-        _applyAttributeSetters: function(renderer, item, str) {
-            return str.replace(/([A-z0-9]+?)(?:="[^"']*?" )data-\1="(.*?)"/g,
-            function(match, attr, data_value) {
+        _applyAttributeSetters: function (renderer, item, str) {
+            return str.replace(/([A-z0-9]+?)(?:="[^"']*?" )data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }
@@ -359,9 +362,8 @@ var Tempo = (function(tempo) {
             });
         },
 
-        _applyTags: function(renderer, item, str) {
-            return str.replace(this.tagRegex,
-            function(match, tag, args, body) {
+        _applyTags: function (renderer, item, str) {
+            return str.replace(this.tagRegex, function (match, tag, args, body) {
                 if (renderer.tags.hasOwnProperty(tag)) {
                     args = args.substring(args.indexOf(' ')).replace(/^[ ]*|[ ]*$/g, '');
                     var filter_args = args.split(/(?:['"])[ ]?,[ ]?(?:['"])/);
@@ -372,7 +374,7 @@ var Tempo = (function(tempo) {
             });
         },
 
-        starting: function() {
+        starting: function () {
             // Use this to manually fire the RENDER_STARTING event e.g. just before you issue an AJAX request
             // Useful if you're not calling prepare immediately before render
             this.started = true;
@@ -381,12 +383,11 @@ var Tempo = (function(tempo) {
             return this;
         },
 
-        renderItem: function(renderer, tempo_info, i, fragment) {
+        renderItem: function (renderer, tempo_info, i, fragment) {
             var template = renderer.templates.templateFor(i);
 
             if (renderer.templates.nestedItem !== null && utils.hasAttr(template, 'data-template')) {
-                template.removeAttribute('data-template');
-                template.removeAttribute('dataTemplate');
+                utils.removeAttr(template, 'data-template');
             }
 
             if (template && i) {
@@ -437,7 +438,7 @@ var Tempo = (function(tempo) {
             }
         },
 
-        _createFragment: function(data) {
+        _createFragment: function (data) {
             if (data) {
                 var tempo_info = {};
                 var fragment = document.createDocumentFragment();
@@ -458,7 +459,7 @@ var Tempo = (function(tempo) {
             return null;
         },
 
-        render: function(data) {
+        render: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
@@ -470,7 +471,7 @@ var Tempo = (function(tempo) {
             return this;
         },
 
-        append: function(data) {
+        append: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
@@ -488,7 +489,7 @@ var Tempo = (function(tempo) {
             return this;
         },
 
-        prepend: function(data) {
+        prepend: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
@@ -504,19 +505,19 @@ var Tempo = (function(tempo) {
             return this;
         },
 
-        clear: function(data) {
+        clear: function (data) {
             utils.clearContainer(this.templates.container);
         },
 
         tags: {
-            'if': function(renderer, i, match, args, body) {
+            'if': function (renderer, i, match, args, body) {
                 var member_regex = utils.memberRegex(i);
 
                 var expr = args[0].replace(/&amp;/g, '&');
                 expr = expr.replace(new RegExp(member_regex, 'gi'),
-                function(match) {
-                    return 'i.' + match;
-                });
+                                    function (match) {
+                                        return 'i.' + match;
+                                    });
 
                 var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
                 var blocks = body.split(blockRegex);
@@ -532,7 +533,7 @@ var Tempo = (function(tempo) {
         },
 
         filters: {
-            'truncate': function(value, args) {
+            'truncate': function (value, args) {
                 if (value !== undefined) {
                     var len = 0;
                     var rep = '...';
@@ -548,7 +549,7 @@ var Tempo = (function(tempo) {
                     return value;
                 }
             },
-            'format': function(value, args) {
+            'format': function (value, args) {
                 if (value !== undefined) {
                     var x = (value + '').split('.');
                     var x1 = x[0];
@@ -561,34 +562,34 @@ var Tempo = (function(tempo) {
                     return x1 + x2;
                 }
             },
-            'upper': function(value, args) {
+            'upper': function (value, args) {
                 return value.toUpperCase();
             },
-            'lower': function(value, args) {
+            'lower': function (value, args) {
                 return value.toLowerCase();
             },
-            'trim': function(value, args) {
+            'trim': function (value, args) {
                 return utils.trim(value);
             },
-            'replace': function(value, args) {
+            'replace': function (value, args) {
                 if (value !== undefined && args.length === 2) {
                     return value.replace(new RegExp(args[0], 'g'), args[1]);
                 }
                 return value;
             },
-            'append': function(value, args) {
+            'append': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return value + '' + args[0];
                 }
                 return value;
             },
-            'prepend': function(value, args) {
+            'prepend': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return args[0] + '' + value;
                 }
                 return value;
             },
-            'default': function(value, args) {
+            'default': function (value, args) {
                 if (value !== undefined && value !== null) {
                     return value;
                 }
@@ -597,7 +598,7 @@ var Tempo = (function(tempo) {
                 }
                 return value;
             },
-            'date': function(value, args) {
+            'date': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     var date = new Date(value);
                     var format = args[0];
@@ -613,76 +614,80 @@ var Tempo = (function(tempo) {
                         var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                         var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
-                            'YYYY': function(date) {
+                            'YYYY': function (date) {
                                 return date.getFullYear();
                             },
-                            'YY': function(date) {
+                            'YY': function (date) {
                                 return date.getFullYear().toFixed().substring(2);
                             },
-                            'MMMM': function(date) {
+                            'MMMM': function (date) {
                                 return MONTHS[date.getMonth()];
                             },
-                            'MMM': function(date) {
+                            'MMM': function (date) {
                                 return MONTHS[date.getMonth()].substring(0, 3);
                             },
-                            'MM': function(date) {
+                            'MM': function (date) {
                                 return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
                             },
-                            'M': function(date) {
+                            'M': function (date) {
                                 return date.getMonth() + 1;
                             },
-                            'DD': function(date) {
+                            'DD': function (date) {
                                 return utils.pad(date.getDate().toFixed(), '0', 2);
                             },
-                            'D': function(date) {
+                            'D': function (date) {
                                 return date.getDate();
                             },
-                            'EEEE': function(date) {
+                            'EEEE': function (date) {
                                 return DAYS[date.getDay()];
                             },
-                            'EEE': function(date) {
+                            'EEE': function (date) {
                                 return DAYS[date.getDay()].substring(0, 3);
                             },
-                            'E': function(date) {
+                            'E': function (date) {
                                 return date.getDay();
                             },
-                            'HH': function(date) {
+                            'HH': function (date) {
                                 return utils.pad(date.getHours().toFixed(), '0', 2);
                             },
-                            'H': function(date) {
+                            'H': function (date) {
                                 return date.getHours();
                             },
-                            'mm': function(date) {
+                            'h': function (date) {
+                                var hours = date.getHours();
+                                return hours < 13 ? (hours === 0 ? 12 : hours) : hours - 12;
+                            },
+                            'mm': function (date) {
                                 return utils.pad(date.getMinutes().toFixed(), '0', 2);
                             },
-                            'm': function(date) {
+                            'm': function (date) {
                                 return date.getMinutes();
                             },
-                            'ss': function(date) {
+                            'ss': function (date) {
                                 return utils.pad(date.getSeconds().toFixed(), '0', 2);
                             },
-                            's': function(date) {
+                            's': function (date) {
                                 return date.getSeconds();
                             },
-                            'SSS': function(date) {
+                            'SSS': function (date) {
                                 return utils.pad(date.getMilliseconds().toFixed(), '0', 3);
                             },
-                            'S': function(date) {
+                            'S': function (date) {
                                 return date.getMilliseconds();
                             },
-                            'a': function(date) {
-                                return date.getHours() < 12 ? 'AM': 'PM';
+                            'a': function (date) {
+                                return date.getHours() < 12 ? 'AM' : 'PM';
                             }
                         };
                         format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g,
-                        function(match, escape, pattern) {
-                            if (!escape) {
-                                if (DATE_PATTERNS.hasOwnProperty(pattern)) {
-                                    return DATE_PATTERNS[pattern](date);
-                                }
-                            }
-                            return pattern;
-                        });
+                                                function (match, escape, pattern) {
+                                                    if (!escape) {
+                                                        if (DATE_PATTERNS.hasOwnProperty(pattern)) {
+                                                            return DATE_PATTERNS[pattern](date);
+                                                        }
+                                                    }
+                                                    return pattern;
+                                                });
 
                         return format;
                     }
@@ -698,7 +703,7 @@ var Tempo = (function(tempo) {
      * Prepare a container for rendering, gathering templates and
      * clearing afterwards.
      */
-    tempo.prepare = function(container, params) {
+    tempo.prepare = function (container, params) {
         if (typeof container === 'string') {
             container = document.getElementById(container);
         }
