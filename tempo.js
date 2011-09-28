@@ -4,8 +4,8 @@
  * http://tempojs.com/
  */
 function TempoEvent(type, item, element) {
-	'use strict';
-	
+    'use strict';
+
     this.type = type;
     this.item = item;
     this.element = element;
@@ -22,8 +22,8 @@ TempoEvent.Types = {
 
 
 var Tempo = (function(tempo) {
-	'use strict';
-	
+    'use strict';
+
     /*!
      * Constants
      */
@@ -185,6 +185,9 @@ var Tempo = (function(tempo) {
 
                         // Normal template
                         this.createTemplate(children[s]);
+                    } else if (utils.hasAttr(children[s], 'data-template-fallback')) {
+                        // Hiding the fallback template
+                        children[s].style.display = 'none';
                     }
                 }
             }
@@ -383,6 +386,7 @@ var Tempo = (function(tempo) {
 
             if (renderer.templates.nestedItem !== null && utils.hasAttr(template, 'data-template')) {
                 template.removeAttribute('data-template');
+                template.removeAttribute('dataTemplate');
             }
 
             if (template && i) {
