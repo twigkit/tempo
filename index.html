@@ -80,7 +80,7 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.5</span></h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.6</span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
@@ -100,10 +100,11 @@
 			<ul id="features">
 				<li>Itty-bitty footprint, lightning-fast rendering!</li>
 				<li>No dependencies - Use with or without jQuery</li>
-				<li>Supports nested and conditional templates</li>
+				<li>Supports <a href="#nested-templates">nested</a> and <a href="#conditional-templates">conditional</a> templates</li>
                 <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
                 <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
                 <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
+                <li>Configurable <a href="#configurable-syntax">syntax</a> for greater compatibility</li>
 			</ul>
 		</section>
 		<aside id="example">
@@ -278,7 +279,8 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 						<li data-template="">Herbert Marx</li>
 					</ol>
 				</div>
-			
+
+                <a id="nested-templates"></a>
 				<h4>Nested data-templates</h4>
 				<p>Data templates can even be nested within other data templates. Multiple nested templates are supported.</p>
 <pre>
@@ -318,6 +320,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 					</ol>
 				</div>
 
+                <a id="conditional-templates"></a>
 				<h4>Conditional Templates</h4>
 				<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
 <pre>
@@ -362,6 +365,12 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
                 <h4>Filter and Formatting Functions</h4>
                 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
+                <h5><code>{{ field | <em>truncate 25</em> [, 'optional_suffix'] }}</code></h5>
+                <p class="h5">If the value of this field is longer than 25 characters, then truncate to the length provided. If a second argument is provided then it is used as the suffix instead of the default ellipsis (...).</p>
+
+                <h5><code>{{ field | <em>format</em> }}</code></h5>
+                <p class="h5">Currently only formats numbers like 100000.25 by adding commas: 100,000.25</p>
+                
                 <h5><code>{{ field | <em>default 'default value'</em> }}</code></h5>
                 <p class="h5">If the field is undefined, or null, then show the default value specified.</p>
 
@@ -410,8 +419,8 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 				<h4>Template Tags</h4>
 				<p>Tempo also supports tag blocks.</p>
 				
-				<h5><code>{% if <i>javascript-expression</i> %} ... {% endif %}</code></h5>
-				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true.</p>
+				<h5><code>{% if <i>javascript-expression</i> %} ... {% else %} ... {% endif %}</code></h5>
+				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true. The <code>{% else %}</code> is optional.</p>
 
                 <a id="inline-injection"></a>
                 <h4>Variable injection for inline scripts</h4>
@@ -484,6 +493,23 @@ $.getJSON(url, function(data) {
                     You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
                 </p>
 
+                <a id="configurable-syntax"></a>
+                <h4>Configuring the surrounding brace syntax</h4>
+				<p>
+                    In order to make it easier to use Tempo with other frameworks such as Django, you can configure Tempo to use surrounding braces other than the default <code>{{ ... }}</code> and <code>{% ... %}</code>.
+                </p>
+                <p>
+                    To do this you pass the <code>var_braces</code> and <code>tag_braces</code> parameters to the <code>Tempo.prepare</code> function. These will be split down the middle to form the left and right braces.
+                </p>
+<pre>
+Tempo.prepare(&#x27;marx-brothers&#x27;, <em>{&#x27;var_braces&#x27; : &#x27;\\[\\[\\]\\]&#x27;, &#x27;tag_braces&#x27; : &#x27;\\[\\?\\?\\]&#x27;}</em>);
+</pre>
+                <p>You can now use this template syntax instead:</p>
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li data-template&gt;<em>[[nickname]]</em> is <em>[? if nickname == 'Groucho' ?]</em>grouchy<em>[? else ?]</em>happy<em>[? endif ?]</em>!&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
                 <h4>Tempo Renderer Information - the <code>_tempo</code> variable</h4>
 				<p>You can access information about the rendering process via the <code>_tempo</code> variable.</p>
 
