@@ -446,6 +446,23 @@ $.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=
     twitter.<em>render</em>(data.results);
 });
 </pre>
+				<h4>Binding event handlers</h4>
+				<p>
+				    Note that if you've bound event listeners to elements in your template, these will <b>not</b> be cloned when the template is used. In order to do this you have two options. <br/>
+				</p>
+				<p>
+				    You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
+				</p>
+				<p>
+					The following example shows how to make a template clickable (assuming an <code>'ol li'</code> selector provides a reference to a template element) and how to obtain a reference to the clicked element:
+				</p>
+<pre>
+$('ol li').live('click', function() {
+    // Do something with the clicked element
+    alert(this);
+});
+</pre>
+				
 				<a id="advanced"></a>
 				<h3>Advanced Topics</h3>
 					
@@ -484,14 +501,6 @@ $.getJSON(url, function(data) {
     twitter.render(data.results);
 });
 </pre>
-
-                <h4>Binding event handlers</h4>
-				<p>
-                    Note that if you've bound event listeners to elements in your template, these will <b>not</b> be cloned when the template is used. In order to do this you have two options. <br/>
-                </p>
-                <p>
-                    You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
-                </p>
 
                 <a id="configurable-syntax"></a>
                 <h4>Configuring the surrounding brace syntax</h4>
