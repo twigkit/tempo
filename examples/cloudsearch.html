@@ -216,11 +216,15 @@
 
     function _request() {
         responseTemplate.starting();
-        $.getJSON(cloudsearch.url(), function(data) {
+        $.ajax({
+            url: cloudsearch.url(),
+            crossDomain: true,
+            success: function(data) {
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
                 // Render the primary response, associated results and facets
                 responseTemplate.render(data);
+            }
         });
     }
 </script>
