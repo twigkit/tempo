@@ -218,7 +218,7 @@
         responseTemplate.starting();
         $.ajax({
             url: cloudsearch.url(),
-            dataType: 'json',
+            dataType: 'jsonp',
             success: function(data) {
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
