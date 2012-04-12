@@ -182,6 +182,7 @@
 
 <!-- This example uses jQuery's ajax() method to retrieve data from cloudsearch -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/postmessage.min.js"></script>
 <script type="text/javascript" src="js/cloudsearch.js"></script>
 
 <script type="text/javascript">
@@ -216,15 +217,10 @@
 
     function _request() {
         responseTemplate.starting();
-        $.ajax({
-            url: cloudsearch.url(),
-            success: function(data) {
-                // Render the query breadcrumbs
-                breadcrumbsTemplate.render(cloudsearch.params);
-                // Render the primary response, associated results and facets
-                responseTemplate.render(data);
-            }
+        $.receiveMessage(function(event) {
+            alert("ding");
         });
+        $.postMessage('hello', cloudsearch.url());
     }
 </script>
 <script type="text/javascript">
