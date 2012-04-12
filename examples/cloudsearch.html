@@ -218,9 +218,6 @@
         responseTemplate.starting();
         $.ajax({
             url: cloudsearch.url(),
-            beforeSend : function(req) {
-                req.setRequestHeader('Origin', '207.97.227.245');
-            },
             success: function(data) {
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
