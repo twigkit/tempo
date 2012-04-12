@@ -220,6 +220,7 @@
         $.ajax({
             url: cloudsearch.url(),
             success: function(data) {
+                console.log(data)
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
                 // Render the primary response, associated results and facets

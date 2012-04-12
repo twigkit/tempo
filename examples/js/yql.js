@@ -26,6 +26,8 @@ jQuery.ajax = (function(_ajax){
         var url = o.url;
 
         if ( true ) {
+            console.log('bong')
+
             // Manipulate options so that JSONP-x request is made to YQL
 
             o.url = YQL;
