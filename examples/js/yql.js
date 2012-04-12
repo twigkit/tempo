@@ -23,6 +23,7 @@ jQuery.ajax = (function(_ajax){
     }
 
     return function(o) {
+        console.log('bing')
         var url = o.url;
 
         if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
