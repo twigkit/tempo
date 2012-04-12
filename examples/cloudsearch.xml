@@ -10,6 +10,7 @@
             </urls>
             <inputs>
                 <key id='q' type='xs:string' paramType='query' required="true"/>
+                <key id='bq' type='xs:string' paramType='query' required="true"/>
             </inputs>
         </select>
     </bindings>
