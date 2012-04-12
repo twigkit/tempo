@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tempo :: The tiny JSON rendering engine by TwigKit</title>
+	<link rel="stylesheet" href="css/tempo.css" type="text/css" media="screen">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+	<script type="text/javascript" src="tempo.js"></script>
+	<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<style>
+		ol#tweets {
+			margin: 0;
+		}
+		ol#tweets li {
+			overflow: hidden;
+			list-style: none outside none;
+		}
+		ol#tweets li img {
+			float: left;
+			margin-right: 10px;
+			width: 48px;
+			height: 48px;
+		}
+		ol#tweets li h3 {
+			margin: 0;
+			font-size: 0.9em;
+			font-family: Helvetica;
+			font-weight: bold;
+		}
+        ol#tweets li p span {
+			font-size: 0.8em;
+		}
+		ol#tweets li p {
+			font-size: 0.9em;
+			color: #666;
+		}
+		ol#tweets li:last-child p {
+			margin-bottom: 0;
+		}
+	</style>
+	<script>
+		$(document).ready(function() {
+			// jQuery example
+			var twitter = Tempo.prepare('tweets');
+			$.getJSON("http://search.twitter.com/search.json?q='groucho marx'&rpp=2&callback=?", function(data) {
+				twitter.render(data.results);
+			});
+		});
+	</script>
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-10163369-2']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+</head>
+<body>
+	<!-- AdPacks.com Ad Code -->
+	<script type="text/javascript">
+	(function(){
+	  var bsa = document.createElement('script');
+	     bsa.type = 'text/javascript';
+	     bsa.async = true;
+	     bsa.src = '//s3.buysellads.com/ac/bsa.js';
+	  (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
+	})();
+	</script>
+	<!-- End AdPacks.com Ad Code -->
+	
+	<div id="top"> </div>
+
+	<header id="overview">
+		<section id="hero">
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.8</span></h1>
+			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
+			<nav id="actions">
+				<ul>
+					<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+					<li><a href="examples/twitter">Twitter Example</a></li>
+                    <li><a href="examples/solr">Solr Example</a></li>
+                    <li><a href="examples/cloudsearch">CloudSearch Example</a></li>
+					<li><a href="https://github.com/twigkit/tempo">GitHub</a></li>
+				</ul>
+			</nav>
+			<h3>Why use Tempo?</h3>
+			<ul id="why">
+				<li>Clear separation of concerns: no HTML in your JavaScript files, and no JavaScript in your HTML</li>
+				<li>It makes working with AJAX/JSON content a piece of cake</li>
+                <li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
+			</ul>
+			<h3>Key Features</h3>
+			<ul id="features">
+				<li>Itty-bitty footprint, lightning-fast rendering!</li>
+				<li>No dependencies - Use with or without jQuery</li>
+				<li>Supports <a href="#nested-templates">nested</a> and <a href="#conditional-templates">conditional</a> templates</li>
+                <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
+                <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
+                <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
+                <li>Configurable <a href="#configurable-syntax">syntax</a> for greater compatibility</li>
+			</ul>
+		</section>
+		<aside id="example">
+			<h3><span>1.</span> Include the Tempo script</h3>
+<pre>
+&lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+<span>&lt;script&gt;</span>Tempo.<em>prepare</em>("tweets").<em>render</em>(data);<span>&lt;/script&gt;</span>
+</pre>
+			<h3><span>2.</span> Compose the data template inline in HTML</h3>
+<pre>
+&lt;ol id=&quot;tweets&quot;&gt;
+    &lt;li <em>data-template</em>&gt;
+        &lt;img <em>src</em>="default.png" <em>data-src</em>="<em>{{profile_image_url}}</em>" /&gt;
+        &lt;h3&gt;<em>{{from_user}}</em>&lt;/h3&gt;
+        &lt;p&gt;<em>{{text}}</em>&lt;span&gt;<em>, {{created_at|date 'HH:mm on EEEE'}}</em>&lt;/span&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li <em>data-template-fallback</em>&gt;Sorry, JavaScript required!&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+			<h3><span>3.</span> Booyah!</h3>
+
+			<div class="example">
+				<ol id="tweets">
+					<li data-template style="display: none;">
+						<img src="examples/images/tweeter.png" data-src="{{profile_image_url}}" />
+						<h3>{{from_user}}</h3>
+						<p>{{text}}<span>, {{created_at | date 'HH:mm on EEEE'}}</span></p>
+					</li>
+                    <li data-template-fallback>Sorry, JavaScript required!</li>
+				</ol>
+			</div>
+
+		</aside>
+	</header>
+
+	<article id="usage">
+		<header>
+			<div>
+				<section>
+					<h2>Usage</h2>
+		
+					<nav>
+						<ul>
+							<li><a href="#json">JSON</a></li>
+							<li><a href="#javascript">JavaScript</a></li>
+							<li><a href="#html">HTML</a></li>
+							<li><a href="#jquery">jQuery</a></li>
+							<li><a href="#advanced">Advanced Topics</a></li>
+						</ul>
+					</nav>
+				</section>
+			</div>
+		</header>
+		<div class="usage">
+			<section class="usage">
+
+				<a id="json"></a>
+				<h3>JSON</h3>
+				<p>Tempo takes information encoded as JSON and renders it according to an HTML template. Below is a sample array of JSON data.</p>
+<pre>
+var data = [
+    {'name':{'first':'Leonard','last':'Marx'},'nickname':'Chico','born':'March 21, 1887','actor': true,'solo_endeavours':[{'title':'Papa Romani'}]},
+    {'name':{'first':'Adolph','last':'Marx'},'nickname':'Harpo','born':'November 23, 1888','actor':true,'solo_endeavours':[{'title':'Too Many Kisses','rating':'favourite'},{'title':'Stage Door Canteen'}]},
+    {'name':{'first':'Julius Henry','last':'Marx'},'nickname':'Groucho','born': 'October 2, 1890','actor':true,'solo_endeavours':[{'title':'Copacabana'},{'title':'Mr. Music','rating':'favourite'},{'title':'Double Dynamite'}]},
+    {'name':{'first':'Milton','last':'Marx'},'nickname':'Gummo','born':'October 23, 1892'},
+    {'name':{'first':'Herbert','last':'Marx'},'nickname':'Zeppo','born':'February 25, 1901','actor':true,'solo_endeavours':[{'title':'A Kiss in the Dark'}]}
+];
+</pre>
+			
+				<a id="javascript"></a>
+				<h3>JavaScript</h3>
+				<h4>Include script</h4>
+				<p>You only need to include one little script.</p>
+<pre>
+&lt;script src=&quot;<em>js/tempo.js</em>&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+</pre>
+				<h4>Tempo.prepare(element)</h4>
+				<p>To initialize Tempo, run the <code>prepare()</code> function to scan an HTML container for data templates, cache them in memory, and remove the data template HTML elements from the page. <code>Tempo.prepare(element)</code> returns an instance of a renderer that knows how to layout the data you provide to it.</p>
+				
+				<h5>element</h5>
+				<p class="h5">The <strong>ID</strong> of the HTML element (or the element itself) containing your data template. If you're using jQuery, you may pass in a jQuery object instead.</p>
+				
+				<p>If the container does not contain a default (that is without conditions and not nested) <code>data-template</code> the entire contents of the container will be considered to represent the template.</p>
+				
+				<h4>renderer.render()</h4>
+				<p>The Tempo.prepare() function returns an instance of a renderer. Once the JSON data is available, run the <code>render(data)</code> function to add the data to the page.</p>
+
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
+<pre>
+Tempo.prepare( <em>element</em> ).render( <em>data</em> );
+</pre>
+<pre>
+Tempo.prepare('marx-brothers').render(data);
+</pre>
+
+                <h4>renderer.append()</h4>
+				<p>Renderer methods all return an instance of the renderer (a la fluent) so you can chain calls to it. The <code>append(data)</code> function will render the data you pass in and append it to the container.</p>
+
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to append.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.append( more_brothers )</em>;
+</pre>
+
+                <h4>renderer.prepend()</h4>
+				<p>The <code>prepend(data)</code> function will render the data you pass in and insert it before others in the container.</p>
+
+				<h5>data</h5>
+				<p class="h5">The JSON <strong>data</strong> to prepend.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.prepend( brothers_we_didnt_know_about )</em>;
+</pre>
+
+                <h4>renderer.clear()</h4>
+				<p>The <code>clear()</code> function will empty the container, allowing you to render the data again.</p>
+<pre>
+Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
+</pre>
+				<a id="html"></a>
+				<h3>HTML</h3>
+				<h4>data-template</h4>
+				<p>Any tag with the <code>data-template</code> attribute will be flagged as a data template.</p>
+                <p>For compliance the full (non-minimized) form is also supported: <code>data-template="data-template"</code>.</p>
+			
+				<h4>{{fields}}</h4>
+				<p>Any field represented in the JSON data may be retrieved by referencing the field name inside double brackets.</p>
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+				<p>The above example would be rendered as:</p>
+				<div class="example">
+					<ol id="marx-brothers">
+						<li data-template="">Chico Marx</li>
+						<li data-template="">Harpo Marx</li>
+						<li data-template="">Groucho Marx</li>
+						<li data-template="">Gummo Marx</li>
+						<li data-template="">Zeppo Marx</li>
+					</ol>
+				</div>
+				
+				<p>If the JSON data represents an array of arrays (which can not be referenced by field/member name) for example:</p>
+				
+				<div class="example">
+					var data = [ 
+						['Leonard','Marx'], 
+						['Adolph','Marx'], 
+						['Julius Henry','Marx'], 
+						['Milton','Marx'], 
+						['Herbert','Marx']
+					 ];
+				</div>
+				
+				<p>You can reference array elements with the following notation:</p>
+				
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{[0]}}</em> <em>{{[1]}}</em>&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+
+				<p>The above example would be rendered as:</p>
+				<div class="example">
+					<ol id="marx-brothers_from_array">
+						<li data-template="">Leonard Marx</li>
+						<li data-template="">Adolph Marx</li>
+						<li data-template="">Julius Henry Marx</li>
+						<li data-template="">Milton Marx</li>
+						<li data-template="">Herbert Marx</li>
+					</ol>
+				</div>
+
+                <a id="nested-templates"></a>
+				<h4>Nested data-templates</h4>
+				<p>Data templates can even be nested within other data templates. Multiple nested templates are supported.</p>
+<pre>
+&lt;li <em>data-template</em>&gt;
+    <em>{{nickname}}</em> <em>{{name.last}}</em>
+    &lt;ul&gt;
+        &lt;li <em>data-template</em>="solo_endeavours"&gt;<em>{{title}}</em>&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/li&gt;
+</pre>
+				<div class="example">
+					<ol id="marx-brothers_nested">
+						<li>Chico Marx
+							<ul>
+								<li>Papa Romani</li>
+							</ul>
+						</li>
+						<li>Harpo Marx
+							<ul>
+								<li>Too Many Kisses</li>
+								<li>Stage Door Canteen</li>
+							</ul>
+						</li>
+						<li>Groucho Marx
+							<ul>
+								<li>Copacabana</li>
+								<li>Mr. Music</li>
+								<li>Double Dynamite	</li>
+							</ul>
+						</li>
+						<li>Gummo Marx</li>
+						<li>Zeppo Marx
+							<ul>
+								<li>A Kiss in the Dark</li>
+							</ul>
+						</li>
+					</ol>
+				</div>
+
+                <a id="conditional-templates"></a>
+				<h4>Conditional Templates</h4>
+				<p>Tempo provides boolean and value-based conditionals, as well as the ability to define multiple data templates per container (the first matching template wins).</p>
+<pre>
+&lt;ul id="marx-brothers3"&gt;
+    &lt;li <em>data-template</em> <em>data-if-nickname</em>="Groucho""&gt;<em>{{nickname}}</em> (aka <em>{{name.first}}</em>) was grumpy!&lt;/li&gt;
+    &lt;li <em>data-template</em> <em>data-if-actor</em>&gt;<em>{{name.first}}</em>, nicknamed '&lt;i&gt;<em>{{nickname}}</em> <em>{{name.last}}</em>&lt;/i&gt;' was born on <em>{{born}}</em>&lt;/li&gt;
+
+    &lt;!-- Default template --&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{name.first}}</em> <em>{{name.last}}</em> was not in any movies!&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+				<div class="example">
+					<ul id="marx-brothers4">
+						<li>Leonard, nicknamed '<i>Chico Marx</i>' was born on March 21, 1887</li>
+						<li>Adolph, nicknamed '<i>Harpo Marx</i>' was born on November 23, 1888</li>
+						<li>Groucho (aka Julius Henry) was grumpy!</li>
+						<li>Milton Marx was not in any movies!</li>
+						<li>Herbert, nicknamed '<i>Zeppo Marx</i>' was born on February 25, 1901</li>
+					</ul>
+				</div>
+
+                <a id="template-fallback"></a>
+                <h4>Fallback Template</h4>
+				<p>Use the <code>data-template-fallback</code> attribute to identify HTML containers you would like to show if JavaScript is disabled.</p>
+                <p>To ensure that your data template is not visible before being rendered (either because of JavaScript being disabled or due to latency retrieving the data), it's best practice to hide your templates with CSS. If you add an inline rule of <code>style="display: none;"</code> Tempo will simply remove the inline rule once the data has been rendered.</p>
+
+<pre>
+&lt;ul id=&quot;marx-brothers&quot;&gt;
+    &lt;li <em>data-template style="display: none;"</em>&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+    &lt;li <em>data-template-fallback</em>&gt;Sorry, JavaScript required!&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+                <p>If JavaScript is disabled in the browser the above example would be rendered as:</p>
+				<div class="example">
+					<ul id="marx-brothers_with_fallback">
+						<li data-template-fallback>Sorry, JavaScript required!</li>
+					</ul>
+				</div>
+
+                <a id="filter-functions"></a>
+                <h4>Filter and Formatting Functions</h4>
+                <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
+
+                <h5><code>{{ field | <em>truncate 25</em> [, 'optional_suffix'] }}</code></h5>
+                <p class="h5">If the value of this field is longer than 25 characters, then truncate to the length provided. If a second argument is provided then it is used as the suffix instead of the default ellipsis (...).</p>
+
+                <h5><code>{{ field | <em>format</em> }}</code></h5>
+                <p class="h5">Currently only formats numbers like 100000.25 by adding commas: 100,000.25</p>
+                
+                <h5><code>{{ field | <em>default 'default value'</em> }}</code></h5>
+                <p class="h5">If the field is undefined, or null, then show the default value specified.</p>
+
+                <h5><code>{{ field | <em>date 'preset or pattern like HH:mm, DD-MM-YYYY'</em> }}</code></h5>
+                <p class="h5">Creates a date object from the field value, and formats according to presets, or using a date pattern. Available presets are <code>localedate</code>, <code>localetime</code>, <code>date</code> and <code>time</code>. The following pattern elements are supported:</p>
+                <ul class="h5">
+                    <li><code>YYYY or YY</code>: year as 4 or 2 digits.</li>
+                    <li><code>MMMM, MMM, MM or M</code>: month of the year as either full name (September), abbreviated (Sep), padded two digit number or simple integer.</li>
+                    <li><code>DD or D</code>: day of the month.</li>
+                    <li><code>EEEE, EEE or E</code>: day of the week as either full (Tuesday), abbreviated (Tue) or number.</li>
+                    <li><code>HH, H or h</code>: hour of the day.</li>
+                    <li><code>mm or m</code>: minutes of the hour.</li>
+                    <li><code>ss or s</code>: seconds.</li>
+                    <li><code>SSS or S</code>: milliseconds.</li>
+                    <li><code>a</code>: AM/PM.</li>
+                </ul>
+                <p class="h5">If you would like to use any of the format characters verbatim in the pattern then use <code>\</code> to escape: <code>{{ some_date | date '\at HH:mm' }}</code>. In this case the <code>a</code> is not replaced with AM/PM.</p>
+                
+                <h5><code>{{ field | <em>replace 'regex_pattern', 'replacement'</em> }}</code></h5>
+                <p class="h5">Replace all occurrences of the pattern (supports regular expressions) with the replacement. Replacement string can contain backreferences. See <a href="examples/twitter.html">Twitter code sample</a> for an example.</p>
+
+                <h5><code>{{ field | <em>trim</em> }}</code></h5>
+                <p class="h5">Trim any white space at the beginning or end of the value.</p>
+
+                <h5><code>{{ field | <em>upper</em> }}</code></h5>
+                <p class="h5">Change any lower case characters in the value to upper case.</p>
+
+                <h5><code>{{ field | <em>lower</em> }}</code></h5>
+                <p class="h5">Change any upper case characters in the value to lower case.</p>
+
+                <h5><code>{{ field | <em>append '&amp;nbsp;some suffix'</em> }}</code></h5>
+                <p class="h5">If the field value is not empty, then append the string to the value. Helpful if you don't want the suffix to show up in the template if the field is undefined or null. Use &amp;nbsp; if you need before or after the suffix.</p>
+
+                <h5><code>{{ field | <em>prepend 'some prefix&amp;nbsp;'</em> }}</code></h5>
+                <p class="h5">If the field value is not empty, then prepend the string to the value. Helpful if you don't want the prefix to show up in the template if the field is undefined or null. Use &amp;nbsp; if you need before or after the prefix.</p>
+
+                <h5><code>{{ field | <em>join 'separator'</em> }}</code></h5>
+                <p class="h5">If the field is an array joins the elements into a string using the supplied separator.</p>
+
+                <a id="attribute-setters"></a>
+                <h4>Attribute Setters</h4>
+				<p>If an HTML element attribute in a template is immediately followed by a second attribute with the same name, prefixed with <code>data-</code>, then as long as the second one is not empty will the value of the original be replaced with the value of the latter.</p>
+                <p>In the following example, will the reference to <code>default_image.png</code> be replaced by an actual field value if one exists. Notice here that the <code>.png</code> suffix is only added if the field is not empty.</p>
+
+<pre>
+&lt;img <em>src</em>="<em>default_image.png</em>" <em>data-src</em>="<em>{{actual_image_if_exists | append '.png'}}</em>" ... /&gt;
+</pre>
+
+				<h4>Template Tags</h4>
+				<p>Tempo also supports tag blocks.</p>
+				
+				<h5><code>{% if <i>javascript-expression</i> %} ... {% else %} ... {% endif %}</code></h5>
+				<p class="h5">The body of the tag will only be rendered if the JavaScript expression evaluates to true. The <code>{% else %}</code> is optional.</p>
+
+                <a id="inline-injection"></a>
+                <h4>Variable injection for inline scripts</h4>
+                <p>If you're using scripts inline in your template, you can access JSON object members. You reference these via the <code>__</code> variable.</p>
+
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__.nickname</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
+</pre>
+
+                <p>Similarly you can reference array elements:</p>
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__[0]</em>); return false;&quot;&gt;{{[0]}}&lt;/a&gt;
+</pre>
+
+                <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes, otherwise type is preserved.</p>
+				
+				<a id="jquery"></a>
+				<h3>Using Tempo with jQuery</h3>
+				<p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
+<pre>
+var twitter = Tempo.<em>prepare</em>('tweets');
+$.getJSON("http://search.twitter.com/search.json?q='marx brothers'&amp;callback=?", function(data) {
+    twitter.<em>render</em>(data.results);
+});
+</pre>
+				<h4>Binding event handlers</h4>
+				<p>
+				    Note that if you've bound event listeners to elements in your template, these will <b>not</b> be cloned when the template is used. In order to do this you have two options. <br/>
+				</p>
+				<p>
+				    You can either leave binding until the data has been rendered, e.g. by registering a <code>TempoEvent.Types.RENDER_COMPLETE</code> listener and doing the binding when that fires, or you can use jQuery <a href="http://api.jquery.com/live/">live</a> which attaches a handler to elements even though they haven't been created.
+				</p>
+				<p>
+					The following example shows how to make a template clickable (assuming an <code>'ol li'</code> selector provides a reference to a template element) and how to obtain a reference to the clicked element:
+				</p>
+<pre>
+$('ol li').live('click', function() {
+    // Do something with the clicked element
+    alert(this);
+});
+</pre>
+				
+				<a id="advanced"></a>
+				<h3>Advanced Topics</h3>
+					
+				<h4>renderer.notify(eventlistener)</h4>
+				<p>After preparing a template you can register an event listener by providing a callback function to be notified of events in the lifecycle. The event listener will be called with a single argument, a <code>TempoEvent</code> which has the following properties:</p>
+
+				<h5>type</h5>
+				<p class="h5">The <strong>type</strong> of the event. Constant values are defined in <code>TempoEvent.Types</code>.</p>
+				
+				<ul class="h5">
+					<li><code>TempoEvent.Types.RENDER_STARTING</code>: Indicates that rendering has started, or been manually triggered by calling <code>starting()</code> on the renderer object.</li>
+					<li><code>TempoEvent.Types.ITEM_RENDER_STARTING</code>: Indicates that the rendering of a given individual item is starting.</li>
+					<li><code>TempoEvent.Types.ITEM_RENDER_COMPLETE</code>: Indicates that the rendering of a given individual item has completed.</li>
+					<li><code>TempoEvent.Types.RENDER_COMPLETE</code>: Indicates that the rendering of all items is completed.</li>
+				</ul>
+				
+				<h5>item</h5>
+				<p class="h5">The <strong>item</strong> being rendered. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+				
+				<h5>element</h5>
+				<p class="h5">The HTML <strong>element</strong> or template being used for rendering. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+
+				<h4>starting()</h4>
+				<p>In some cases you prepare the templates ahead of calling render. In those cases if you would like to e.g. set loader graphics, call the renderer's <code>starting()</code> method just prior to issuing e.g. a jQuery request. This will fire the <code>ITEM_RENDER_STARTING</code> event.</p>
+				
+<p>The following example demonstrates use of both methods above. In this case we prepare the templates, and register our event handler function. The event handler is then notified that the jQuery request is about to be issued (when we manually fire <code>RENDER_STARTING</code> with a call to <code>starting()</code>) adding a CSS class to the container. We are then notified that rendering is complete so we can remove the CSS class.
+				
+<pre>
+var twitter = Tempo.prepare('tweets').<em>notify</em>( function (event) {
+    if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+        $('#tweets').toggleClass('loading');
+    }
+});
+twitter.<em>starting</em>();
+$.getJSON(url, function(data) {
+    twitter.render(data.results);
+});
+</pre>
+
+                <a id="configurable-syntax"></a>
+                <h4>Configuring the surrounding brace syntax</h4>
+				<p>
+                    In order to make it easier to use Tempo with other frameworks such as Django, you can configure Tempo to use surrounding braces other than the default <code>{{ ... }}</code> and <code>{% ... %}</code>.
+                </p>
+                <p>
+                    To do this you pass the <code>var_braces</code> and <code>tag_braces</code> parameters to the <code>Tempo.prepare</code> function. These will be split down the middle to form the left and right braces.
+                </p>
+<pre>
+Tempo.prepare(&#x27;marx-brothers&#x27;, <em>{&#x27;var_braces&#x27; : &#x27;\\[\\[\\]\\]&#x27;, &#x27;tag_braces&#x27; : &#x27;\\[\\?\\?\\]&#x27;}</em>);
+</pre>
+                <p>You can now use this template syntax instead:</p>
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li data-template&gt;<em>[[nickname]]</em> is <em>[? if nickname == 'Groucho' ?]</em>grouchy<em>[? else ?]</em>happy<em>[? endif ?]</em>!&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+                <h4>Tempo Renderer Information - the <code>_tempo</code> variable</h4>
+				<p>You can access information about the rendering process via the <code>_tempo</code> variable.</p>
+
+				<h5>_tempo.index</h5>
+				<p class="h5">The <code>index</code> variable tells you how many iterations of a given template have been carried out. This is a zero (0) based index. Nested templates have a separate counter.
+                <p>The following example adds the iteration count to the <code>class</code> attribute, prefixed with '<code>item-</code>':</p>
+<pre>
+&lt;ol id=&quot;marx-brothers&quot; class=&quot;item-<em>{{_tempo.index}}</em>&quot;&gt;
+    &lt;li data-template&gt;{{nickname}} {{name.last}}&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+                <p>This example shows how to access the iteration counter using inline JavaScript injection:</p>
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__._tempo.index</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
+</pre>
+			</section>
+			<aside id="advert">
+				<div class="ad">
+					<!-- AdPacks.com Zone Code -->
+					<div id="bsap_1259205" class="bsarocks bsap_25779f8aebf23dd2e6c5b30743833cb3"></div>
+					<a href="http://adpacks.com" id="bsap_aplink">via Ad Packs</a>
+					<!-- End AdPacks.com Zone Code -->
+				</div>
+			</aside>
+		</div>
+	</article>
+
+	<nav id="actions2">
+		<ul>
+			<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
+			<li><a href="examples/twitter.html">Twitter Example</a></li>
+			<li><a href="examples/solr">Solr Example</a></li>
+			<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
+		</ul>
+	</nav>
+
+	<footer id="bottom">
+		<section>
+			<p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
+		</section>
+	</footer>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 1.7
+ * Tempo Template Engine 1.8
  *
  * http://tempojs.com/
  */
@@ -578,6 +578,12 @@ var Tempo = (function (tempo) {
             'prepend': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return args[0] + '' + value;
+                }
+                return value;
+            },
+            'join': function(value, args) {
+                if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
+                    return value.join(args[0]);
                 }
                 return value;
             },

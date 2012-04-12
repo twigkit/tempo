@@ -153,7 +153,7 @@ header#overview section#hero nav#actions ul {
   margin: 2em 0;
 }
 header#overview section#hero nav#actions ul li a {
-  padding: 1em;
+  padding: 0.6em;
 }
 header#overview section#hero ul#features li, header#overview section#hero ul#why li {
   list-style: circle outside none;
@@ -273,7 +273,7 @@ article#usage div.usage section.usage {
   overflow: hidden;
   float: left;
   display: inline;
-  width: 97.917%;
+  width: 81.25%;
 }
 article#usage div.usage section.usage h3 {
   clear: both;
@@ -296,8 +296,44 @@ article#usage div.usage section.usage ul.h5 {
   margin-top: -1em;
   margin-left: 5em;
 }
+article#usage div.usage aside#advert {
+  margin: 0 1.04%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  width: 14.583%;
+}
+article#usage div.usage aside#advert .ad {
+  margin: 4.7em 0 0 0;
+  float: right;
+}
+@media screen and (max-width: 900px) {
+  article#usage div.usage section.usage {
+    width: 72.73%;
+  }
+  article#usage div.usage aside#advert {
+    width: 22.916%;
+  }
+}
+@media screen and (max-width: 700px) {
+  article#usage header div section nav {
+    display: none;
+  }
+  article#usage div.usage section.usage {
+    width: 97.917%;
+  }
+  article#usage div.usage aside#advert {
+    display: none;
+  }
+}
 @media screen and (max-device-width: 480px) {
   article#usage header div section nav {
+    display: none;
+  }
+  article#usage div.usage section.usage {
+    width: 97.917%;
+  }
+  article#usage div.usage aside#advert {
     display: none;
   }
 }
@@ -314,4 +350,40 @@ nav#actions2 ul {
 }
 nav#actions2 ul li a {
   padding: 1em;
+}
+body .adpacks {
+  background: #fff;
+  padding: 15px;
+  margin: 15px 0 0;
+  border: 3px solid #eee;
+}
+body .one .bsa_it_ad {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  padding: 0 15px 0 10px;
+  width: 130px;
+  text-align: left;
+}
+body .one .bsa_it_ad .bsa_it_i {
+  display: block;
+  padding: 0;
+  float: none;
+  margin: 0 0 5px;
+}
+body .one .bsa_it_ad .bsa_it_i img {
+  padding: 0;
+  border: none;
+}
+body .one .bsa_it_ad .bsa_it_t {
+  padding: 6px 0 0 0;
+}
+body .one .bsa_it_p {
+  display: none;
+}
+body #bsap_aplink, body #bsap_aplink:hover {
+  display: block;
+  font-size: 10px;
+  margin: 8px 12px 0;
+  text-align: left;
 }

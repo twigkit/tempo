@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
+    <meta>
+        <sampleQuery>select * from {table} where q='star';</sampleQuery>
+    </meta>
+    <bindings>
+        <select itemPath="" produces="json">
+            <urls>
+                <url>http://search-movies-jc4u2tqsvf5jgd7xxmceezlu24.us-east-1.cloudsearch.amazonaws.com/2011-02-01/search?facet=genre&amp;return-fields=actor,director,title,year,text_relevance</url>
+            </urls>
+            <inputs>
+                <key id='q' type='xs:string' paramType='query' required="true"/>
+                <key id='bq' type='xs:string' paramType='query' required="false"/>
+            </inputs>
+        </select>
+    </bindings>
+</table>

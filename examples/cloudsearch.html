@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Tempo :: Solr Example</title>
+<title>Tempo :: cloudsearch Example</title>
 
 <!-- Import the 1KB CSS Grid -->
 <link rel="stylesheet" href="css/grid.css" type="text/css" media="screen">
@@ -11,16 +11,20 @@
 <link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
 
 <style type="text/css" media="screen">
-    /* reset and basic typography */
+        /* reset and basic typography */
     body {
         margin: 0;
         padding: 0;
         font-family: Helvetica, Arial, sans-serif;
     }
 
-    h1, h2, #solr-facets h3 {
+    h1, h2, #cloudsearch-facets h3 {
         font-family: Georgia;
         font-weight: normal;
+    }
+
+    h1 span {
+        color: red;
     }
 
     ol, ul {
@@ -29,7 +33,7 @@
         list-style: none outside none;
     }
 
-    /* header */
+        /* header */
     #header {
         background-color: black;
     }
@@ -58,31 +62,31 @@
         font-size: 1.5em;
     }
 
-    /* breadcrumbs */
-    #solr-breadcrumbs ul {
+        /* breadcrumbs */
+    #cloudsearch-breadcrumbs ul {
         margin: 1em 1em 2em 1em;
         padding-bottom: 0.5em;
     }
 
-    #solr-breadcrumbs ul li {
+    #cloudsearch-breadcrumbs ul li {
         display: block;
         float: left;
         margin-right: 15px;
         text-transform: capitalize;
     }
 
-    #solr-breadcrumbs ul li a {
+    #cloudsearch-breadcrumbs ul li a {
         color: #999;
         font-size: 1.3em;
         text-decoration: none;
         margin: 0 8px 0 0;
     }
 
-    #solr-breadcrumbs ul li a:hover {
+    #cloudsearch-breadcrumbs ul li a:hover {
         color: #333;
     }
 
-    /* search results */
+        /* search results */
     h2 {
         color: #999;
         padding: 0 0 0.5em 0;
@@ -121,14 +125,21 @@
         color: #333;
     }
 
-    /* faceted navigation */
-    #solr-facets {
+    ol li p.actors {
+        margin: 0.7em 0 0 0;
+        color: #333;
+        font-size: 0.7em;
+        text-transform: none;
+    }
+
+        /* faceted navigation */
+    #cloudsearch-facets {
         border-left: 1px dotted #ccc;
         padding-left: 49px;
         margin-left: 40px;
     }
 
-    #solr-facets h3 {
+    #cloudsearch-facets h3 {
         text-transform: capitalize;
         color: #999;
         padding: 0 0 0.7em 0;
@@ -136,32 +147,32 @@
         border-bottom: 1px solid #ccc;
     }
 
-    #solr-facets ul {
+    #cloudsearch-facets ul {
         margin-bottom: 2em;
     }
 
-    #solr-facets ul li li {
+    #cloudsearch-facets ul li li {
         text-transform: capitalize;
         padding: 0.33em 0;
         font-size: 0.95em;
         border-bottom: 1px solid #e9e9e9;
     }
 
-    #solr-facets ul li li:hover {
+    #cloudsearch-facets ul li li:hover {
         background-color: #f2f2f2;
     }
 
-    #solr-facets ul li span {
+    #cloudsearch-facets ul li span {
         color: #999;
         font-family: Georgia;
     }
 
-    #solr-facets ul li a {
+    #cloudsearch-facets ul li a {
         color: black;
         text-decoration: none;
     }
 
-    #solr-facets ul li a:hover {
+    #cloudsearch-facets ul li a:hover {
         text-decoration: underline;
     }
 </style>
@@ -169,18 +180,18 @@
 <!-- Import Tempo -->
 <script type="text/javascript" src="../tempo.min.js"></script>
 
-<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<!-- This example uses jQuery's ajax() method to retrieve data from cloudsearch -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-<script type="text/javascript" src="js/solr.js"></script>
+<script type="text/javascript" src="js/cloudsearch.js"></script>
 
 <script type="text/javascript">
 
-    var solrjs = new SolrJS('http://data.twigkit.com/solr-gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
+    var cloudsearch = new CloudSearchJS();
     var responseTemplate;
 
     $(document).ready(function() {
         // Prepare templates
-        breadcrumbsTemplate = Tempo.prepare('solr-breadcrumbs');
+        breadcrumbsTemplate = Tempo.prepare('cloudsearch-breadcrumbs');
         responseTemplate = Tempo.prepare('mainbody');
 
         // Default query
@@ -189,37 +200,35 @@
 
     function query(q) {
         // Search request
-        solrjs.q(q != undefined && q != '' ? q : '*:*');
+        cloudsearch.q(q != undefined && q != '' ? q : 'Love');
         _request();
     }
 
     function addFilter(field, value) {
-        solrjs.add_bq(field, value);
+        cloudsearch.add_bq(field, value);
         _request();
     }
 
     function removeFilter(field, value) {
-        solrjs.remove_bq(field, value);
+        cloudsearch.remove_bq(field, value);
         _request();
     }
 
     function _request() {
         responseTemplate.starting();
         $.ajax({
-            url: solrjs.url(),
+            url: cloudsearch.url(),
             dataType: 'jsonp',
-            jsonp: 'json.wrf',
             success: function(data) {
                 // Render the query breadcrumbs
-                breadcrumbsTemplate.render(solrjs.params);
+                breadcrumbsTemplate.render(cloudsearch.params);
                 // Render the primary response, associated results and facets
-                responseTemplate.render(data);
+                responseTemplate.render(data.query.results.json);
             }
         });
     }
 </script>
 <script type="text/javascript">
-
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-10163369-2']);
     _gaq.push(['_trackPageview']);
@@ -232,7 +241,6 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
-
 </script>
 </head>
 <body>
@@ -242,11 +250,11 @@
 <div id="header">
     <div class="row">
         <div class="column grid_6">
-            <h1>Tempo + Solr = True Love</h1>
+            <h1>Tempo <span>&#9829;</span> CloudSearch</h1>
         </div>
         <div class="column grid_6">
-            <form id="search" onsubmit="solrjs.reset(); query($('#q').val()); return false;">
-                <input type="search" name="q" id="q" placeholder="Search for old books">
+            <form id="search" onsubmit="cloudsearch.reset(); query($('#q').val()); return false;">
+                <input type="search" name="q" id="q" placeholder="Search movies">
                 <input type="submit" value="Search" id="submit">
             </form>
         </div>
@@ -254,12 +262,12 @@
 </div>
 
 
-<div id="solr-breadcrumbs" class="row">
+<div id="cloudsearch-breadcrumbs" class="row">
     <ul data-template style="display: none;">
         {% if q !== '*:*' %}
         <li><a href="#" onclick="query(''); return false;">&#215;</a>{{q}}</li>
         {% endif %}
-        <li data-template="fq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">
+        <li data-template="bq"><a href="#" onclick="removeFilter(__.field, __.value); return false;" title="{{field}}">
             &#215;</a>{{value}}
         </li>
     </ul>
@@ -270,33 +278,25 @@
     <div data-template style="display: none;">
         <!-- Search Results -->
         <div class="column grid_8">
-            <h2>{{response.numFound|format}} results found</h2>
+            <h2>{{hits.found|format}} results found</h2>
 
             <ol>
-                <li data-template="response.docs">
-                    <h3>{{title}}</h3>
-
-                    <p>by <a href="#" onclick="addFilter('creator', __.creator[0]); return false;">{{creator}}</a></p>
+                <li data-template="hits.hit">
+                    <h3>{{data.title}}</h3>
+                    <p>directed by <a href="#" onclick="addFilter('director', __.data.director); return false;">{{data.director}}</a></p>
+                    <p class="actors">{{data.actor | join '&nbsp;&#8226;&nbsp;' | replace '([A-z ]*), ([A-z ]*)', '$2 $1'}}</p>
                 </li>
             </ol>
         </div>
-
         <!-- Faceted Navigation -->
-        <div id="solr-facets" class="column grid_3">
+        <div id="cloudsearch-facets" class="column grid_3">
             <ul>
                 <li>
-                    <h3>Subjects</h3>
+                    <h3>Genre</h3>
                     <ul>
-                        <li data-template="facet_counts.facet_fields.subject">
-                            <a href="#" onclick="addFilter('subject', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Languages</h3>
-                    <ul>
-                        <li data-template="facet_counts.facet_fields.language">
-                            <a href="#" onclick="addFilter('language', __[0]); return false;">{{[0]|truncate 30}}</a> <span>{{[1]|format}}</span>
+                        <li data-template="facets.genre.constraints">
+                            <a href="#" onclick="addFilter('genre', __.value); return false;">{{value|truncate 30}}</a>
+                            <span>{{count|format}}</span>
                         </li>
                     </ul>
                 </li>
@@ -317,7 +317,8 @@
 </ul>
 <div id="footer">
     <div class="row">
-        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
+        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a
+                href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
     </div>
 </div>
 
