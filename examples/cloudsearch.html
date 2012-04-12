@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="css/examples.css" type="text/css" media="screen">
 
 <style type="text/css" media="screen">
-    /* reset and basic typography */
+        /* reset and basic typography */
     body {
         margin: 0;
         padding: 0;
@@ -33,7 +33,7 @@
         list-style: none outside none;
     }
 
-    /* header */
+        /* header */
     #header {
         background-color: black;
     }
@@ -62,7 +62,7 @@
         font-size: 1.5em;
     }
 
-    /* breadcrumbs */
+        /* breadcrumbs */
     #cloudsearch-breadcrumbs ul {
         margin: 1em 1em 2em 1em;
         padding-bottom: 0.5em;
@@ -86,7 +86,7 @@
         color: #333;
     }
 
-    /* search results */
+        /* search results */
     h2 {
         color: #999;
         padding: 0 0 0.5em 0;
@@ -132,7 +132,7 @@
         text-transform: none;
     }
 
-    /* faceted navigation */
+        /* faceted navigation */
     #cloudsearch-facets {
         border-left: 1px dotted #ccc;
         padding-left: 49px;
@@ -218,7 +218,9 @@
         responseTemplate.starting();
         $.ajax({
             url: cloudsearch.url(),
-            crossDomain: true,
+            beforeSend : function(req) {
+                req.setRequestHeader('Origin', '207.97.227.245');
+            },
             success: function(data) {
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
@@ -285,7 +287,10 @@
             <ol>
                 <li data-template="hits.hit">
                     <h3>{{data.title}}</h3>
-                    <p>directed by <a href="#" onclick="addFilter('director', __.data.director[0]); return false;">{{data.director}}</a></p>
+
+                    <p>directed by <a href="#" onclick="addFilter('director', __.data.director[0]); return false;">{{data.director}}</a>
+                    </p>
+
                     <p class="actors">{{data.actor | join '&nbsp;&#8226;&nbsp;' | replace '([A-z ]*), ([A-z ]*)', '$2 $1'}}</p>
                 </li>
             </ol>
@@ -297,7 +302,8 @@
                     <h3>Genre</h3>
                     <ul>
                         <li data-template="facets.genre.constraints">
-                            <a href="#" onclick="addFilter('genre', __.value); return false;">{{value|truncate 30}}</a> <span>{{count|format}}</span>
+                            <a href="#" onclick="addFilter('genre', __.value); return false;">{{value|truncate 30}}</a>
+                            <span>{{count|format}}</span>
                         </li>
                     </ul>
                 </li>
@@ -318,7 +324,8 @@
 </ul>
 <div id="footer">
     <div class="row">
-        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
+        <p>Brought to you by the friendly guys at <a href="http://twigkit.com/">TwigKit</a>. Follow <a
+                href="http://twitter.com/mrolafsson">Stefan Olafsson</a> on Twitter.</p>
     </div>
 </div>
 
