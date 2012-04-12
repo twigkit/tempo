@@ -182,12 +182,12 @@
 
 <!-- This example uses jQuery's ajax() method to retrieve data from cloudsearch -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-<script type="text/javascript" src="js/yql.js"></script>
+<!--<script type="text/javascript" src="js/yql.js"></script>-->
 <script type="text/javascript" src="js/cloudsearch.js"></script>
 
 <script type="text/javascript">
 
-    var cloudsearch = new CloudSearchJS('http://search-movies-jc4u2tqsvf5jgd7xxmceezlu24.us-east-1.cloudsearch.amazonaws.com/2011-02-01/search?facet=genre&return-fields=actor%2Cdirector%2Ctitle%2Cyear%2Ctext_relevance');
+    var cloudsearch = new CloudSearchJS('http://query.yahooapis.com/v1/public/yql?q=select+*+from+html+where+url%3D%22http%3A%2F%2Fsearch-movies-jc4u2tqsvf5jgd7xxmceezlu24.us-east-1.cloudsearch.amazonaws.com%2F2011-02-01%2Fsearch%3Ffacet%3Dgenre%26return-fields%3Dactor%252Cdirector%252Ctitle%252Cyear%252Ctext_relevance%26q%3DLove%22+and+xpath%3D%22*%22&format=json');
     var responseTemplate;
 
     $(document).ready(function() {
@@ -220,11 +220,11 @@
         $.ajax({
             url: cloudsearch.url(),
             success: function(data) {
-                console.log(data)
+                var p = eval('eval(' + data.query.results.html.body.p.replace(/'/g, '\\\'') + ')');
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
                 // Render the primary response, associated results and facets
-                responseTemplate.render(data);
+                responseTemplate.render(p);
             }
         });
     }
