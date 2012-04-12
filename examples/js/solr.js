@@ -15,11 +15,11 @@ SolrJS.prototype = {
 		}
 	},
 	
-	add_fq : function(field, value) {
+	add_bq : function(field, value) {
 		this.params.fq.push({'field': field, 'value': value});
 	},
 	
-	remove_fq : function(field, value) {
+	remove_bq : function(field, value) {
 		for (var i in this.params.fq) {
 			if (this.params.fq[i] != undefined && this.params.fq[i].field == field && this.params.fq[i].value == value) {
 				this.params.fq[i] = undefined;

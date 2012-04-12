@@ -80,14 +80,15 @@
 
 	<header id="overview">
 		<section id="hero">
-			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.7</span></h1>
+			<h1>Tempo <span class="version" style="font-size: 0.5em;">1.8</span></h1>
 			<p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
 			<nav id="actions">
 				<ul>
 					<li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
 					<li><a href="examples/twitter">Twitter Example</a></li>
-					<li><a href="examples/solr">Solr Example</a></li>
-					<li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
+					<li><a href="examples/cloudsearch">Solr Example</a></li>
+                    <li><a href="examples/solr">CloudSearch Example</a></li>
+					<li><a href="https://github.com/twigkit/tempo">GitHub</a></li>
 				</ul>
 			</nav>
 			<h3>Why use Tempo?</h3>
@@ -406,6 +407,9 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 
                 <h5><code>{{ field | <em>prepend 'some prefix&amp;nbsp;'</em> }}</code></h5>
                 <p class="h5">If the field value is not empty, then prepend the string to the value. Helpful if you don't want the prefix to show up in the template if the field is undefined or null. Use &amp;nbsp; if you need before or after the prefix.</p>
+
+                <h5><code>{{ field | <em>join 'separator'</em> }}</code></h5>
+                <p class="h5">If the field is an array joins the elements into a string using the supplied separator.</p>
 
                 <a id="attribute-setters"></a>
                 <h4>Attribute Setters</h4>
