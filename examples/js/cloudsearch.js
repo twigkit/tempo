@@ -37,9 +37,7 @@ CloudSearchJS.prototype = {
         if (filters.length > 0) {
             filters = '(and' + filters + ')';
         }
-        var url = 'http://query.yahooapis.com/v1/public/yql?q=use "http://tempojs.com/examples/cloudsearch.xml";select * from cloudsearch where q="' + this.params.q + '" and bq="' + filters + '";&format=json';
-        console.log(url);
-        return url;
+        return 'http://query.yahooapis.com/v1/public/yql?q=use "http://tempojs.com/examples/cloudsearch.xml";select * from cloudsearch where q="' + this.params.q + '" and bq="' + filters + '";&format=json';
     },
 
     reset : function() {
