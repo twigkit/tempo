@@ -28,7 +28,6 @@ CloudSearchJS.prototype = {
     },
 
     url : function() {
-        var req = this.h + '&q=' + this.params.q;
         var filters = '';
         for (var i in this.params.bq) {
             if (this.params.bq[i] != undefined) {
@@ -36,9 +35,11 @@ CloudSearchJS.prototype = {
             }
         }
         if (filters.length > 0) {
-            req += '&bq=(and' + filters + ')';
+            filters = '(and' + filters + ')';
         }
-        return req;
+        var url = 'http://query.yahooapis.com/v1/public/yql?q=use "http://tempojs.com/examples/cloudsearch.xml";select * from cloudsearch where q="' + this.params.q + '" and bq="' + filters + '";&format=json';
+        console.log(url);
+        return url;
     },
 
     reset : function() {
