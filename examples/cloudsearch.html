@@ -216,14 +216,11 @@
 
     function _request() {
         responseTemplate.starting();
-        $.ajax({
-            url: cloudsearch.url(),
-            success: function(data) {
+        $.getJSON(cloudsearch.url(), function(data) {
                 // Render the query breadcrumbs
                 breadcrumbsTemplate.render(cloudsearch.params);
                 // Render the primary response, associated results and facets
                 responseTemplate.render(data);
-            }
         });
     }
 </script>
