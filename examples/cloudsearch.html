@@ -187,7 +187,7 @@
 
 <script type="text/javascript">
 
-    var cloudsearch = new CloudSearchJS('http://query.yahooapis.com/v1/public/yql?q=select+*+from+html+where+url%3D%22http%3A%2F%2Fsearch-movies-jc4u2tqsvf5jgd7xxmceezlu24.us-east-1.cloudsearch.amazonaws.com%2F2011-02-01%2Fsearch%3Ffacet%3Dgenre%26return-fields%3Dactor%252Cdirector%252Ctitle%252Cyear%252Ctext_relevance%26q%3DLove%22+and+xpath%3D%22*%22&format=json');
+    var cloudsearch = new CloudSearchJS('http://search-movies-jc4u2tqsvf5jgd7xxmceezlu24.us-east-1.cloudsearch.amazonaws.com/2011-02-01/search?facet=genre&return-fields=actor,director,title,year,text_relevance');
     var responseTemplate;
 
     $(document).ready(function() {
@@ -218,7 +218,7 @@
     function _request() {
         responseTemplate.starting();
         $.ajax({
-            url: cloudsearch.url(),
+            url: 'http://query.yahooapis.com/v1/public/yql?&format=json&q=select * from html where url="' + encodeURIComponent(cloudsearch.url()).replace(/\(/g, '%28').replace(/\)/g, '%29') + '" and xpath="*"',
             success: function(data) {
                 var p = eval('eval(' + data.query.results.html.body.p.replace(/'/g, '\\\'') + ')');
                 // Render the query breadcrumbs

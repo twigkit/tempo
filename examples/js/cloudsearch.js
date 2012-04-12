@@ -36,8 +36,7 @@ CloudSearchJS.prototype = {
             }
         }
         if (filters.length > 0) {
-            req += '&bq=(and' + filters + ' )';
-            
+            req += '&bq=(and' + filters + ')';
         }
         return req;
     },
