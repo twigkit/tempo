@@ -229,7 +229,6 @@
     }
 </script>
 <script type="text/javascript">
-
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-10163369-2']);
     _gaq.push(['_trackPageview']);
@@ -242,7 +241,6 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
-
 </script>
 </head>
 <body>
@@ -285,9 +283,7 @@
             <ol>
                 <li data-template="hits.hit">
                     <h3>{{data.title}}</h3>
-                    <p>directed by <a href="#" onclick="addFilter('director', __.data.director); return false;">{{data.director}}</a>
-                    </p>
-
+                    <p>directed by <a href="#" onclick="addFilter('director', __.data.director); return false;">{{data.director}}</a></p>
                     <p class="actors">{{data.actor | join '&nbsp;&#8226;&nbsp;' | replace '([A-z ]*), ([A-z ]*)', '$2 $1'}}</p>
                 </li>
             </ol>
