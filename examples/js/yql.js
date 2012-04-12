@@ -25,9 +25,7 @@ jQuery.ajax = (function(_ajax){
     return function(o) {
         var url = o.url;
 
-        if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
-            console.log('bong')
-
+        if ( true ) {
             // Manipulate options so that JSONP-x request is made to YQL
 
             o.url = YQL;
