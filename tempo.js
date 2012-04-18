@@ -283,8 +283,10 @@ var Tempo = (function (tempo) {
                         return eval(variable);
                     }
 
-                    if (utils.typeOf(i) === 'array') {
-                        val = eval('i' + variable);
+                    if (variable === '.') {
+						val = eval('i');
+					} else if (utils.typeOf(i) === 'array') {
+						val = eval('i' + variable);
                     } else {
                         val = eval('i.' + variable);
                     }
