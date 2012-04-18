@@ -3,7 +3,7 @@
  *
  * http://tempojs.com/
  */
-function TempoEvent (type, item, element) {
+function TempoEvent(type, item, element) {
     this.type = type;
     this.item = item;
     this.element = element;
@@ -148,7 +148,7 @@ var Tempo = (function (tempo) {
         }
     };
 
-    function Templates (params, nestedItem) {
+    function Templates(params, nestedItem) {
         this.params = params;
         this.defaultTemplate = null;
         this.namedTemplates = {};
@@ -184,7 +184,7 @@ var Tempo = (function (tempo) {
 
     Templates.prototype = {
         load: function (file, callback) {
-            function contents (iframe) {
+            function contents(iframe) {
                 return iframe.contentWindow ? iframe.contentWindow.document.documentElement.innerHTML : iframe.contentDocument ? iframe.contentDocument.body.innerHTML : iframe.document.body.innerHTML;
             }
 
@@ -328,7 +328,7 @@ var Tempo = (function (tempo) {
     /*!
      * Renderer for populating containers with data using templates.
      */
-    function Renderer (templates) {
+    function Renderer(templates) {
         this.templates = templates;
         this.listener = undefined;
         this.started = false;
@@ -359,8 +359,10 @@ var Tempo = (function (tempo) {
                 } else if (utils.startsWith(variable, 'attr.')) {
                     val = renderer.templates.attributes[variable.substring(5, variable.length)];
                 }
-			} else 	if (variable === '.') {
-				val = eval('i');
+            } else if (variable === '.') {
+                val = eval('i');
+            } else if (variable === 'this' || variable.match(/this[\\[\\.]/) !== null) {
+                val = eval('i' + variable.substring(4, variable.length));
             } else if (utils.typeOf(i) === 'array') {
                 val = eval('i' + variable);
             } else {
@@ -404,7 +406,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects: function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -587,8 +589,8 @@ var Tempo = (function (tempo) {
 
             return this;
         },
-        
-		clear: function (data) {
+
+        clear: function (data) {
             utils.clearContainer(this.templates.container);
         },
 
@@ -671,12 +673,12 @@ var Tempo = (function (tempo) {
                 }
                 return value;
             },
-			'join': function(value, args) {
-				if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
-					return value.join(args[0]);
-				}
-				return value;
-			},
+            'join': function(value, args) {
+                if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
+                    return value.join(args[0]);
+                }
+                return value;
+            },
             'default': function (value, args) {
                 if (value !== undefined && value !== null) {
                     return value;
