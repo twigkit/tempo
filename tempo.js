@@ -359,6 +359,8 @@ var Tempo = (function (tempo) {
                 } else if (utils.startsWith(variable, 'attr.')) {
                     val = renderer.templates.attributes[variable.substring(5, variable.length)];
                 }
+			} else 	if (variable === '.') {
+				val = eval('i');
             } else if (utils.typeOf(i) === 'array') {
                 val = eval('i' + variable);
             } else {
@@ -585,8 +587,8 @@ var Tempo = (function (tempo) {
 
             return this;
         },
-
-        clear: function (data) {
+        
+		clear: function (data) {
             utils.clearContainer(this.templates.container);
         },
 
@@ -669,6 +671,12 @@ var Tempo = (function (tempo) {
                 }
                 return value;
             },
+			'join': function(value, args) {
+				if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
+					return value.join(args[0]);
+				}
+				return value;
+			},
             'default': function (value, args) {
                 if (value !== undefined && value !== null) {
                     return value;
