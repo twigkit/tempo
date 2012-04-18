@@ -284,9 +284,9 @@ var Tempo = (function (tempo) {
                     }
 
                     if (variable === '.') {
-						val = eval('i');
-					} else if (utils.typeOf(i) === 'array') {
-						val = eval('i' + variable);
+                        val = eval('i');
+                    } else if (utils.typeOf(i) === 'array') {
+                        val = eval('i' + variable);
                     } else {
                         val = eval('i.' + variable);
                     }
@@ -320,7 +320,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects: function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = null;
@@ -329,8 +329,9 @@ var Tempo = (function (tempo) {
                     if (utils.startsWith(variable, '_tempo.')) {
                         return eval(variable);
                     }
-
-                    if (utils.typeOf(i) === 'array') {
+                    if (variable === 'this' || variable.match(/this[\\[\\.]/) !== null) {
+                        val = eval('i' + variable.substring(4, variable.length));
+                    } else if (utils.typeOf(i) === 'array') {
                         val = eval('i' + variable);
                     } else {
                         val = eval('i.' + variable);
@@ -509,9 +510,9 @@ var Tempo = (function (tempo) {
 
                 var expr = args[0].replace(/&amp;/g, '&');
                 expr = expr.replace(new RegExp(member_regex, 'gi'),
-                                    function (match) {
-                                        return 'i.' + match;
-                                    });
+                    function (match) {
+                        return 'i.' + match;
+                    });
 
                 var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
                 var blocks = body.split(blockRegex);
@@ -680,14 +681,14 @@ var Tempo = (function (tempo) {
                             }
                         };
                         format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g,
-                                                function (match, escape, pattern) {
-                                                    if (!escape) {
-                                                        if (DATE_PATTERNS.hasOwnProperty(pattern)) {
-                                                            return DATE_PATTERNS[pattern](date);
-                                                        }
-                                                    }
-                                                    return pattern;
-                                                });
+                            function (match, escape, pattern) {
+                                if (!escape) {
+                                    if (DATE_PATTERNS.hasOwnProperty(pattern)) {
+                                        return DATE_PATTERNS[pattern](date);
+                                    }
+                                }
+                                return pattern;
+                            });
 
                         return format;
                     }

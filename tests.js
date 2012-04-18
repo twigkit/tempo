@@ -135,3 +135,7 @@ test('_replaceVariables', function () {
     equal(renderer._replaceVariables(renderer, {}, item, str2), 'Sample [object Object] string.');
     equal(renderer._replaceVariables(renderer, {}, array, str2), 'Sample foo,bar string.');
 });
+
+test('_replaceObjects', function () {
+    equal(renderer._replaceObjects(renderer, {}, ['foo', 'bar'], '<a href="#" onclick="alert(__.this[0]); return false;">{{[0]}}</a>'), '<a href="#" onclick="alert(\'foo\'); return false;">{{[0]}}</a>');
+});

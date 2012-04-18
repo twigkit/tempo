@@ -451,6 +451,11 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 &lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__.nickname</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
 </pre>
 
+                <p>You can refer to the object being iterated with <em>this</em>:</p>
+<pre>
+&lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__.this</em>); return false;&quot;&gt;{{[0]}}&lt;/a&gt;
+</pre>
+
                 <p>Similarly you can reference array elements:</p>
 <pre>
 &lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__[0]</em>); return false;&quot;&gt;{{[0]}}&lt;/a&gt;
