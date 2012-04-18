@@ -250,6 +250,23 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 					</ol>
 				</div>
 				
+				<p>You can reference the object being iterated with <em>{{.}}</em>:
+				
+				<div class="example">
+					var data = [ 
+						'Leonard Marx', 
+						'Adolph Marx', 
+						'Julius Henry Marx', 
+						'Milton Marx', 
+						'Herbert Marx'
+					 ];
+				</div>
+
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li <em>data-template</em>&gt;<em>{{.}}</em>&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
 				<p>If the JSON data represents an array of arrays (which can not be referenced by field/member name) for example:</p>
 				
 				<div class="example">
@@ -270,7 +287,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 &lt;/ol&gt;
 </pre>
 
-				<p>The above example would be rendered as:</p>
+				<p>Both examples above would be rendered as:</p>
 				<div class="example">
 					<ol id="marx-brothers_from_array">
 						<li data-template="">Leonard Marx</li>
