@@ -546,6 +546,9 @@ var Tempo = (function (tempo) {
             },
             'format': function (value, args) {
                 if (value !== undefined) {
+                    if(args.length===1) {
+                        value = parseFloat(value+'').toFixed(parseInt(args[0]));
+                    }
                     var x = (value + '').split('.');
                     var x1 = x[0];
                     var x2 = x.length > 1 ? '.' + x[1] : '';
@@ -600,9 +603,10 @@ var Tempo = (function (tempo) {
                 return value;
             },
             'date': function (value, args) {
-                if (value !== undefined && args.length === 1) {
+                if (value !== undefined && args.length >= 1 && args.length <= 2) {
                     var date = new Date(value);
                     var format = args[0];
+                    var isUTC = (args.length === 2 && args[1] === "UTC");
                     if (format === 'localedate') {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
@@ -616,68 +620,68 @@ var Tempo = (function (tempo) {
                         var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
                             'YYYY': function (date) {
-                                return date.getFullYear();
+                                return (isUTC?date.getUTCFullYear():date.getFullYear());
                             },
                             'YY': function (date) {
-                                return date.getFullYear().toFixed().substring(2);
+                                return (isUTC?date.getUTCFullYear():date.getFullYear()).toFixed().substring(2);
                             },
                             'MMMM': function (date) {
-                                return MONTHS[date.getMonth()];
+                                return MONTHS[(isUTC?date.getUTCMonth():date.getMonth())];
                             },
                             'MMM': function (date) {
-                                return MONTHS[date.getMonth()].substring(0, 3);
+                                return MONTHS[(isUTC?date.getUTCMonth():date.getMonth())].substring(0, 3);
                             },
                             'MM': function (date) {
-                                return utils.pad((date.getMonth() + 1).toFixed(), '0', 2);
+                                return utils.pad(((isUTC?date.getUTCMonth():date.getMonth()) + 1).toFixed(), '0', 2);
                             },
                             'M': function (date) {
-                                return date.getMonth() + 1;
+                                return (isUTC?date.getUTCMonth():date.getMonth()) + 1;
                             },
                             'DD': function (date) {
-                                return utils.pad(date.getDate().toFixed(), '0', 2);
+                                return utils.pad((isUTC?date.getUTCDate():date.getDate()).toFixed(), '0', 2);
                             },
                             'D': function (date) {
-                                return date.getDate();
+                                return (isUTC?date.getUTCDate():date.getDate());
                             },
                             'EEEE': function (date) {
-                                return DAYS[date.getDay()];
+                                return DAYS[(isUTC?date.getUTCDay():date.getDay())];
                             },
                             'EEE': function (date) {
-                                return DAYS[date.getDay()].substring(0, 3);
+                                return DAYS[(isUTC?date.getUTCDay():date.getDay())].substring(0, 3);
                             },
                             'E': function (date) {
-                                return date.getDay();
+                                return (isUTC?date.getUTCDay():date.getDay());
                             },
                             'HH': function (date) {
-                                return utils.pad(date.getHours().toFixed(), '0', 2);
+                                return utils.pad((isUTC?date.getUTCHours():date.getHours()).toFixed(), '0', 2);
                             },
                             'H': function (date) {
-                                return date.getHours();
+                                return (isUTC?date.getUTCHours():date.getHours());
                             },
                             'h': function (date) {
-                                var hours = date.getHours();
+                                var hours = (isUTC?date.getUTCHours():date.getHours());
                                 return hours < 13 ? (hours === 0 ? 12 : hours) : hours - 12;
                             },
                             'mm': function (date) {
-                                return utils.pad(date.getMinutes().toFixed(), '0', 2);
+                                return utils.pad((isUTC?date.getUTCMinutes():date.getMinutes()).toFixed(), '0', 2);
                             },
                             'm': function (date) {
-                                return date.getMinutes();
+                                return (isUTC?date.getUTCMinutes():date.getMinutes());
                             },
                             'ss': function (date) {
-                                return utils.pad(date.getSeconds().toFixed(), '0', 2);
+                                return utils.pad((isUTC?date.getUTCSeconds():date.getSeconds()).toFixed(), '0', 2);
                             },
                             's': function (date) {
-                                return date.getSeconds();
+                                return (isUTC?date.getUTCSeconds():date.getSeconds());
                             },
                             'SSS': function (date) {
-                                return utils.pad(date.getMilliseconds().toFixed(), '0', 3);
+                                return utils.pad((isUTC?date.getUTCMilliseconds():date.getMilliseconds()).toFixed(), '0', 3);
                             },
                             'S': function (date) {
-                                return date.getMilliseconds();
+                                return (isUTC?date.getUTCMilliseconds():date.getMilliseconds());
                             },
                             'a': function (date) {
-                                return date.getHours() < 12 ? 'AM' : 'PM';
+                                return (isUTC?date.getUTCHours():date.getHours()) < 12 ? 'AM' : 'PM';
                             }
                         };
                         format = format.replace(/(\\)?(Y{2,4}|M{1,4}|D{1,2}|E{1,4}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|a)/g,
