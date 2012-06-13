@@ -1,0 +1,50 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.js"></script>
+
+<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script>
+    data1 = [
+        { identifier: "1", clientName: "Mon client", description: "Projet test"},
+        { identifier: "2", clientName: "Autre client", description: "Projet test 2"}
+    ];
+    data2 = [
+        { identifier: "1", clientName: "Mon client", description: "Projet test"},
+        { identifier: "2", clientName: "Autre client", description: "Projet test 2"},
+        { identifier: "3", clientName: "Nouveau", description: "Nouveau test"}
+    ];
+
+    $(document).ready(function () {
+        // Prepare templates
+        var tables = ['projects-table', 'other-table'];
+        for (var i = 0; i < tables.length; i++) {
+            var template = Tempo.prepare(tables[i]);
+            template.render(data1);
+            template.render(data2);
+        }
+    });
+</script>
+<table>
+    <thead>
+    <tr>
+        <th>Identifiant</th>
+        <th>Nom du client</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody id="projects-table">
+    <tr data-template>
+        <td>{{identifier}}</td>
+        <td>{{clientName}}</td>
+        <td>{{description}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<table id="other-table">
+    <tr data-template>
+        <td>{{identifier}}</td>
+        <td>{{clientName}}</td>
+        <td>{{description}}</td>
+    </tr>
+</table>

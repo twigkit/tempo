@@ -88,8 +88,9 @@ var Tempo = (function (tempo) {
         },
 
         getElement: function (template, html) {
-            if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
+            if (navigator.appVersion.indexOf("MSIE") > -1 && utils.equalsIgnoreCase(template.tagName, 'tr')) {
                 // Wrapping to get around read-only innerHTML
+                console.log('ding')
                 var el = _window.document.createElement('div');
                 el.innerHTML = '<table><tbody>' + html + '</tbody></table>';
                 var depth = 3;
