@@ -1,0 +1,56 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {
+                "text": "The sun is shining",
+                "children": []},
+            {
+                "text": "it is cloudy.",
+                "children": [
+                    {
+                        "text": "It is raining.",
+                        "children": []},
+                    {
+                        "text": "The sun was shining.",
+                        "children": []},
+                    {
+                        "text": "A rainbow appeared.",
+                        "children": [
+                            {
+                                "text": "A pot of gold was found at the end of the rainbow.",
+                                "children": []},
+                            {
+                                "text": "The gold returned more than a million dollars, when sold.",
+                                "children": []}
+                        ]}
+                ]}
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare("template").render(data);
+        });
+    </script>
+</head>
+<body>
+<h1>Hello</h1>
+<ul id="template">
+    <li data-template>
+        {{text}}
+        <ul>
+            <li data-template-for="children">
+                {{text}}
+                <ul>
+                    <li data-template-for="children" class="sub_sub">{{text}}</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</body>
+</html>

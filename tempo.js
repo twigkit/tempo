@@ -3,7 +3,7 @@
  *
  * http://tempojs.com/
  */
-function TempoEvent(type, item, element) {
+function TempoEvent (type, item, element) {
     this.type = type;
     this.item = item;
     this.element = element;
@@ -148,7 +148,7 @@ var Tempo = (function (tempo) {
         }
     };
 
-    function Templates(params, nestedItem) {
+    function Templates (params, nestedItem) {
         this.params = params;
         this.defaultTemplate = null;
         this.namedTemplates = {};
@@ -184,7 +184,7 @@ var Tempo = (function (tempo) {
 
     Templates.prototype = {
         load: function (file, callback) {
-            function contents(iframe) {
+            function contents (iframe) {
                 return iframe.contentWindow ? iframe.contentWindow.document.documentElement.innerHTML : iframe.contentDocument ? iframe.contentDocument.body.innerHTML : iframe.document.body.innerHTML;
             }
 
@@ -243,11 +243,14 @@ var Tempo = (function (tempo) {
 
             // Parsing
             if (ready) {
+                var foundTemplates = {};
                 for (var s = 0; s < children.length; s++) {
                     if (children[s].getAttribute !== undefined) {
-                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for')) {
+                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for') && !foundTemplates[this.nestedItem]) {
                             // Nested template
                             this.createTemplate(children[s]);
+                            // Guards against recursion when child template has same name!
+                            foundTemplates[this.nestedItem] = true;
                         } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
                             // Normal template
                             this.createTemplate(children[s]);
@@ -328,7 +331,7 @@ var Tempo = (function (tempo) {
     /*!
      * Renderer for populating containers with data using templates.
      */
-    function Renderer(templates) {
+    function Renderer (templates) {
         this.templates = templates;
         this.listener = undefined;
         this.started = false;
@@ -473,12 +476,14 @@ var Tempo = (function (tempo) {
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
 
-                var nestedDeclaration = template.innerHTML.match(/data-template-for="(.+?)"/g);
+                var nestedDeclaration = template.innerHTML.match(/data-template-for="([^"]+?)"/g);
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
-                        var nested = nestedDeclaration[p].match(/"(.+?)"/)[1];
-                        var t = new Templates(renderer.templates.params, nested);
-                        t.parse(template, this._renderNestedItem(i, nested));
+                        var nested = nestedDeclaration[p].match(/data-template-for="([^"]+?)"/);
+                        if (nested && nested[1]) {
+                            var t = new Templates(renderer.templates.params, nested[1]);
+                            t.parse(template, this._renderNestedItem(i, nested[1]));
+                        }
                     }
                 }
                 // Dealing with HTML as a String from now on (to be reviewed)
@@ -565,7 +570,7 @@ var Tempo = (function (tempo) {
             }
 
             var fragment = this._createFragment(data);
-            if (fragment !== null) {
+            if (fragment !== null && this.templates.container !== null) {
                 this.templates.container.appendChild(fragment);
             }
 
@@ -673,7 +678,7 @@ var Tempo = (function (tempo) {
                 }
                 return value;
             },
-            'join': function(value, args) {
+            'join': function (value, args) {
                 if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
                     return value.join(args[0]);
                 }
