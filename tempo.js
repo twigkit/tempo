@@ -4,6 +4,7 @@
  * http://tempojs.com/
  */
 function TempoEvent (type, item, element) {
+    'use strict';
     this.type = type;
     this.item = item;
     this.element = element;
@@ -20,6 +21,7 @@ TempoEvent.Types = {
 
 
 var Tempo = (function (tempo) {
+    'use strict';
 
     /*!
      * Constants
@@ -299,6 +301,10 @@ var Tempo = (function (tempo) {
                         val = '\'' + attr.value + '\'';
                     }
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
+                    utils.removeAttr(element, attr.name);
+                    nonDefault = true;
+                } else if (attr.name === 'data-has') {
+                    this.namedTemplates[attr.value + '!==undefined'] = element;
                     utils.removeAttr(element, attr.name);
                     nonDefault = true;
                 } else if (attr.name === 'data-from-map') {
