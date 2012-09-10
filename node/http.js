@@ -7,7 +7,7 @@ http.createServer(
 
             // Load a template file and create an instance of Tempo
             // Load method supplies an instance of Tempo to the callback function
-            tempo.load('views/beatles.tempo', function(tempo) {
+            tempo.load('views/beatles.tpl', function(tempo) {
                 // Load some data
                 var beatles = [
                     {'name': 'John'},

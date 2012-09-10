@@ -8,7 +8,7 @@
 <h1>{{title}}</h1>
 
 <ul>
-    <li data-template-for="beatles" data-template-file="views/beatle.tempo"></li>
+    <li data-template-for="beatles" data-template-file="views/beatle.tpl"></li>
 </ul>
 
 </body>

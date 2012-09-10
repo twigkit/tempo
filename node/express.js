@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 
-app.set('view engine', 'tempo');
+app.engine('tpl', require('tempo').__express);
+app.set('view engine', 'tpl');
 
 app.get('/', function(req, res) {
     var beatles = [
