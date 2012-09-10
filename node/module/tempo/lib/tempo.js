@@ -4,6 +4,7 @@
  * http://tempojs.com/
  */
 function TempoEvent (type, item, element) {
+    'use strict';
     this.type = type;
     this.item = item;
     this.element = element;
@@ -20,6 +21,7 @@ TempoEvent.Types = {
 
 
 var Tempo = (function (tempo) {
+    'use strict';
 
     /*!
      * Constants
@@ -88,7 +90,7 @@ var Tempo = (function (tempo) {
         },
 
         getElement: function (template, html) {
-            if (utils.equalsIgnoreCase(template.tagName, 'tr')) {
+            if (navigator.appVersion.indexOf("MSIE") > -1 && utils.equalsIgnoreCase(template.tagName, 'tr')) {
                 // Wrapping to get around read-only innerHTML
                 var el = _window.document.createElement('div');
                 el.innerHTML = '<table><tbody>' + html + '</tbody></table>';
@@ -243,11 +245,14 @@ var Tempo = (function (tempo) {
 
             // Parsing
             if (ready) {
+                var foundTemplates = {};
                 for (var s = 0; s < children.length; s++) {
                     if (children[s].getAttribute !== undefined) {
-                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for')) {
+                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for') && !foundTemplates[this.nestedItem]) {
                             // Nested template
                             this.createTemplate(children[s]);
+                            // Guards against recursion when child template has same name!
+                            foundTemplates[this.nestedItem] = true;
                         } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
                             // Normal template
                             this.createTemplate(children[s]);
@@ -296,6 +301,10 @@ var Tempo = (function (tempo) {
                         val = '\'' + attr.value + '\'';
                     }
                     this.namedTemplates[attr.name.substring(8, attr.name.length) + '==' + val] = element;
+                    utils.removeAttr(element, attr.name);
+                    nonDefault = true;
+                } else if (attr.name === 'data-has') {
+                    this.namedTemplates[attr.value + '!==undefined'] = element;
                     utils.removeAttr(element, attr.name);
                     nonDefault = true;
                 } else if (attr.name === 'data-from-map') {
@@ -359,6 +368,10 @@ var Tempo = (function (tempo) {
                 } else if (utils.startsWith(variable, 'attr.')) {
                     val = renderer.templates.attributes[variable.substring(5, variable.length)];
                 }
+            } else if (variable === '.') {
+                val = eval('i');
+            } else if (variable === 'this' || variable.match(/this[\\[\\.]/) !== null) {
+                val = eval('i' + variable.substring(4, variable.length));
             } else if (utils.typeOf(i) === 'array') {
                 val = eval('i' + variable);
             } else {
@@ -402,7 +415,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects: function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + ')([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -469,12 +482,14 @@ var Tempo = (function (tempo) {
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
 
-                var nestedDeclaration = template.innerHTML.match(/data-template-for="(.+?)"/g);
+                var nestedDeclaration = template.innerHTML.match(/data-template-for="([^"]+?)"/g);
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
-                        var nested = nestedDeclaration[p].match(/"(.+?)"/)[1];
-                        var t = new Templates(renderer.templates.params, nested);
-                        t.parse(template, this._renderNestedItem(i, nested));
+                        var nested = nestedDeclaration[p].match(/data-template-for="([^"]+?)"/);
+                        if (nested && nested[1]) {
+                            var t = new Templates(renderer.templates.params, nested[1]);
+                            t.parse(template, this._renderNestedItem(i, nested[1]));
+                        }
                     }
                 }
                 // Dealing with HTML as a String from now on (to be reviewed)
@@ -561,7 +576,7 @@ var Tempo = (function (tempo) {
             }
 
             var fragment = this._createFragment(data);
-            if (fragment !== null) {
+            if (fragment !== null && this.templates.container !== null) {
                 this.templates.container.appendChild(fragment);
             }
 
@@ -666,6 +681,12 @@ var Tempo = (function (tempo) {
             'prepend': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return args[0] + '' + value;
+                }
+                return value;
+            },
+            'join': function (value, args) {
+                if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
+                    return value.join(args[0]);
                 }
                 return value;
             },
