@@ -1,11 +1,7 @@
 var express = require('express');
-var utils = require('connect').utils;
-var tempo = require('tempo').tempo
 var app = express();
 
 app.set('view engine', 'tempo');
-app.set('view options', utils.merge(app.set('view options'), { layout: false }));
-
 
 app.get('/', function(req, res) {
     var beatles = [
@@ -18,4 +14,5 @@ app.get('/', function(req, res) {
     res.render('beatles', {'title': 'The Beatles!', 'beatles' : beatles});
 });
 
+console.log('Server running at http://127.0.0.1:3000/');
 app.listen(3000);

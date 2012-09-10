@@ -26,8 +26,6 @@ tempo.write = function (res) {
 }
 
 tempo.compile = function (markup, options) {
-    options = options || {};
-    var name = options.filename || markup;
     var data = markup;
     document = jsdom(data);
     window = document.createWindow();
