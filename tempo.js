@@ -66,9 +66,21 @@ var Tempo = (function (tempo) {
 
         clearContainer: function (el) {
             if (el !== null && el !== undefined && el.childNodes !== undefined) {
-                for (var i = el.childNodes.length; i >= 0; i--) {
-                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
-                        el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
+                if (this.equalsIgnoreCase(el.tagName, 'tbody') || this.equalsIgnoreCase(el.tagName, 'table')) {
+                    var table = el;
+                    while (!this.equalsIgnoreCase(table.tagName, 'table')) {
+                        table = table.parentNode;
+                    }
+                    for (var i = table.rows.length - 1; i >= 0; i--) {
+                        if (this.hasAttr(table.rows[i], 'data-template') || this.hasAttr(table.rows[i], 'data-template-for')) {
+                            table.deleteRow(i);
+                        }
+                    }
+                } else {
+                    for (var i = el.childNodes.length; i >= 0; i--) {
+                        if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
+                            el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
+                        }
                     }
                 }
             }
