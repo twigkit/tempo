@@ -98,6 +98,7 @@ var Tempo = (function (tempo) {
                 while (depth--) {
                     el = el.lastChild;
                 }
+                el.setAttribute('data-template', '');
                 return el;
             } else {
                 // No need to wrap

@@ -66,24 +66,9 @@ var Tempo = (function (tempo) {
 
         clearContainer: function (el) {
             if (el !== null && el !== undefined && el.childNodes !== undefined) {
-                if (this.equalsIgnoreCase(el.tagName, 'tbody') || this.equalsIgnoreCase(el.tagName, 'table')) {
-                    var table = el;
-                    while (!this.equalsIgnoreCase(table.tagName, 'table')) {
-                        table = table.parentNode;
-                    }
-                    var rowCount = table.rows.length;
-                    for (var i = 0; i < rowCount; i++) {
-                        if (this.hasAttr(table.rows[i], 'data-template') || this.hasAttr(table.rows[i], 'data-template-for')) {
-                            table.deleteRow(i);
-                            rowCount--;
-                            i--;
-                        }
-                    }
-                } else {
-                    for (var i = el.childNodes.length; i >= 0; i--) {
-                        if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
-                            el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
-                        }
+                for (var i = el.childNodes.length; i >= 0; i--) {
+                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
+                        el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
                     }
                 }
             }
@@ -113,6 +98,7 @@ var Tempo = (function (tempo) {
                 while (depth--) {
                     el = el.lastChild;
                 }
+                el.setAttribute('data-template', '');
                 return el;
             } else {
                 // No need to wrap
