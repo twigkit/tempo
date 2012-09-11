@@ -71,9 +71,12 @@ var Tempo = (function (tempo) {
                     while (!this.equalsIgnoreCase(table.tagName, 'table')) {
                         table = table.parentNode;
                     }
-                    for (var i = table.rows.length - 1; i >= 0; i--) {
+                    var rowCount = table.rows.length;
+                    for (var i = 0; i < rowCount; i++) {
                         if (this.hasAttr(table.rows[i], 'data-template') || this.hasAttr(table.rows[i], 'data-template-for')) {
                             table.deleteRow(i);
+                            rowCount--;
+                            i--;
                         }
                     }
                 } else {
