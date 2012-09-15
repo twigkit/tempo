@@ -144,6 +144,22 @@ var Tempo = (function (tempo) {
             }
         },
 
+        merge: function (obj1, obj2) {
+            var obj3 = {};
+
+            for (var attr1 in obj1) {
+                if (obj1.hasOwnProperty(attr1)) {
+                    obj3[attr1] = obj1[attr1];
+                }
+            }
+
+            for (var attr2 in obj2) {
+                if (obj2.hasOwnProperty(attr2)) {
+                    obj3[attr2] = obj2[attr2];
+                }
+            }
+            return obj3;
+        },
         notify: function (listener, event) {
             if (listener !== undefined) {
                 listener(event);
@@ -310,12 +326,11 @@ var Tempo = (function (tempo) {
                     nonDefault = true;
                 } else if (attr.name === 'data-from-map') {
                     this.dataIsMap = true;
-                } else if (utils.startsWith(attr.name, 'data-')) {
+                } else if (!utils.startsWith(attr.name, 'data-template') && utils.startsWith(attr.name, 'data-')) {
                     // Treat as an attribute for template
                     this.attributes[attr.name.substring(5, attr.name.length)] = attr.value;
                 }
             }
-
             // Setting as default template, last one wins
             if (!nonDefault) {
                 this.defaultTemplate = element;
@@ -362,14 +377,7 @@ var Tempo = (function (tempo) {
                 return eval(variable);
             }
 
-            if (utils.startsWith(variable, 'attr')) {
-                // Handling attributes for template
-                if (variable === 'attr') {
-                    val = renderer.templates.attributes;
-                } else if (utils.startsWith(variable, 'attr.')) {
-                    val = renderer.templates.attributes[variable.substring(5, variable.length)];
-                }
-            } else if (variable === '.') {
+            if (variable === '.') {
                 val = eval('i');
             } else if (variable === 'this' || variable.match(/this[\\[\\.]/) !== null) {
                 val = eval('i' + variable.substring(4, variable.length));
@@ -416,7 +424,7 @@ var Tempo = (function (tempo) {
         },
 
         _replaceObjects: function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|attr|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -436,7 +444,8 @@ var Tempo = (function (tempo) {
         },
 
         _applyAttributeSetters: function (renderer, item, str) {
-            return str.replace(/([A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+            // Adding a space in front of first part to make sure I don't get partial matches
+            return str.replace(/( [A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }
@@ -474,6 +483,7 @@ var Tempo = (function (tempo) {
 
         renderItem: function (renderer, tempo_info, i, fragment) {
             var template = renderer.templates.templateFor(i);
+            tempo_info = utils.merge(tempo_info, renderer.templates.attributes);
 
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
