@@ -370,11 +370,11 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        _getValue: function (renderer, variable, i, _tempo) {
+        _getValue: function (renderer, variable, i, t) {
             var val = null;
             // Handling tempo_info variable
             if (utils.startsWith(variable, '_tempo.')) {
-                return eval(variable);
+                return eval('t.' + variable.substring(7, variable.length));
             }
 
             if (variable === '.') {
