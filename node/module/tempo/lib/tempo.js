@@ -481,9 +481,9 @@ var Tempo = (function (tempo) {
             };
         },
 
-        renderItem: function (renderer, tempo_info, i, fragment) {
+        renderItem: function (renderer, _tempo_info, i, fragment) {
             var template = renderer.templates.templateFor(i);
-            tempo_info = utils.merge(tempo_info, renderer.templates.attributes);
+            var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
 
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
