@@ -477,7 +477,11 @@ var Tempo = (function (tempo) {
         _renderNestedItem: function (i, nested) {
             return function (templates) {
                 var r = new Renderer(templates);
-                r.render(eval('i.' + nested));
+                var data = eval('i.' + nested);
+                data._parent = function() {
+                    return i;
+                }();
+                r.render(data);
             };
         },
 
