@@ -121,6 +121,12 @@ var Tempo = (function (tempo) {
                 if (obj.constructor === (new RegExp()).constructor) {
                     return "regex";
                 }
+                if (typeof HTMLElement === "object" ? obj instanceof HTMLElement : obj && typeof obj === "object" && obj.nodeType === 1 && typeof obj.nodeName === "string") {
+                    return 'element';
+                }
+                if (obj instanceof jQuery) {
+                    return 'jquery';
+                }
                 return "object";
             }
             return typeof(obj);
@@ -478,7 +484,7 @@ var Tempo = (function (tempo) {
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = eval('i.' + nested);
-                data._parent = function() {
+                data._parent = function () {
                     return i;
                 }();
                 r.render(data);
@@ -827,12 +833,14 @@ var Tempo = (function (tempo) {
      * clearing afterwards.
      */
     tempo.prepare = function (container, params, callback) {
-        if (typeof container === 'string') {
+        if (utils.typeOf(container) === 'string') {
             if (container === '*') {
                 container = _window.document.getElementsByTagName('html')[0];
             } else {
                 container = _window.document.getElementById(container);
             }
+        } else if (utils.typeOf(container) === 'jquery' && container.length > 0) {
+            container = container[0];
         }
 
         var templates = new Templates(params);
