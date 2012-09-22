@@ -1,0 +1,29 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {"type": 'java', "name": 'guice'},
+            {"type": 'javascript', "name": 'jQuery'},
+            {"type": 'java', "name": 'guice', "owner": 'Google'},
+            {"type": 'php', "name": 'django'}
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare($('ul')).render(data);
+        });
+    </script>
+</head>
+<body>
+<h1>Hello</h1>
+<ul id="ul">
+    <li data-template data-if-type="javascript">I am a JavaScript library: {{name}}</li>
+    <li data-template data-has="owner">I am owned by someone: {{name}} ({{owner}})</li>
+    <li data-template>Library for {{type}}: {{name}}</li>
+</ul>
+</body>
+</html>
