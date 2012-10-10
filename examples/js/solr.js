@@ -20,7 +20,7 @@ SolrJS.prototype = {
 	},
 	
 	remove_fq : function(field, value) {
-		for (var i in this.params.fq) {
+		for (var i = 0 ; i < this.params.fq.length; i++) {
 			if (this.params.fq[i] != undefined && this.params.fq[i].field == field && this.params.fq[i].value == value) {
 				this.params.fq[i] = undefined;
 			}
@@ -29,8 +29,8 @@ SolrJS.prototype = {
 	
 	url : function() {
 		var req = this.h + '&q=' + this.params.q;
-		for (var i in this.params.fq) {
-			if (this.params.fq[i] != undefined) {
+        for (var i = 0 ; i < this.params.fq.length; i++) {
+			if (this.params.fq[i] !== undefined) {
 				req += '&fq=' + this.params.fq[i].field + ':("' + this.params.fq[i].value + '")';
 			}
 		}

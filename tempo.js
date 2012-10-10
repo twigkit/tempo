@@ -46,7 +46,7 @@ var Tempo = (function (tempo) {
                     member_regex += member;
                 }
             }
-            return member_regex + ')' + '(?!\\w)';
+            return member_regex + ')[\\.]?' + '(?!\\w)';
         },
 
         pad: function (val, pad, size) {
@@ -124,7 +124,7 @@ var Tempo = (function (tempo) {
                 if (typeof HTMLElement === "object" ? obj instanceof HTMLElement : obj && typeof obj === "object" && obj.nodeType === 1 && typeof obj.nodeName === "string") {
                     return 'element';
                 }
-                if (obj instanceof jQuery) {
+                if (typeof jQuery !== 'undefined' && obj instanceof jQuery) {
                     return 'jquery';
                 }
                 return "object";
@@ -167,8 +167,13 @@ var Tempo = (function (tempo) {
             return obj3;
         },
         notify: function (listener, event) {
-            if (listener !== undefined) {
-                listener(event);
+            if (listener !== undefined && listener.length > 0) {
+                for (var i = 0; i < listener.length; i++) {
+                    if (event.type === listener[i].type) {
+                        listener[i].listener(event);
+                    }
+                }
+//                listener(event);
             }
         }
     };
@@ -361,7 +366,7 @@ var Tempo = (function (tempo) {
      */
     function Renderer (templates) {
         this.templates = templates;
-        this.listener = undefined;
+        this.listener = [];
         this.started = false;
         this.varRegex = new RegExp(this.templates.var_brace_left + '[ ]?([A-Za-z0-9$\\._\\[\\]]*?)([ ]?\\|[ ]?.*?)?[ ]?' + this.templates.var_brace_right, 'g');
         this.tagRegex = new RegExp(this.templates.tag_brace_left + '[ ]?([\\s\\S]*?)( [\\s\\S]*?)?[ ]?' + this.templates.tag_brace_right + '(([\\s\\S]*?)(?=' + this.templates.tag_brace_left + '[ ]?end\\1[ ]?' + this.templates.tag_brace_right + '))?', 'g');
@@ -370,8 +375,8 @@ var Tempo = (function (tempo) {
     }
 
     Renderer.prototype = {
-        notify: function (listener) {
-            this.listener = listener;
+        when: function (type, listener) {
+            this.listener.push({'type': type, 'listener': listener});
 
             return this;
         },
@@ -398,9 +403,9 @@ var Tempo = (function (tempo) {
 
         _replaceVariables: function (renderer, _tempo, i, str) {
             return str.replace(this.varRegex, function (match, variable, args) {
+
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
-
                     // Handle filters
                     var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
                     if (args !== undefined && args !== '') {
@@ -423,6 +428,7 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
+
                 }
 
                 return '';
@@ -471,11 +477,14 @@ var Tempo = (function (tempo) {
             });
         },
 
-        starting: function () {
+        starting: function (event) {
             // Use this to manually fire the RENDER_STARTING event e.g. just before you issue an AJAX request
             // Useful if you're not calling prepare immediately before render
             this.started = true;
-            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+            if (event === undefined) {
+                event = new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined);
+            }
+            utils.notify(this.listener, event);
 
             return this;
         },
@@ -484,9 +493,11 @@ var Tempo = (function (tempo) {
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = eval('i.' + nested);
-                data._parent = function () {
-                    return i;
-                }();
+                if (data) {
+                    data._parent = function () {
+                        return i;
+                    }();
+                }
                 r.render(data);
             };
         },
@@ -581,7 +592,7 @@ var Tempo = (function (tempo) {
         render: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+                this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
             }
 
             this.clear();
@@ -593,7 +604,7 @@ var Tempo = (function (tempo) {
         append: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+                this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
             }
 
             var fragment = this._createFragment(data);
@@ -601,7 +612,7 @@ var Tempo = (function (tempo) {
                 this.templates.container.appendChild(fragment);
             }
 
-            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
 
             return this;
         },
@@ -609,7 +620,7 @@ var Tempo = (function (tempo) {
         prepend: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
-                utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_STARTING, undefined, undefined));
+                this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
             }
 
             var fragment = this._createFragment(data);
@@ -617,7 +628,7 @@ var Tempo = (function (tempo) {
                 this.templates.container.insertBefore(fragment, this.templates.container.firstChild);
             }
 
-            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, undefined, undefined));
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
 
             return this;
         },
@@ -630,7 +641,7 @@ var Tempo = (function (tempo) {
             'if': function (renderer, i, match, args, body) {
                 var member_regex = utils.memberRegex(i);
 
-                var expr = args[0].replace(/&amp;/g, '&');
+                var expr = args[0].replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
                 expr = expr.replace(new RegExp(member_regex, 'gi'), function (match) {
                     return 'i.' + match;
                 });

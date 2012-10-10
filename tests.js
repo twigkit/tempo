@@ -5,7 +5,7 @@ module('Utils');
 var utils = Tempo.test.utils;
 
 test('memberRegex', function () {
-	equal(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), '(foo|zoo)(?!\\w)', 'Created RegEx testing for object members');
+	equal(utils.memberRegex({ 'foo' : 'bar', 'zoo' : 'doo' }), '(foo|zoo)[\\.]?(?!\\w)', 'Created RegEx testing for object members');
 });
 
 test('pad', function () {
@@ -107,7 +107,7 @@ test('date', function () {
 });
 
 test('filters member regex', function () {
-    equal(utils.memberRegex(filters), '(truncate|format|upper|lower|trim|replace|append|prepend|join|default|date)(?!\\w)', 'Regex of all filter names');
+    equal(utils.memberRegex(filters), '(truncate|format|upper|lower|trim|replace|append|prepend|join|default|date)[\\.]?(?!\\w)', 'Regex of all filter names');
 });
 
 /*!
