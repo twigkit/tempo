@@ -173,7 +173,6 @@ var Tempo = (function (tempo) {
                         listener[i].listener(event);
                     }
                 }
-//                listener(event);
             }
         }
     };
