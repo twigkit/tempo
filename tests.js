@@ -99,7 +99,7 @@ test('date', function () {
 	var date = new Date(1283359805000);
 	equal(filters.date(undefined, []), '', 'Undefined date');
 	equal(filters.date(date, ['localedate']), '1 September 2010', 'Date to localedate');
-	equal(filters.date(date, ['localetime']), '17:50:05 GMT+01:00', 'Date to localetime');
+	equal(filters.date(date, ['localetime']), '17:50:05 BST', 'Date to localetime');
 	equal(filters.date(date, ['date']), 'Wed Sep 01 2010', 'Date to date');
 	equal(filters.date(date, ['time']), '17:50:05 GMT+0100 (BST)', 'Date to localetime');
 	equal(filters.date(date, ['YYYY YY MMMM MMM MM M EEEE EEE E DD D HH H mm m ss s SSS S a']), '2010 10 September Sep 09 9 Wednesday Wed 3 01 1 17 17 50 50 05 5 000 0 PM', 'Date to formatted with pattern');
