@@ -737,7 +737,7 @@ var Tempo = (function (tempo) {
                 if (value !== undefined && args.length >= 1 && args.length <= 2) {
                     var date = new Date(value);
                     var format = args[0];
-                    var isUTC = (args.length === 2 && args[1] === "UTC");
+                    var isUTC = (args.length === 2 && args[1] === 'UTC');
                     if (format === 'localedate') {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
