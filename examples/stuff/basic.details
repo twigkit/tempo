@@ -1,5 +1,4 @@
-Basic Tempo demo with no external dependencies.
-
+/*
 ---
 name: Basic
 description: Basic Tempo demo with no external dependencies.
@@ -8,3 +7,4 @@ authors:
 resources:
   - http://tempojs.com/tempo2.min.js
 ...
+*/
