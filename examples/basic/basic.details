@@ -1,12 +1,10 @@
-Everything before the line containing only '---' will not be parsed
+Basic Tempo demo with no external dependencies.
 
 ---
- name: The Name of the Demo
- description: Some description, please keep it in one line
- authors:
-   - John Doe
-   - Jan Wisniewski
- resources:
-   - http://some.url.com/some/file.js
-   - http://other.url.com/other_filename.css
- normalize_css: no
+name: Basic
+description: Basic Tempo demo with no external dependencies.
+authors:
+  - H. Stefan Olafsson
+resources:
+  http://tempojs.com/tempo2.min.js
+...
