@@ -1,7 +1,7 @@
 /*
 ---
-name: Basic
-description: Basic Tempo demo with no external dependencies.
+name: Simple Demo
+description: Simple Tempo demo with no external dependencies.
 authors:
   - H. Stefan Olafsson
 resources:
