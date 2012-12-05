@@ -18,4 +18,6 @@ var data = [
 ];
 
 // Render
-Tempo.prepare('marx-brothers').render(data);
+$(document).ready( function () {
+    Tempo.prepare('marx-brothers').render(data);
+});
