@@ -174,6 +174,19 @@ var Tempo = (function (tempo) {
                     }
                 }
             }
+        },
+        container: function(container) {
+            if (utils.typeOf(container) === 'string') {
+                if (container === '*') {
+                    container = _window.document.getElementsByTagName('html')[0];
+                } else {
+                    container = _window.document.getElementById(container);
+                }
+            } else if (utils.typeOf(container) === 'jquery' && container.length > 0) {
+                container = container[0];
+            }
+
+            return container;
         }
     };
 
@@ -588,6 +601,14 @@ var Tempo = (function (tempo) {
             return null;
         },
 
+        in: function (target) {
+            if (target !== undefined) {
+                this.templates.container = utils.container(target);
+            }
+
+            return this;
+        },
+
         render:function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
@@ -848,15 +869,7 @@ var Tempo = (function (tempo) {
      * clearing afterwards.
      */
     tempo.prepare = function (container, params, callback) {
-        if (utils.typeOf(container) === 'string') {
-            if (container === '*') {
-                container = _window.document.getElementsByTagName('html')[0];
-            } else {
-                container = _window.document.getElementById(container);
-            }
-        } else if (utils.typeOf(container) === 'jquery' && container.length > 0) {
-            container = container[0];
-        }
+        container = utils.container(container);
 
         var templates = new Templates(params);
         if (callback !== undefined) {

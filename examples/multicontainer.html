@@ -1,0 +1,46 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data_1 = [
+            {"type":'gold'}
+        ];
+
+        var data_2 = [
+            {"type":'silver'}
+        ];
+
+        var data_3 = [
+            {"type":'bronze'}
+        ];
+
+        $(document).ready(function () {
+            var template = Tempo.prepare('data_1');
+            template.render(data_1);
+            template.in('data_2').render(data_2);
+            template.in($('#data_3')).render(data_3);
+            // Note that in(elem) reassigns template to new container
+            template.append({"type":'iron'});
+        });
+    </script>
+</head>
+<body>
+<h1>One Template - Multiple Containers</h1>
+
+<h2>data_1</h2>
+<ul id="data_1">
+    <li data-template>{{type}}</li>
+</ul>
+
+<h2>data_2</h2>
+<ul id="data_2"></ul>
+
+<h2>data_3</h2>
+<ul id="data_3"></ul>
+
+</body>
+</html>
