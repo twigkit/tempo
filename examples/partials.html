@@ -1,0 +1,48 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born':'March 21, 1887', 'actor':true, 'solo_endeavours':[
+                {'title':'Papa Romani'}
+            ]},
+            {'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born':'November 23, 1888', 'actor':true, 'solo_endeavours':[
+                {'title':'Too Many Kisses', 'rating':'favourite'},
+                {'title':'Stage Door Canteen'}
+            ]},
+            {'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born':'October 2, 1890', 'actor':true, 'solo_endeavours':[
+                {'title':'Copacabana'},
+                {'title':'Mr. Music', 'rating':'favourite'},
+                {'title':'Double Dynamite'}
+            ]},
+            {'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born':'October 23, 1892'},
+            {'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born':'February 25, 1901', 'actor':true, 'solo_endeavours':[
+                {'title':'A Kiss in the Dark'}
+            ]}
+        ];
+
+        // Render
+        $(document).ready( function () {
+            Tempo.prepare('marx-brothers', {}, function(template) {
+                template.when()
+               template.render(data);
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Partials in Template</h1>
+<ol id="marx-brothers">
+    <li data-template>
+        <div>{{name.first}} {{name.last}}</div>
+        <ul>
+            <li data-template-for="solo_endeavours" data-template-file="partials/movie.html"></li>
+        </ul>
+    </li>
+</ol>
+</body>
+</html>

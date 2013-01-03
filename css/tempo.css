@@ -72,6 +72,9 @@ pre ul,
 .example ul {
   margin-left: 1.5em;
 }
+pre a {
+    text-decoration: none;
+}
 nav ul {
   overflow: hidden;
 }

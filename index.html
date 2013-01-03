@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Tempo :: The tiny JSON rendering engine by TwigKit</title>
@@ -80,8 +80,8 @@
 
 <header id="overview">
     <section id="hero">
-        <h1>Tempo <span class="version" style="font-size: 0.5em;">1.8</span></h1>
-        <p>Tempo is a tiny JSON rendering engine that enables you to craft data templates in pure HTML.</p>
+        <h1>Tempo <span class="version" style="font-size: 0.5em;">2.0</span></h1>
+        <p>Tempo is an easy to use JSON rendering engine that enables you to craft data templates in pure HTML.</p>
         <nav id="actions">
             <ul>
                 <li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
@@ -101,7 +101,7 @@
         <ul id="features">
             <li>Itty-bitty footprint, lightning-fast rendering!</li>
             <li>No dependencies - Use with or without jQuery</li>
-            <li>Supports <a href="#nested-templates">nested</a> and <a href="#conditional-templates">conditional</a> templates</li>
+            <li>Supports <a href="#partial-templates">partial</a>, <a href="#nested-templates">nested</a> and <a href="#conditional-templates">conditional</a> templates</li>
             <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
             <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
             <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
@@ -191,8 +191,8 @@ var data = [
 
 <p>If the container does not contain a default (that is without conditions and not nested) <code>data-template</code> the entire contents of the container will be considered to represent the template.</p>
 
-<h4>renderer.render()</h4>
-<p>The Tempo.prepare() function returns an instance of a renderer. Once the JSON data is available, run the <code>render(data)</code> function to add the data to the page.</p>
+<h4>template.render()</h4>
+<p>The Tempo.prepare() function returns an instance of a template ready for rendering. Once the JSON data is available, run the <code>render(data)</code> function to add the data to the page.</p>
 
 <h5>data</h5>
 <p class="h5">The JSON <strong>data</strong> to be rendered. You'll first need to perform an AJAX call to the JSON data source (see below).</p>
@@ -203,7 +203,7 @@ Tempo.prepare( <em>element</em> ).render( <em>data</em> );
 Tempo.prepare('marx-brothers').render(data);
 </pre>
 
-<h4>renderer.append()</h4>
+<h4>template.append()</h4>
 <p>Renderer methods all return an instance of the renderer (a la fluent) so you can chain calls to it. The <code>append(data)</code> function will render the data you pass in and append it to the container.</p>
 
 <h5>data</h5>
@@ -212,7 +212,7 @@ Tempo.prepare('marx-brothers').render(data);
 Tempo.prepare('marx-brothers').render( data )<em>.append( more_brothers )</em>;
 </pre>
 
-<h4>renderer.prepend()</h4>
+<h4>template.prepend()</h4>
 <p>The <code>prepend(data)</code> function will render the data you pass in and insert it before others in the container.</p>
 
 <h5>data</h5>
@@ -221,11 +221,29 @@ Tempo.prepare('marx-brothers').render( data )<em>.append( more_brothers )</em>;
 Tempo.prepare('marx-brothers').render( data )<em>.prepend( brothers_we_didnt_know_about )</em>;
 </pre>
 
-<h4>renderer.clear()</h4>
+<h4>template.clear()</h4>
 <p>The <code>clear()</code> function will empty the container, allowing you to render the data again.</p>
 <pre>
 Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 </pre>
+
+<h4>template.in(container)</h4>
+<p>The <code>in(element)</code> function will allow you to render the original template to one or more different containers specified. The method will return a new template on which you can call the other template methods such as <code>render()</code> or <code>append()</code>.</p>
+
+<h5>container</h5>
+<p class="h5">The container to render the template to.</p>
+<h6>Render to different container:</h6>
+<pre>
+Tempo.prepare('marx-brothers')<em>.in('alternative-container')</em>.render( data );
+</pre>
+<h6>Reuse template for multiple different containers:</h6>
+<pre>
+var template = Tempo.prepare('marx-brothers');
+template<em>.in('alternative-container')</em>.render( data_1 );
+template<em>.in('yet-another-alternative-container')</em>.render( data_2 );
+</pre>
+
+
 <a id="html"></a>
 <h3>HTML</h3>
 <h4>data-template</h4>
@@ -305,12 +323,68 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 &lt;li <em>data-template</em>&gt;
     <em>{{nickname}}</em> <em>{{name.last}}</em>
     &lt;ul&gt;
-        &lt;li <em>data-template</em>="solo_endeavours"&gt;<em>{{title}}</em>&lt;/li&gt;
+        &lt;li <em>data-template-for</em>="solo_endeavours"&gt;<em>{{title}}</em>&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/li&gt;
 </pre>
 <div class="example">
     <ol id="marx-brothers_nested">
+        <li>Chico Marx
+            <ul>
+                <li>Papa Romani</li>
+            </ul>
+        </li>
+        <li>Harpo Marx
+            <ul>
+                <li>Too Many Kisses</li>
+                <li>Stage Door Canteen</li>
+            </ul>
+        </li>
+        <li>Groucho Marx
+            <ul>
+                <li>Copacabana</li>
+                <li>Mr. Music</li>
+                <li>Double Dynamite	</li>
+            </ul>
+        </li>
+        <li>Gummo Marx</li>
+        <li>Zeppo Marx
+            <ul>
+                <li>A Kiss in the Dark</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<p>You can (recursively) refer to parent objects within a nested template using the <code>_parent</code> variable.</p>
+<pre>
+&lt;li <em>data-template-for</em>="solo_endeavours"&gt;{{<em>_parent</em>.name.first}} acted in {{title}}&lt;/li&gt;
+</pre>
+
+<a id="partial-templates"></a>
+<h4>Nested Templates as Partial Template Files</h4>
+<p>Tempo supports separating more complex nested templates in to master and partial template files. Partials templates are loaded on demand from the server and do require you to use the alternative asynchronous pattern:</p>
+<h6>JavaScript:</h6>
+<pre>
+Tempo.prepare('marx-brothers'<em>, <a href="#configurable-syntax">{}</a>, function(template)</em> {
+   <em>template.render(data);</em>
+});
+</pre>
+<h6>Template:</h6>
+<pre>
+&lt;li data-template&gt;
+    {{name.first}} {{name.last}}
+    &lt;ol&gt;
+        &lt;li data-template-for=&quot;solo_endeavours&quot; <em>data-template-file=</em>&quot;partials/movie.html&quot;&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/li&gt;
+</pre>
+<h6>Partial ('partials/movie.html'):</h6>
+<pre>
+{{title}}
+</pre>
+<div class="example">
+    <ol id="marx-brothers_partial">
         <li>Chico Marx
             <ul>
                 <li>Papa Romani</li>
@@ -360,6 +434,11 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
     </ul>
 </div>
 
+<p>You can define templates based on data member existence as well:</p>
+<pre>
+&lt;li data-template <em>data-has=</em>"friend">{{friend}}&gt;&lt;/li&gt;
+</pre>
+
 <a id="template-fallback"></a>
 <h4>Fallback Template</h4>
 <p>Use the <code>data-template-fallback</code> attribute to identify HTML containers you would like to show if JavaScript is disabled.</p>
@@ -383,16 +462,16 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 <h4>Filter and Formatting Functions</h4>
 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
-<h5><code>{{ field | <em>truncate 25</em> [, 'optional_suffix'] }}</code></h5>
+<h5><code>{{ field | <em>truncate 25</em>[, 'optional_suffix'] }}</code></h5>
 <p class="h5">If the value of this field is longer than 25 characters, then truncate to the length provided. If a second argument is provided then it is used as the suffix instead of the default ellipsis (...).</p>
 
-<h5><code>{{ field | <em>format</em> }}</code></h5>
-<p class="h5">Currently only formats numbers like 100000.25 by adding commas: 100,000.25</p>
+<h5><code>{{ field | <em>format[, numberOfDecimals]</em> }}</code></h5>
+<p class="h5">Currently only formats numbers like 100000.25 by adding commas: 100,000.25. You can optionally specify the number of decimals to use.</p>
 
 <h5><code>{{ field | <em>default 'default value'</em> }}</code></h5>
 <p class="h5">If the field is undefined, or null, then show the default value specified.</p>
 
-<h5><code>{{ field | <em>date 'preset or pattern like HH:mm, DD-MM-YYYY'</em> }}</code></h5>
+<h5><code>{{ field | <em>date 'preset or pattern like HH:mm, DD-MM-YYYY'[, 'UTC']</em> }}</code></h5>
 <p class="h5">Creates a date object from the field value, and formats according to presets, or using a date pattern. Available presets are <code>localedate</code>, <code>localetime</code>, <code>date</code> and <code>time</code>. The following pattern elements are supported:</p>
 <ul class="h5">
     <li><code>YYYY or YY</code>: year as 4 or 2 digits.</li>
@@ -405,7 +484,7 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
     <li><code>SSS or S</code>: milliseconds.</li>
     <li><code>a</code>: AM/PM.</li>
 </ul>
-<p class="h5">If you would like to use any of the format characters verbatim in the pattern then use <code>\</code> to escape: <code>{{ some_date | date '\at HH:mm' }}</code>. In this case the <code>a</code> is not replaced with AM/PM.</p>
+<p class="h5">If you would like to use any of the format characters verbatim in the pattern then use <code>\</code> to escape: <code>{{ some_date | date '\at HH:mm' }}</code>. In this case the <code>a</code> is not replaced with AM/PM. Additionally you can specify whether dates should be handled as UTC.</p>
 
 <h5><code>{{ field | <em>replace 'regex_pattern', 'replacement'</em> }}</code></h5>
 <p class="h5">Replace all occurrences of the pattern (supports regular expressions) with the replacement. Replacement string can contain backreferences. See <a href="examples/twitter.html">Twitter code sample</a> for an example.</p>
@@ -418,6 +497,9 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 
 <h5><code>{{ field | <em>lower</em> }}</code></h5>
 <p class="h5">Change any upper case characters in the value to lower case.</p>
+
+<h5><code>{{ field | <em>titlecase[, 'and for the']</em> }}</code></h5>
+<p class="h5">Format strings to title case, with an optional blacklist of words that should not be titled (unless first in string e.g. 'the last of the mohicans' to 'The Last of the Mohicans'). See <a href="http://jsfiddle.net/gh/get/jquery/1.8/twigkit/tempo/tree/dev-2.0/examples/fiddles/filters/titlecase/" target="_blank">example</a>.</p>
 
 <h5><code>{{ field | <em>append '&amp;nbsp;some suffix'</em> }}</code></h5>
 <p class="h5">If the field value is not empty, then append the string to the value. Helpful if you don't want the suffix to show up in the template if the field is undefined or null. Use &amp;nbsp; if you need before or after the suffix.</p>
@@ -463,6 +545,61 @@ Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 
 <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes, otherwise type is preserved.</p>
 
+
+<h3>Pre-processing and Render Events</h3>
+
+<h4>template.when(type, handler)</h4>
+<p>After preparing a template you can register one or more event listeners by providing a callback function to be notified of events in the lifecycle.</p>
+
+<h5>type</h5>
+<p class="h5">The <strong>type</strong> of the event. Constant values are defined in <code>TempoEvent.Types</code>.</p>
+
+<ul class="h5">
+    <li><code>TempoEvent.Types.RENDER_STARTING</code>: Indicates that rendering has started, or been manually triggered by calling <code>starting()</code> on the renderer object.</li>
+    <li><code>TempoEvent.Types.ITEM_RENDER_STARTING</code>: Indicates that the rendering of a given individual item is starting.</li>
+    <li><code>TempoEvent.Types.ITEM_RENDER_COMPLETE</code>: Indicates that the rendering of a given individual item has completed.</li>
+    <li><code>TempoEvent.Types.RENDER_COMPLETE</code>: Indicates that the rendering of all items is completed.</li>
+</ul>
+
+<h5>handler</h5>
+<p class="h5">The <strong>handler</strong> function to call when the specified event fires.</p>
+
+<p>The event listener will be called with a single argument, a <code>TempoEvent</code> which has the following properties:</p>
+
+<h5>type</h5>
+<p class="h5">The <strong>type</strong> of the event. Constant values are defined in <code>TempoEvent.Types</code>.</p>
+
+<h5>item</h5>
+<p class="h5">The <strong>item</strong> being rendered. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+
+<h5>element</h5>
+<p class="h5">The HTML <strong>element</strong> or template being used for rendering. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
+
+<pre>
+Tempo.prepare('tweets')<em>.when(TempoEvent.Types.RENDER_STARTING, function (event)</em> {
+        $('#tweets').addClass('loading');
+    })<em>.when(TempoEvent.Types.RENDER_COMPLETE, function (event)</em> {
+        $('#tweets').removeClass('loading');
+    }).render(data);
+</pre>
+<h4>starting()</h4>
+<p>In some cases you prepare the templates ahead of calling render. In those cases if you would like to e.g. set loader graphics, call the renderer's <code>starting()</code> method just prior to issuing e.g. a jQuery request. This will fire the <code>ITEM_RENDER_STARTING</code> event.</p>
+
+<p>The following example demonstrates use of both methods above. In this case we prepare the templates, and register our event handler function. The event handler is then notified that the jQuery request is about to be issued (when we manually fire <code>RENDER_STARTING</code> with a call to <code>starting()</code>) adding a CSS class to the container. We are then notified that rendering is complete so we can remove the CSS class.
+
+<pre>
+var twitter = Tempo.prepare('tweets')<em>.when(TempoEvent.Types.RENDER_STARTING, function (event)</em> {
+            $('#tweets').addClass('loading');
+        })<em>.when(TempoEvent.Types.RENDER_COMPLETE, function (event)</em> {
+            $('#tweets').removeClass('loading');
+        });
+twitter.<em>starting</em>();
+$.getJSON(url, function(data) {
+    twitter.render(data.results);
+});
+</pre>
+
+
 <a id="jquery"></a>
 <h3>Using Tempo with jQuery</h3>
 <p>jQuery's <a href="http://api.jquery.com/jQuery.getJSON/">getJSON()</a> method provides an easy means of loading JSON-encoded data from the server using a GET HTTP request.</p>
@@ -492,42 +629,6 @@ $('ol li').live('click', function() {
 <a id="advanced"></a>
 <h3>Advanced Topics</h3>
 
-<h4>renderer.notify(eventlistener)</h4>
-<p>After preparing a template you can register an event listener by providing a callback function to be notified of events in the lifecycle. The event listener will be called with a single argument, a <code>TempoEvent</code> which has the following properties:</p>
-
-<h5>type</h5>
-<p class="h5">The <strong>type</strong> of the event. Constant values are defined in <code>TempoEvent.Types</code>.</p>
-
-<ul class="h5">
-    <li><code>TempoEvent.Types.RENDER_STARTING</code>: Indicates that rendering has started, or been manually triggered by calling <code>starting()</code> on the renderer object.</li>
-    <li><code>TempoEvent.Types.ITEM_RENDER_STARTING</code>: Indicates that the rendering of a given individual item is starting.</li>
-    <li><code>TempoEvent.Types.ITEM_RENDER_COMPLETE</code>: Indicates that the rendering of a given individual item has completed.</li>
-    <li><code>TempoEvent.Types.RENDER_COMPLETE</code>: Indicates that the rendering of all items is completed.</li>
-</ul>
-
-<h5>item</h5>
-<p class="h5">The <strong>item</strong> being rendered. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
-
-<h5>element</h5>
-<p class="h5">The HTML <strong>element</strong> or template being used for rendering. This is only available for the <code>ITEM_RENDER_STARTING</code> and <code>ITEM_RENDER_COMPLETE</code> events.</p>
-
-<h4>starting()</h4>
-<p>In some cases you prepare the templates ahead of calling render. In those cases if you would like to e.g. set loader graphics, call the renderer's <code>starting()</code> method just prior to issuing e.g. a jQuery request. This will fire the <code>ITEM_RENDER_STARTING</code> event.</p>
-
-<p>The following example demonstrates use of both methods above. In this case we prepare the templates, and register our event handler function. The event handler is then notified that the jQuery request is about to be issued (when we manually fire <code>RENDER_STARTING</code> with a call to <code>starting()</code>) adding a CSS class to the container. We are then notified that rendering is complete so we can remove the CSS class.
-
-<pre>
-var twitter = Tempo.prepare('tweets').<em>notify</em>( function (event) {
-    if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
-        $('#tweets').toggleClass('loading');
-    }
-});
-twitter.<em>starting</em>();
-$.getJSON(url, function(data) {
-    twitter.render(data.results);
-});
-</pre>
-
 <a id="configurable-syntax"></a>
 <h4>Configuring the surrounding brace syntax</h4>
 <p>
@@ -545,6 +646,7 @@ Tempo.prepare(&#x27;marx-brothers&#x27;, <em>{&#x27;var_braces&#x27; : &#x27;\\[
     &lt;li data-template&gt;<em>[[nickname]]</em> is <em>[? if nickname == 'Groucho' ?]</em>grouchy<em>[? else ?]</em>happy<em>[? endif ?]</em>!&lt;/li&gt;
 &lt;/ol&gt;
 </pre>
+
 <h4>Tempo Renderer Information - the <code>_tempo</code> variable</h4>
 <p>You can access information about the rendering process via the <code>_tempo</code> variable.</p>
 
@@ -560,6 +662,7 @@ Tempo.prepare(&#x27;marx-brothers&#x27;, <em>{&#x27;var_braces&#x27; : &#x27;\\[
 <pre>
 &lt;a href=&quot;#&quot; onclick=&quot;alert(<em>__._tempo.index</em>); return false;&quot;&gt;{{name.last}}&lt;/a&gt;
 </pre>
+
 </section>
 <aside id="advert">
     <div class="ad">
