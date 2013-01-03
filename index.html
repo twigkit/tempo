@@ -227,20 +227,20 @@ Tempo.prepare('marx-brothers').render( data )<em>.prepend( brothers_we_didnt_kno
 Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 </pre>
 
-<h4>template.in(container)</h4>
-<p>The <code>in(element)</code> function will allow you to render the original template to one or more different containers specified. The method will return a new template on which you can call the other template methods such as <code>render()</code> or <code>append()</code>.</p>
+<h4>template.into(container)</h4>
+<p>The <code>into(element)</code> function will allow you to render the original template to one or more different containers specified. The method will return a new template on which you can call the other template methods such as <code>render()</code> or <code>append()</code>.</p>
 
 <h5>container</h5>
 <p class="h5">The container to render the template to.</p>
 <h6>Render to different container:</h6>
 <pre>
-Tempo.prepare('marx-brothers')<em>.in('alternative-container')</em>.render( data );
+Tempo.prepare('marx-brothers')<em>.into('alternative-container')</em>.render( data );
 </pre>
 <h6>Reuse template for multiple different containers:</h6>
 <pre>
 var template = Tempo.prepare('marx-brothers');
-template<em>.in('alternative-container')</em>.render( data_1 );
-template<em>.in('yet-another-alternative-container')</em>.render( data_2 );
+template<em>.into('alternative-container')</em>.render( data_1 );
+template<em>.into('yet-another-alternative-container')</em>.render( data_2 );
 </pre>
 
 
