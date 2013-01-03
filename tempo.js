@@ -469,7 +469,7 @@ var Tempo = (function (tempo) {
 
         _applyAttributeSetters:function (renderer, item, str) {
             // Adding a space in front of first part to make sure I don't get partial matches
-            return str.replace(/( [A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+            return str.replace(/(\b[A-z0-9]+?)(?:="[^"']*?"[^>]*?)data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }

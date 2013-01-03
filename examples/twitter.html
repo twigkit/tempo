@@ -80,18 +80,18 @@
 	</style>
 	
 	<!-- Import Tempo -->
-	<script type="text/javascript" src="../tempo.min.js"></script>
+	<script type="text/javascript" src="../tempo.js"></script>
 	
 	<!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
-			var twitter = Tempo.prepare('tweets').notify(function(event) {
-				if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
-					$('ol').toggleClass('loading');
-				}
-			});
+			var twitter = Tempo.prepare('tweets').when(TempoEvent.Types.RENDER_STARTING, function(event) {
+                $('ol').toggleClass('loading');
+			}).when(TempoEvent.Types.RENDER_COMPLETE, function(event) {
+                $('ol').toggleClass('loading');
+            });
 			twitter.starting();
 			$.getJSON("http://search.twitter.com/search.json?q='groucho'&rpp=10&callback=?", function(data) {
 				twitter.render(data.results);
@@ -115,7 +115,7 @@
 <!-- Tweets -->
 <ol id="tweets">
 	<li class="row" data-template style="display: none;">
-		<div class="column grid_4 user">
+		<div class="column grid_4 user" title="user" data-title="{{from_user}}">
 			<img src="images/tweeter.png" data-src="{{profile_image_url}}" height="48" width="48" />
 			<h3>{{from_user}}</h3>
 		</div>

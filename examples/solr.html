@@ -105,19 +105,22 @@
     }
 
     ol li p {
-        margin: 0;
         font-size: 0.9em;
         color: #999;
+    }
+
+    ol li p.byline {
+        margin: 0;
         text-transform: uppercase;
     }
 
-    ol li p a {
+    ol li p.byline a {
         color: #999;
         text-decoration: none;
         border-bottom: 1px solid #ccc;
     }
 
-    ol li p a:hover {
+    ol li p.byline a:hover {
         color: #333;
     }
 
@@ -175,7 +178,7 @@
 
 <script type="text/javascript">
 
-    var solrjs = new SolrJS('http://data.twigkit.com/solr-gutenberg/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=subject&facet.field=language&facet.mincount=1');
+    var solrjs = new SolrJS('http://data.twigkit.com/solr-news/select/?version=2.2&start=0&rows=10&wt=json&json.nl=arrarr&facet=true&facet.limit=10&facet.field=category&facet.field=source&facet.mincount=1');
     var responseTemplate, breadcrumbsTemplate;
 
     $(document).ready(function() {
@@ -250,7 +253,7 @@
         </div>
         <div class="column grid_6">
             <form id="search" onsubmit="solrjs.reset(); query($('#q').val()); return false;">
-                <input type="search" name="q" id="q" placeholder="Search for old books">
+                <input type="search" name="q" id="q" placeholder="Search news!">
                 <input type="submit" value="Search" id="submit">
             </form>
         </div>
