@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Tempo :: The tiny JSON rendering engine by TwigKit</title>
+    <title>Tempo :: The powerful JSON rendering engine by TwigKit</title>
     <link rel="stylesheet" href="css/tempo.css" type="text/css" media="screen">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
     <script type="text/javascript" src="tempo.js"></script>
@@ -81,12 +81,12 @@
 <header id="overview">
     <section id="hero">
         <h1>Tempo <span class="version" style="font-size: 0.5em;">2.0</span></h1>
-        <p>Tempo is an easy to use JSON rendering engine that enables you to craft data templates in pure HTML.</p>
+        <p>Tempo is an easy to use JavaScript template engine that enables you to craft data templates in pure HTML.</p>
         <nav id="actions">
             <ul>
                 <li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
                 <li><a href="examples/twitter">Twitter Example</a></li>
-                <li><a href="examples/solr">Solr Example</a></li>
+                <li><a href="examples/solr/">Solr Example</a></li>
                 <!-- <li><a href="examples/cloudsearch">CloudSearch Example</a></li> -->
                 <li><a href="https://github.com/twigkit/tempo">GitHub</a></li>
             </ul>
@@ -94,7 +94,7 @@
         <h3>Why use Tempo?</h3>
         <ul id="why">
             <li>Clear separation of concerns: no HTML in your JavaScript files, and no JavaScript in your HTML</li>
-            <li>It makes working with AJAX/JSON content a piece of cake</li>
+            <li>Makes working with AJAX/JSON content a piece of cake</li>
             <li>Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+</li>
         </ul>
         <h3>Key Features</h3>
@@ -102,7 +102,7 @@
             <li>Itty-bitty footprint, lightning-fast rendering!</li>
             <li>No dependencies - Use with or without jQuery</li>
             <li>Supports <a href="#partial-templates">partial</a>, <a href="#nested-templates">nested</a> and <a href="#conditional-templates">conditional</a> templates</li>
-            <li>Support for <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
+            <li>Support for <a href="#preprocessing">pre-processing</a>, <a href="#filter-functions">filter and formatting</a> functions and safe <a href="#attribute-setters">attribute setters</a></li>
             <li>Variable <a href="#inline-injection">injection</a> for inline JavaScript expressions</li>
             <li>Degrades <a href="#template-fallback">gracefully</a> if JavaScript is not enabled</li>
             <li>Configurable <a href="#configurable-syntax">syntax</a> for greater compatibility</li>
@@ -545,7 +545,7 @@ Tempo.prepare('marx-brothers'<em>, <a href="#configurable-syntax">{}</a>, functi
 
 <p>At render time the accessor variable will be replaced by the object it references. If the object is a <string>string</string> then its value will be wrapped in single quotes, otherwise type is preserved.</p>
 
-
+<a id="preprocessing"></a>
 <h3>Pre-processing and Render Events</h3>
 
 <h4>template.when(type, handler)</h4>
@@ -582,6 +582,9 @@ Tempo.prepare('tweets')<em>.when(TempoEvent.Types.RENDER_STARTING, function (eve
         $('#tweets').removeClass('loading');
     }).render(data);
 </pre>
+
+<p>Even though it's possible to modify the DOM via event handlers it's worth keeping in mind that Tempo is built on the premise of keeping the templates as semantic and readable as possible. We would therefore advise that you limit the use or pre-processing to data cleansing and restructuring as opposed to template modifications.</p>
+
 <h4>starting()</h4>
 <p>In some cases you prepare the templates ahead of calling render. In those cases if you would like to e.g. set loader graphics, call the renderer's <code>starting()</code> method just prior to issuing e.g. a jQuery request. This will fire the <code>ITEM_RENDER_STARTING</code> event.</p>
 
@@ -598,7 +601,6 @@ $.getJSON(url, function(data) {
     twitter.render(data.results);
 });
 </pre>
-
 
 <a id="jquery"></a>
 <h3>Using Tempo with jQuery</h3>
@@ -679,7 +681,7 @@ Tempo.prepare(&#x27;marx-brothers&#x27;, <em>{&#x27;var_braces&#x27; : &#x27;\\[
     <ul>
         <li class="download"><a href="https://github.com/twigkit/tempo/zipball/master">Download</a></li>
         <li><a href="examples/twitter.html">Twitter Example</a></li>
-        <li><a href="examples/solr">Solr Example</a></li>
+        <li><a href="examples/solr/">Solr Example</a></li>
         <li><a href="https://github.com/twigkit/tempo">View on GitHub</a></li>
     </ul>
 </nav>
