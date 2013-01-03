@@ -613,7 +613,7 @@ var Tempo = (function (tempo) {
             return null;
         },
 
-        in:function (target) {
+        into:function (target) {
             if (target !== undefined) {
                 this.templates.container = utils.container(target);
             }
