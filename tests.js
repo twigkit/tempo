@@ -67,6 +67,13 @@ test('lower', function () {
 	equal(filters.lower('hELLO'), 'hello', 'Lowercase filter');
 });
 
+test('titlecase', function () {
+    equal(filters.titlecase('snow white and the seven dwarfs', ['and the']), 'Snow White and the Seven Dwarfs', 'Capitalize filter with blacklist values');
+    equal(filters.titlecase('the last of the mohicans', ['the of']), 'The Last of the Mohicans', 'Capitalize filter with first word in blacklist');
+    equal(filters.titlecase('FIRE bug'), 'FIRE Bug', 'Ignoring capitalized words');
+});
+
+
 test('trim', function () {
 	equal(filters.trim('  hello  '), 'hello', 'Trimmed whitespace');
 	equal(filters.trim('hello'), 'hello', 'No whitespace to trim');

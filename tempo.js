@@ -175,7 +175,7 @@ var Tempo = (function (tempo) {
                 }
             }
         },
-        container: function(container) {
+        container:function (container) {
             if (utils.typeOf(container) === 'string') {
                 if (container === '*') {
                     container = _window.document.getElementsByTagName('html')[0];
@@ -187,6 +187,18 @@ var Tempo = (function (tempo) {
             }
 
             return container;
+        },
+        arrayContains:function (array, obj) {
+            if (!Array.prototype.indexOf) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return array.indexOf(obj) > -1;
+            }
         }
     };
 
@@ -601,7 +613,7 @@ var Tempo = (function (tempo) {
             return null;
         },
 
-        in: function (target) {
+        in:function (target) {
             if (target !== undefined) {
                 this.templates.container = utils.container(target);
             }
@@ -717,6 +729,18 @@ var Tempo = (function (tempo) {
             },
             'lower':function (value, args) {
                 return value.toLowerCase();
+            },
+            'titlecase':function (value, args) {
+                var blacklist = [];
+                if (args !== undefined && args.length == 1) {
+                    blacklist = args[0].split(' ');
+                }
+                return value.replace(/\w[a-z]\S*/g, function (m, i) {
+                    if (blacklist.length === 0 || !(utils.arrayContains(blacklist, m) && i > 0)) {
+                        return m.charAt(0).toUpperCase() + m.substr(1).toLowerCase();
+                    }
+                    return m;
+                });
             },
             'trim':function (value, args) {
                 return utils.trim(value);

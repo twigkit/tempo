@@ -1,0 +1,25 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {'name': 'snow white and the seven dwarfs'},
+            {'name': 'the last of the mohicans'}
+        ];
+
+        // Render
+        $(document).ready( function () {
+            Tempo.prepare('list').render(data);
+        });
+    </script>
+</head>
+<body>
+
+<ol id="list">
+    <li data-template>{{name | titlecase 'and the of'}}</li>
+</ol>
+
+</body>
+</html>
