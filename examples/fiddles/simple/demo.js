@@ -1,23 +1,28 @@
 var data = [
-    {'name':{'first':'Leonard', 'last':'Marx'}, 'nickname':'Chico', 'born':'March 21, 1887', 'actor':true, 'solo_endeavours':[
-        {'title':'Papa Romani'}
-    ]},
-    {'name':{'first':'Adolph', 'last':'Marx'}, 'nickname':'Harpo', 'born':'November 23, 1888', 'actor':true, 'solo_endeavours':[
-        {'title':'Too Many Kisses', 'rating':'favourite'},
-        {'title':'Stage Door Canteen'}
-    ]},
-    {'name':{'first':'Julius Henry', 'last':'Marx'}, 'nickname':'Groucho', 'born':'October 2, 1890', 'actor':true, 'solo_endeavours':[
-        {'title':'Copacabana'},
-        {'title':'Mr. Music', 'rating':'favourite'},
-        {'title':'Double Dynamite'}
-    ]},
-    {'name':{'first':'Milton', 'last':'Marx'}, 'nickname':'Gummo', 'born':'October 23, 1892'},
-    {'name':{'first':'Herbert', 'last':'Marx'}, 'nickname':'Zeppo', 'born':'February 25, 1901', 'actor':true, 'solo_endeavours':[
-        {'title':'A Kiss in the Dark'}
-    ]}
+    {"type":'java', "name":'guice'},
+    {"type":'javascript', "name":'jQuery'},
+    {"type":'java', "name":'guice', "owner":'Google'},
+    {"type":'php', "name":'django'}
 ];
 
-// Render
-$(document).ready( function () {
-    Tempo.prepare('marx-brothers').render(data);
-});
+$(document).ready(
+    setTimeout(function () {
+        Tempo.prepare($('ul'), {}, function (template) {
+            var i = 0;
+
+            template.when(TempoEvent.Types.RENDER_STARTING,function (event) {
+                $(event.element).before('<h2>Before</h2>');
+
+            }).when(TempoEvent.Types.ITEM_RENDER_STARTING,function (event) {
+                    if (event.item.type == 'javascript') {
+                        event.item.name += ' is fun!';
+                    }
+                    event.item.even = i++ % 2 ? 'even' : 'odd';
+
+                }).when(TempoEvent.Types.RENDER_COMPLETE,function (event) {
+                    $(event.element).after('<h2>After</h2>');
+
+                }).render(data);
+        });
+    }, 2500)
+);
