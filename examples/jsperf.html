@@ -1,0 +1,44 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = {
+            header:"Header",
+            header2:"Header2",
+            header3:"Header3",
+            header4:"Header4",
+            header5:"Header5",
+            header6:"Header6",
+            list:['1000000000', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        };
+
+        $(document).ready(function () {
+            var t = new Date();
+            var tempo = Tempo.prepare('tempo');
+            for (var i = 0; i < 250; i++) {
+                tempo.render(data);
+            }
+            console.log(new Date() - t);
+        });
+    </script>
+</head>
+<body>
+<h1>Hello</h1>
+
+<div id="tempo" data-template>
+    <h1 class='header'>{{header}}</h1>
+    <h2 class='header2'>{{header2}}</h2>
+    <h3 class='header3'>{{header3}}</h3>
+    <h4 class='header4'>{{header4}}</h4>
+    <h5 class='header5'>{{header5}}</h5>
+    <h6 class='header6'>{{header6}}</h6>
+    <ul>
+        <li data-template-for="list" class='item'>{{.}}</li>
+    </ul>
+</div>
+</body>
+</html>

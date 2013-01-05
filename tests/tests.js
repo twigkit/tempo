@@ -114,7 +114,7 @@ test('date', function () {
 });
 
 test('filters member regex', function () {
-    equal(utils.memberRegex(filters), '(truncate|format|upper|lower|trim|replace|append|prepend|join|default|date)[\\.]?(?!\\w)', 'Regex of all filter names');
+    equal(utils.memberRegex(filters), '(truncate|format|upper|lower|titlecase|trim|replace|append|prepend|join|default|date)[\\.]?(?!\\w)', 'Regex of all filter names');
 });
 
 /*!
@@ -144,5 +144,6 @@ test('_replaceVariables', function () {
 });
 
 test('_replaceObjects', function () {
-    equal(renderer._replaceObjects(renderer, {}, ['foo', 'bar'], '<a href="#" onclick="alert(__.this[0]); return false;">{{[0]}}</a>'), '<a href="#" onclick="alert(\'foo\'); return false;">{{[0]}}</a>');
+    var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(['foo', 'bar']) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g')
+    equal(renderer._replaceObjects(renderer, {}, ['foo', 'bar'], '<a href="#" onclick="alert(__.this[0]); return false;">{{[0]}}</a>', regex), '<a href="#" onclick="alert(\'foo\'); return false;">{{[0]}}</a>');
 });

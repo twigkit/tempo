@@ -394,7 +394,7 @@ var Tempo = (function (tempo) {
         this.started = false;
         this.varRegex = new RegExp(this.templates.var_brace_left + '[ ]?([A-Za-z0-9$\\._\\[\\]]*?)([ ]?\\|[ ]?.*?)?[ ]?' + this.templates.var_brace_right, 'g');
         this.tagRegex = new RegExp(this.templates.tag_brace_left + '[ ]?([\\s\\S]*?)( [\\s\\S]*?)?[ ]?' + this.templates.tag_brace_right + '(([\\s\\S]*?)(?=' + this.templates.tag_brace_left + '[ ]?end\\1[ ]?' + this.templates.tag_brace_right + '))?', 'g');
-
+        this.filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(this.filters) + ')', 'g');
         return this;
     }
 
@@ -431,9 +431,8 @@ var Tempo = (function (tempo) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
                     // Handle filters
-                    var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
                     if (args !== undefined && args !== '') {
-                        var filters = utils.trim(utils.trim(args).substring(1)).split(filterSplitter);
+                        var filters = utils.trim(utils.trim(args).substring(1)).split(this.filterSplitter);
                         for (var p = 0; p < filters.length; p++) {
                             var filter = utils.trim(filters[p]);
                             var filter_args = [];
@@ -459,8 +458,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        _replaceObjects:function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+        _replaceObjects:function (renderer, _tempo, i, str, regex) {
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -527,12 +525,17 @@ var Tempo = (function (tempo) {
         },
 
         renderItem:function (renderer, _tempo_info, i, fragment) {
+
+            var memberRegex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             var template = renderer.templates.templateFor(i);
             var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
 
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
                 utils.removeAttr(template, 'data-template-for');
+            }
+            if (utils.hasAttr(template, 'data-template-file')) {
+                utils.removeAttr(template, 'data-template-file');
             }
 
             if (template && i) {
@@ -559,7 +562,7 @@ var Tempo = (function (tempo) {
                 html = this._replaceVariables(this, tempo_info, i, html);
 
                 // JavaScript objects
-                html = this._replaceObjects(this, tempo_info, i, html);
+                html = this._replaceObjects(this, tempo_info, i, html, memberRegex);
 
                 // Template class attribute
                 if (template.getAttribute('class')) {
