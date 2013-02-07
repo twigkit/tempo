@@ -426,13 +426,14 @@ var Tempo = (function (tempo) {
         },
 
         _replaceVariables:function (renderer, _tempo, i, str) {
+            var self = this;
             return str.replace(this.varRegex, function (match, variable, args) {
 
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
                     // Handle filters
                     if (args !== undefined && args !== '') {
-                        var filters = utils.trim(utils.trim(args).substring(1)).split(this.filterSplitter);
+                        var filters = utils.trim(utils.trim(args).substring(1)).split(self.filterSplitter);
                         for (var p = 0; p < filters.length; p++) {
                             var filter = utils.trim(filters[p]);
                             var filter_args = [];
