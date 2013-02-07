@@ -551,6 +551,13 @@ var Tempo = (function (tempo) {
                         }
                     }
                 }
+
+                // Processing template element attributes
+                for (var a = 0; a < template.attributes.length; a++) {
+                    var attr = template.attributes[a];
+                    attr.value = this._replaceVariables(this, tempo_info, i, attr.value);
+                }
+
                 // Dealing with HTML as a String from now on (to be reviewed)
                 // Attribute values are escaped in FireFox so making sure there are no escaped tags
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
@@ -563,16 +570,6 @@ var Tempo = (function (tempo) {
 
                 // JavaScript objects
                 html = this._replaceObjects(this, tempo_info, i, html, memberRegex);
-
-                // Template class attribute
-                if (template.getAttribute('class')) {
-                    template.className = this._replaceVariables(this, tempo_info, i, template.className);
-                }
-
-                // Template id
-                if (template.getAttribute('id')) {
-                    template.id = this._replaceVariables(this, tempo_info, i, template.id);
-                }
 
                 html = this._applyAttributeSetters(this, i, html);
 
