@@ -16,7 +16,9 @@ TempoEvent.Types = {
     RENDER_STARTING:'render_starting',
     ITEM_RENDER_STARTING:'item_render_starting',
     ITEM_RENDER_COMPLETE:'item_render_complete',
-    RENDER_COMPLETE:'render_complete'
+    RENDER_COMPLETE:'render_complete',
+    BEFORE_CLEAR:'before_clear',
+    AFTER_CLEAR:'after_clear'
 };
 
 
@@ -667,8 +669,10 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        clear:function (data) {
+        clear:function () {
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.BEFORE_CLEAR, {}, this.templates.container));
             utils.clearContainer(this.templates.container);
+            utils.notify(this.listener, new TempoEvent(TempoEvent.Types.AFTER_CLEAR, {}, this.templates.container));
         },
 
         tags:{

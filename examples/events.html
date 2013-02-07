@@ -1,0 +1,29 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+
+<script>
+    var data = [
+        {'name': 'snow white and the seven dwarfs', 'some': 'foo', 'other': true},
+        {'name': 'the last of the mohicans', 'some': 'bar', 'other': false}
+    ];
+
+    // Render
+    $(document).ready(function () {
+        Tempo.prepare('list').when(TempoEvent.Types.BEFORE_CLEAR,function (event) {
+                    console.log(event.element.innerHTML);
+                }
+        ).when(TempoEvent.Types.AFTER_CLEAR,function (event) {
+                    console.log(event.element.innerHTML);
+                }
+        ).render(data).render(data);
+    });
+</script>
+
+<ol id="list">
+    <li data-template class="{{name}}" data-some="{{some}}" data-other="{% if other %}yes{% else %}no{% endif %}">
+        {{name}}
+    </li>
+</ol>
