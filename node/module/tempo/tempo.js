@@ -174,6 +174,31 @@ var Tempo = (function (tempo) {
                     }
                 }
             }
+        },
+        container:function (container) {
+            if (utils.typeOf(container) === 'string') {
+                if (container === '*') {
+                    container = _window.document.getElementsByTagName('html')[0];
+                } else {
+                    container = _window.document.getElementById(container);
+                }
+            } else if (utils.typeOf(container) === 'jquery' && container.length > 0) {
+                container = container[0];
+            }
+
+            return container;
+        },
+        arrayContains:function (array, obj) {
+            if (!Array.prototype.indexOf) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return array.indexOf(obj) > -1;
+            }
         }
     };
 
@@ -369,7 +394,7 @@ var Tempo = (function (tempo) {
         this.started = false;
         this.varRegex = new RegExp(this.templates.var_brace_left + '[ ]?([A-Za-z0-9$\\._\\[\\]]*?)([ ]?\\|[ ]?.*?)?[ ]?' + this.templates.var_brace_right, 'g');
         this.tagRegex = new RegExp(this.templates.tag_brace_left + '[ ]?([\\s\\S]*?)( [\\s\\S]*?)?[ ]?' + this.templates.tag_brace_right + '(([\\s\\S]*?)(?=' + this.templates.tag_brace_left + '[ ]?end\\1[ ]?' + this.templates.tag_brace_right + '))?', 'g');
-
+        this.filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(this.filters) + ')', 'g');
         return this;
     }
 
@@ -406,9 +431,8 @@ var Tempo = (function (tempo) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
                     // Handle filters
-                    var filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(renderer.filters) + ')', 'g');
                     if (args !== undefined && args !== '') {
-                        var filters = utils.trim(utils.trim(args).substring(1)).split(filterSplitter);
+                        var filters = utils.trim(utils.trim(args).substring(1)).split(this.filterSplitter);
                         for (var p = 0; p < filters.length; p++) {
                             var filter = utils.trim(filters[p]);
                             var filter_args = [];
@@ -434,8 +458,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        _replaceObjects:function (renderer, _tempo, i, str) {
-            var regex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
+        _replaceObjects:function (renderer, _tempo, i, str, regex) {
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -456,7 +479,7 @@ var Tempo = (function (tempo) {
 
         _applyAttributeSetters:function (renderer, item, str) {
             // Adding a space in front of first part to make sure I don't get partial matches
-            return str.replace(/( [A-z0-9]+?)(?==).*?data-\1="(.*?)"/g, function (match, attr, data_value) {
+            return str.replace(/(\b[A-z0-9]+?)(?:="[^"']*?"[^>]*?)data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
                     return attr + '="' + data_value + '"';
                 }
@@ -502,12 +525,17 @@ var Tempo = (function (tempo) {
         },
 
         renderItem:function (renderer, _tempo_info, i, fragment) {
+
+            var memberRegex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             var template = renderer.templates.templateFor(i);
             var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
 
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
                 utils.removeAttr(template, 'data-template-for');
+            }
+            if (utils.hasAttr(template, 'data-template-file')) {
+                utils.removeAttr(template, 'data-template-file');
             }
 
             if (template && i) {
@@ -523,6 +551,14 @@ var Tempo = (function (tempo) {
                         }
                     }
                 }
+
+                // Processing template element attributes
+                for (var a = 0; a < template.attributes.length; a++) {
+                    var attr = template.attributes[a];
+                    attr.value = this._applyTags(this, i, attr.value);
+                    attr.value = this._replaceVariables(this, tempo_info, i, attr.value);
+                }
+
                 // Dealing with HTML as a String from now on (to be reviewed)
                 // Attribute values are escaped in FireFox so making sure there are no escaped tags
                 var html = template.innerHTML.replace(/%7B%7B/g, '{{').replace(/%7D%7D/g, '}}');
@@ -534,17 +570,7 @@ var Tempo = (function (tempo) {
                 html = this._replaceVariables(this, tempo_info, i, html);
 
                 // JavaScript objects
-                html = this._replaceObjects(this, tempo_info, i, html);
-
-                // Template class attribute
-                if (template.getAttribute('class')) {
-                    template.className = this._replaceVariables(this, tempo_info, i, template.className);
-                }
-
-                // Template id
-                if (template.getAttribute('id')) {
-                    template.id = this._replaceVariables(this, tempo_info, i, template.id);
-                }
+                html = this._replaceObjects(this, tempo_info, i, html, memberRegex);
 
                 html = this._applyAttributeSetters(this, i, html);
 
@@ -586,6 +612,14 @@ var Tempo = (function (tempo) {
             }
 
             return null;
+        },
+
+        into:function (target) {
+            if (target !== undefined) {
+                this.templates.container = utils.container(target);
+            }
+
+            return this;
         },
 
         render:function (data) {
@@ -697,6 +731,18 @@ var Tempo = (function (tempo) {
             'lower':function (value, args) {
                 return value.toLowerCase();
             },
+            'titlecase':function (value, args) {
+                var blacklist = [];
+                if (args !== undefined && args.length == 1) {
+                    blacklist = args[0].split(' ');
+                }
+                return value.replace(/\w[a-z]\S*/g, function (m, i) {
+                    if (blacklist.length === 0 || !(utils.arrayContains(blacklist, m) && i > 0)) {
+                        return m.charAt(0).toUpperCase() + m.substr(1).toLowerCase();
+                    }
+                    return m;
+                });
+            },
             'trim':function (value, args) {
                 return utils.trim(value);
             },
@@ -737,7 +783,7 @@ var Tempo = (function (tempo) {
                 if (value !== undefined && args.length >= 1 && args.length <= 2) {
                     var date = new Date(value);
                     var format = args[0];
-                    var isUTC = (args.length === 2 && args[1] === "UTC");
+                    var isUTC = (args.length === 2 && args[1] === 'UTC');
                     if (format === 'localedate') {
                         return date.toLocaleDateString();
                     } else if (format === 'localetime') {
@@ -848,15 +894,7 @@ var Tempo = (function (tempo) {
      * clearing afterwards.
      */
     tempo.prepare = function (container, params, callback) {
-        if (utils.typeOf(container) === 'string') {
-            if (container === '*') {
-                container = _window.document.getElementsByTagName('html')[0];
-            } else {
-                container = _window.document.getElementById(container);
-            }
-        } else if (utils.typeOf(container) === 'jquery' && container.length > 0) {
-            container = container[0];
-        }
+        container = utils.container(container);
 
         var templates = new Templates(params);
         if (callback !== undefined) {

@@ -555,6 +555,7 @@ var Tempo = (function (tempo) {
                 // Processing template element attributes
                 for (var a = 0; a < template.attributes.length; a++) {
                     var attr = template.attributes[a];
+                    attr.value = this._applyTags(this, i, attr.value);
                     attr.value = this._replaceVariables(this, tempo_info, i, attr.value);
                 }
 

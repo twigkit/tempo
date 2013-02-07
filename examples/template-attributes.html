@@ -7,8 +7,8 @@
 
 <script>
     var data = [
-        {'name': 'snow white and the seven dwarfs', 'some': 'foo'},
-        {'name': 'the last of the mohicans', 'some': 'bar'}
+        {'name': 'snow white and the seven dwarfs', 'some': 'foo', 'other': true},
+        {'name': 'the last of the mohicans', 'some': 'bar', 'other': false}
     ];
 
     // Render
@@ -18,5 +18,5 @@
 </script>
 
 <ol id="list">
-    <li data-template class="{{name}}" data-some="{{some}}">{{name}}</li>
+    <li data-template class="{{name}}" data-some="{{some}}" data-other="{% if other %}yes{% else %}no{% endif %}">{{name}}</li>
 </ol>
