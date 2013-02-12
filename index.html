@@ -463,6 +463,15 @@ Tempo.prepare('marx-brothers'<em>, <a href="#configurable-syntax">{}</a>, functi
 <h4>Filter and Formatting Functions</h4>
 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
+<h5><code>{{ field | <em>escape</em> }}</code></h5>
+<p class="h5">Escape HTML characters before rendering to page.</p>
+
+<h5><code>{{ field | <em>encodeURI</em> }}</code></h5>
+<p class="h5">Encodes a Uniform Resource Identifier (URI) by replacing certain characters with escape sequences representing the UTF-8 encoding of the character.</p>
+
+<h5><code>{{ field | <em>decodeURI</em> }}</code></h5>
+<p class="h5">Replaces each escape sequence in an encoded URI with the character that it represents.</p>
+
 <h5><code>{{ field | <em>truncate 25</em>[, 'optional_suffix'] }}</code></h5>
 <p class="h5">If the value of this field is longer than 25 characters, then truncate to the length provided. If a second argument is provided then it is used as the suffix instead of the default ellipsis (...).</p>
 
