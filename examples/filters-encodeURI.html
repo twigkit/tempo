@@ -1,0 +1,18 @@
+
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<script>
+    var data = [
+        {'url': 'http://en.wikipedia.org/wiki/Björk_Guðmundsdóttir'}
+    ];
+
+    window.onload = function() {
+        Tempo.prepare('list').render(data);
+    }
+</script>
+
+<!-- Blacklist argument is optional! -->
+<ol id="list">
+    <li data-template>{{url | encodeURI | decodeURI}} ({{url | encodeURI}})</li>
+</ol>

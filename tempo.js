@@ -457,7 +457,7 @@ var Tempo = (function (tempo) {
 
                 }
 
-                return '';
+                return str;
             });
         },
 
@@ -698,6 +698,21 @@ var Tempo = (function (tempo) {
         },
 
         filters:{
+            'escape': function(value, args) {
+                return value.replace(/[&<>]/g, function(c) {
+                    return {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;'
+                    }[c] || c;
+                });
+            },
+            'encodeURI': function(value, args) {
+                return encodeURI(value);
+            },
+            'decodeURI': function(value, args) {
+                return decodeURI(value);
+            },
             'truncate':function (value, args) {
                 if (value !== undefined) {
                     var len = 0;
