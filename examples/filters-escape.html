@@ -1,0 +1,18 @@
+
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<script>
+    var data = [
+        {'name': 'snow <h1>white</h1> & the seven dwarfs'}
+    ];
+
+    window.onload = function() {
+        Tempo.prepare('list').render(data);
+    }
+</script>
+
+<!-- Blacklist argument is optional! -->
+<ol id="list">
+    <li data-template>{{name | escape}}</li>
+</ol>
