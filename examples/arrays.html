@@ -1,0 +1,20 @@
+
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+
+<script>
+    var data = [['foo', 'bar'], ['one', 'two']];
+
+    // Render
+    window.onload = function () {
+        Tempo.prepare('list').render(data);
+    };
+</script>
+
+<!-- Blacklist argument is optional! -->
+<ol id="list">
+    <li data-template data-from-map>{{.}} {{[0]}}/{{[1]}}</li>
+</ol>

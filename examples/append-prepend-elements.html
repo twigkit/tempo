@@ -1,0 +1,46 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+<script>
+    var first = [
+        { 'id': '1', 'nickname':'Chico', 'born':'March 21, 1887'}
+    ];
+    var second = [
+        { 'id': '2', 'nickname':'Harpo', 'born':'November 23, 1888'}
+    ];
+    var two = [
+        { 'id': '3', 'nickname':'Groucho', 'born':'October 2, 1890'}
+    ];
+    var three = [
+        { 'id': '3', 'nickname':'Groucho', 'born':'October 2, 1890'},
+        { 'id': '4', 'nickname':'Gummo', 'born':'October 23, 1892'}
+    ];
+    var last = [
+        { 'id': '5', 'nickname':'Zeppo', 'born':'February 25, 1901'}
+    ];
+
+    window.onload = function () {
+        // Prepare templates
+        Tempo.prepare('table').render(two).render(three).prepend(second).prepend(first).append(last).clear();
+        Tempo.prepare('table').render(two).render(three).prepend(second).prepend(first).append(last)
+    };
+</script>
+<table id="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nickname</th>
+        <th>Born</th>
+    </tr>
+    </thead>
+    <tr>
+        <td colspan="3" style="border-bottom: 1px solid black">0 - Non-template - Top of container</td>
+    </tr>
+    <tr data-template>
+        <td>{{id}}</td>
+        <td>{{nickname}}</td>
+        <td>{{born}}</td>
+    </tr>
+    <tr>
+        <td colspan="3" style="border-top: 1px solid black">6 - Non-template - Bottom of container</td>
+    </tr>
+</table>
