@@ -38,21 +38,6 @@ var Tempo = (function (tempo) {
      * Helpers
      */
     var utils = {
-        getReferenceElement:function (container, append) {
-            if (container.childNodes.length === 1) {
-                return container.childNodes[1];
-            }
-            if (container !== null && container !== undefined && container.childNodes) {
-                var from = append ? container.childNodes.length : 0;
-                for (var i = from; append ? i >= 0 : i < container.childNodes.length; append ? i-- : i++) {
-                    if (container.childNodes[i] !== undefined && container.childNodes[i].getAttribute !== undefined && (container.childNodes[i].getAttribute('data-from-template') !== null || container.childNodes[i].getAttribute('data-template') !== null)) {
-                        return container.childNodes[i];
-                    }
-                }
-            }
-            return append ? container.lastChild : container.firstChild;
-        },
-
         memberRegex:function (obj) {
             var member_regex = '(';
             for (var member in obj) {
@@ -64,20 +49,6 @@ var Tempo = (function (tempo) {
                 }
             }
             return member_regex + ')[\\.]?' + '(?!\\w)';
-        },
-
-        show:function(element) {
-            if (element.style.removeAttribute) {
-                element.style.removeAttribute('display');
-            } else if (element.style.removeProperty) {
-                element.style.removeProperty('display');
-            } else {
-                element.style.display = 'block';
-            }
-        },
-
-        hide:function(element) {
-            element.style.display = 'none';
         },
 
         pad:function (val, pad, size) {
@@ -98,7 +69,7 @@ var Tempo = (function (tempo) {
         clearContainer:function (el) {
             if (el !== null && el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
-                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-from-template') !== null)) {
+                    if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
                         el.childNodes[i].parentNode.removeChild(el.childNodes[i]);
                     }
                 }
@@ -178,7 +149,6 @@ var Tempo = (function (tempo) {
         removeAttr:function (el, name) {
             if (el !== undefined) {
                 el.setAttribute(name, '');
-                el.removeAttribute(name);
             }
         },
 
@@ -358,11 +328,16 @@ var Tempo = (function (tempo) {
         },
 
         createTemplate:function (node) {
-//            var element = node.cloneNode(true);
-            var element = node;
+            var element = node.cloneNode(true);
 
-            // Hiding the original element
-            utils.hide(node);
+            // Clear display: none;
+            if (element.style.removeAttribute) {
+                element.style.removeAttribute('display');
+            } else if (element.style.removeProperty) {
+                element.style.removeProperty('display');
+            } else {
+                element.style.display = 'block';
+            }
 
             // Remapping container element in case template
             // is deep in container
@@ -556,24 +531,18 @@ var Tempo = (function (tempo) {
         },
 
         renderItem:function (renderer, _tempo_info, i, fragment) {
+
             var memberRegex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             var template = renderer.templates.templateFor(i);
             var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
 
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
-            if (utils.hasAttr(template, 'data-template')) {
-                utils.removeAttr(template, 'data-template');
-            }
             if (utils.hasAttr(template, 'data-template-for')) {
                 utils.removeAttr(template, 'data-template-for');
             }
             if (utils.hasAttr(template, 'data-template-file')) {
                 utils.removeAttr(template, 'data-template-file');
             }
-            template.setAttribute('data-from-template', '');
-
-            // Showing the template in case it was hidden using display: none;
-            utils.show(template);
 
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
@@ -679,9 +648,7 @@ var Tempo = (function (tempo) {
 
             var fragment = this._createFragment(data);
             if (fragment !== null && this.templates.container !== null) {
-//                this.templates.container.appendChild(fragment);
-                var reference = utils.getReferenceElement(this.templates.container, true);
-                this.templates.container.insertBefore(fragment, reference.nextSibling);
+                this.templates.container.appendChild(fragment);
             }
 
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
@@ -697,8 +664,7 @@ var Tempo = (function (tempo) {
 
             var fragment = this._createFragment(data);
             if (fragment !== null) {
-                var reference = utils.getReferenceElement(this.templates.container, false);
-                this.templates.container.insertBefore(fragment, reference);
+                this.templates.container.insertBefore(fragment, this.templates.container.firstChild);
             }
 
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
@@ -736,7 +702,7 @@ var Tempo = (function (tempo) {
 
         filters:{
             'escape': function(value, args) {
-                return value.toString().replace(/[&<>]/g, function(c) {
+                return value.replace(/[&<>]/g, function(c) {
                     return {
                         '&': '&amp;',
                         '<': '&lt;',
@@ -745,10 +711,10 @@ var Tempo = (function (tempo) {
                 });
             },
             'encodeURI': function(value, args) {
-                return encodeURI(value.toString());
+                return encodeURI(value);
             },
             'decodeURI': function(value, args) {
-                return decodeURI(value.toString());
+                return decodeURI(value);
             },
             'truncate':function (value, args) {
                 if (value !== undefined) {

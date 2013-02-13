@@ -28,9 +28,9 @@ test('equalsIgnoreCase', function () {
 
 test('clearContainer', function () {
 	var el = document.getElementById('container');
-	ok($(el).children('li').length === 4, 'Container has three elements (2 templates, one regular)');
+	ok($(el).children('li').length === 3, 'Container has three elements (2 templates, one regular)');
 	utils.clearContainer(el);
-	ok($(el).children('li').length === 3, 'All child elements removed');
+	ok($(el).children('li').length === 2, 'All child elements removed');
 });
 
 
@@ -114,7 +114,7 @@ test('date', function () {
 });
 
 test('filters member regex', function () {
-    equal(utils.memberRegex(filters), '(escape|encodeURI|decodeURI|truncate|format|upper|lower|titlecase|trim|replace|append|prepend|join|default|date)[\\.]?(?!\\w)', 'Regex of all filter names');
+    equal(utils.memberRegex(filters), '(truncate|format|upper|lower|titlecase|trim|replace|append|prepend|join|default|date)[\\.]?(?!\\w)', 'Regex of all filter names');
 });
 
 /*!
@@ -138,7 +138,6 @@ var str = 'Sample {{ $foo }} string.';
 var str2 = 'Sample {{.}} string.';
 
 test('_replaceVariables', function () {
-    var m
     equal(renderer._replaceVariables(renderer, {}, item, str), 'Sample bar string.');
     equal(renderer._replaceVariables(renderer, {}, item, str2), 'Sample [object Object] string.');
     equal(renderer._replaceVariables(renderer, {}, array, str2), 'Sample foo,bar string.');
