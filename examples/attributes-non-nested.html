@@ -1,0 +1,28 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {"type": 'java', "name": 'guice'},
+            {"type": 'javascript', "name": 'jQuery'},
+            {"type": 'java', "name": 'guice', "owner": 'Google'},
+            {"type": 'php', "name": 'django'}
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare("feed").render(data);
+        });
+    </script>
+</head>
+<body>
+
+    <ul id="feed">
+        <li data-template data-label="{{name}}" data-year="2013" style="display: none;">{{_tempo.index}}. {{_tempo.label}} ({{_tempo.year}})</li>
+    </ul>
+
+</body>
+</html>

@@ -13,12 +13,12 @@ function TempoEvent(type, item, element) {
 }
 
 TempoEvent.Types = {
-    RENDER_STARTING:'render_starting',
-    ITEM_RENDER_STARTING:'item_render_starting',
-    ITEM_RENDER_COMPLETE:'item_render_complete',
-    RENDER_COMPLETE:'render_complete',
-    BEFORE_CLEAR:'before_clear',
-    AFTER_CLEAR:'after_clear'
+    RENDER_STARTING: 'render_starting',
+    ITEM_RENDER_STARTING: 'item_render_starting',
+    ITEM_RENDER_COMPLETE: 'item_render_complete',
+    RENDER_COMPLETE: 'render_complete',
+    BEFORE_CLEAR: 'before_clear',
+    AFTER_CLEAR: 'after_clear'
 };
 
 
@@ -38,7 +38,7 @@ var Tempo = (function (tempo) {
      * Helpers
      */
     var utils = {
-        memberRegex:function (obj) {
+        memberRegex: function (obj) {
             var member_regex = '(';
             for (var member in obj) {
                 if (obj.hasOwnProperty(member)) {
@@ -51,22 +51,22 @@ var Tempo = (function (tempo) {
             return member_regex + ')[\\.]?' + '(?!\\w)';
         },
 
-        pad:function (val, pad, size) {
+        pad: function (val, pad, size) {
             while (val.length < size) {
                 val = pad + val;
             }
             return val;
         },
 
-        trim:function (str) {
+        trim: function (str) {
             return str.replace(/^\s*([\S\s]*?)\s*$/, '$1');
         },
 
-        startsWith:function (str, prefix) {
+        startsWith: function (str, prefix) {
             return (str.indexOf(prefix) === 0);
         },
 
-        clearContainer:function (el) {
+        clearContainer: function (el) {
             if (el !== null && el !== undefined && el.childNodes !== undefined) {
                 for (var i = el.childNodes.length; i >= 0; i--) {
                     if (el.childNodes[i] !== undefined && el.childNodes[i].getAttribute !== undefined && (el.childNodes[i].getAttribute('data-template') !== null || el.childNodes[i].getAttribute('data-template-for') !== null)) {
@@ -76,7 +76,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        isNested:function (el) {
+        isNested: function (el) {
             var p = el.parentNode;
             while (p) {
                 if (this.hasAttr(p, 'data-template') || this.hasAttr(p, 'data-template-for')) {
@@ -87,11 +87,11 @@ var Tempo = (function (tempo) {
             return false;
         },
 
-        equalsIgnoreCase:function (str1, str2) {
+        equalsIgnoreCase: function (str1, str2) {
             return str1.toLowerCase() === str2.toLowerCase();
         },
 
-        getElement:function (template, html) {
+        getElement: function (template, html) {
             if (navigator.appVersion.indexOf("MSIE") > -1 && utils.equalsIgnoreCase(template.tagName, 'tr')) {
                 // Wrapping to get around read-only innerHTML
                 var el = _window.document.createElement('div');
@@ -109,7 +109,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        typeOf:function (obj) {
+        typeOf: function (obj) {
             if (typeof(obj) === "object") {
                 if (obj === null) {
                     return "null";
@@ -134,7 +134,7 @@ var Tempo = (function (tempo) {
             return typeof(obj);
         },
 
-        hasAttr:function (el, name) {
+        hasAttr: function (el, name) {
             if (el !== undefined) {
                 if (el.hasAttribute !== undefined) {
                     return el.hasAttribute(name);
@@ -146,13 +146,13 @@ var Tempo = (function (tempo) {
             return false;
         },
 
-        removeAttr:function (el, name) {
+        removeAttr: function (el, name) {
             if (el !== undefined) {
                 el.setAttribute(name, '');
             }
         },
 
-        merge:function (obj1, obj2) {
+        merge: function (obj1, obj2) {
             var obj3 = {};
 
             for (var attr1 in obj1) {
@@ -168,7 +168,7 @@ var Tempo = (function (tempo) {
             }
             return obj3;
         },
-        notify:function (listener, event) {
+        notify: function (listener, event) {
             if (listener !== undefined && listener.length > 0) {
                 for (var i = 0; i < listener.length; i++) {
                     if (event.type === listener[i].type) {
@@ -177,7 +177,7 @@ var Tempo = (function (tempo) {
                 }
             }
         },
-        container:function (container) {
+        container: function (container) {
             if (utils.typeOf(container) === 'string') {
                 if (container === '*') {
                     container = _window.document.getElementsByTagName('html')[0];
@@ -190,7 +190,7 @@ var Tempo = (function (tempo) {
 
             return container;
         },
-        arrayContains:function (array, obj) {
+        arrayContains: function (array, obj) {
             if (!Array.prototype.indexOf) {
                 for (var i = 0; i < this.length; i++) {
                     if (this[i] === obj) {
@@ -240,7 +240,7 @@ var Tempo = (function (tempo) {
     }
 
     Templates.prototype = {
-        load:function (file, callback) {
+        load: function (file, callback) {
             function contents(iframe) {
                 return iframe.contentWindow ? iframe.contentWindow.document.documentElement.innerHTML : iframe.contentDocument ? iframe.contentDocument.body.innerHTML : iframe.document.body.innerHTML;
             }
@@ -268,7 +268,7 @@ var Tempo = (function (tempo) {
                 _window.document.body.appendChild(el);
             }
         },
-        _insertTemplate:function (child, templates, container, callback) {
+        _insertTemplate: function (child, templates, container, callback) {
             return function (el) {
                 utils.removeAttr(child, 'data-template-file');
                 child.innerHTML = el;
@@ -276,7 +276,7 @@ var Tempo = (function (tempo) {
             };
         },
 
-        parse:function (container, callback) {
+        parse: function (container, callback) {
             this.container = container;
             var children = container.getElementsByTagName('*');
 
@@ -327,7 +327,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        createTemplate:function (node) {
+        createTemplate: function (node) {
             var element = node.cloneNode(true);
 
             // Clear display: none;
@@ -375,7 +375,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        templateFor:function (i) {
+        templateFor: function (i) {
             for (var templateName in this.namedTemplates) {
                 if (eval('i.' + templateName)) {
                     return this.namedTemplates[templateName].cloneNode(true);
@@ -402,13 +402,13 @@ var Tempo = (function (tempo) {
     }
 
     Renderer.prototype = {
-        when:function (type, listener) {
-            this.listener.push({'type':type, 'listener':listener});
+        when: function (type, listener) {
+            this.listener.push({'type': type, 'listener': listener});
 
             return this;
         },
 
-        _getValue:function (renderer, variable, i, t) {
+        _getValue: function (renderer, variable, i, t) {
             var val = null;
             // Handling tempo_info variable
             if (utils.startsWith(variable, '_tempo.')) {
@@ -428,7 +428,7 @@ var Tempo = (function (tempo) {
             return val;
         },
 
-        _replaceVariables:function (renderer, _tempo, i, str) {
+        _replaceVariables: function (renderer, _tempo, i, str) {
             var self = this;
             return str.replace(this.varRegex, function (match, variable, args) {
 
@@ -457,14 +457,13 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
-
                 }
 
-                return str;
+                return '';
             });
         },
 
-        _replaceObjects:function (renderer, _tempo, i, str, regex) {
+        _replaceObjects: function (renderer, _tempo, i, str, regex) {
             return str.replace(regex, function (match, variable, args) {
                 try {
                     var val = renderer._getValue(renderer, variable, i, _tempo);
@@ -483,7 +482,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        _applyAttributeSetters:function (renderer, item, str) {
+        _applyAttributeSetters: function (renderer, item, str) {
             // Adding a space in front of first part to make sure I don't get partial matches
             return str.replace(/(\b[A-z0-9]+?)(?:="[^"']*?"[^>]*?)data-\1="(.*?)"/g, function (match, attr, data_value) {
                 if (data_value !== '') {
@@ -493,7 +492,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        _applyTags:function (renderer, item, str) {
+        _applyTags: function (renderer, item, str) {
             return str.replace(this.tagRegex, function (match, tag, args, body) {
                 if (renderer.tags.hasOwnProperty(tag)) {
                     args = args.substring(args.indexOf(' ')).replace(/^[ ]*|[ ]*$/g, '');
@@ -505,7 +504,7 @@ var Tempo = (function (tempo) {
             });
         },
 
-        starting:function (event) {
+        starting: function (event) {
             // Use this to manually fire the RENDER_STARTING event e.g. just before you issue an AJAX request
             // Useful if you're not calling prepare immediately before render
             this.started = true;
@@ -517,7 +516,7 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        _renderNestedItem:function (i, nested) {
+        _renderNestedItem: function (i, nested) {
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = eval('i.' + nested);
@@ -530,12 +529,10 @@ var Tempo = (function (tempo) {
             };
         },
 
-        renderItem:function (renderer, _tempo_info, i, fragment) {
-
+        renderItem: function (renderer, _tempo_info, i, fragment) {
             var memberRegex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             var template = renderer.templates.templateFor(i);
             var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
-
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
                 utils.removeAttr(template, 'data-template-for');
@@ -561,8 +558,10 @@ var Tempo = (function (tempo) {
                 // Processing template element attributes
                 for (var a = 0; a < template.attributes.length; a++) {
                     var attr = template.attributes[a];
-                    attr.value = this._applyTags(this, i, attr.value);
-                    attr.value = this._replaceVariables(this, tempo_info, i, attr.value);
+                    if (attr !== null && attr.specified && attr.value !== null && attr.value.length > 0 && attr.name.match(/style|data-template.*/) === null) {
+                        attr.value = this._applyTags(this, i, attr.value);
+                        attr.value = this._replaceVariables(this, tempo_info, i, attr.value);
+                    }
                 }
 
                 // Dealing with HTML as a String from now on (to be reviewed)
@@ -586,7 +585,7 @@ var Tempo = (function (tempo) {
             }
         },
 
-        _createFragment:function (data) {
+        _createFragment: function (data) {
             if (data) {
                 var tempo_info = {};
                 var fragment = _window.document.createDocumentFragment();
@@ -620,7 +619,7 @@ var Tempo = (function (tempo) {
             return null;
         },
 
-        into:function (target) {
+        into: function (target) {
             if (target !== undefined) {
                 this.templates.container = utils.container(target);
             }
@@ -628,7 +627,7 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        render:function (data) {
+        render: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
@@ -640,7 +639,7 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        append:function (data) {
+        append: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
@@ -656,7 +655,7 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        prepend:function (data) {
+        prepend: function (data) {
             // Check if starting event was manually fired
             if (!this.started) {
                 this.starting(new TempoEvent(TempoEvent.Types.RENDER_STARTING, data, this.templates.container));
@@ -672,14 +671,14 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        clear:function () {
+        clear: function () {
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.BEFORE_CLEAR, {}, this.templates.container));
             utils.clearContainer(this.templates.container);
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.AFTER_CLEAR, {}, this.templates.container));
         },
 
-        tags:{
-            'if':function (renderer, i, match, args, body) {
+        tags: {
+            'if': function (renderer, i, match, args, body) {
                 var member_regex = utils.memberRegex(i);
 
                 var expr = args[0].replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
@@ -700,9 +699,9 @@ var Tempo = (function (tempo) {
             }
         },
 
-        filters:{
-            'escape': function(value, args) {
-                return value.replace(/[&<>]/g, function(c) {
+        filters: {
+            'escape': function (value, args) {
+                return value.toString().replace(/[&<>]/g, function (c) {
                     return {
                         '&': '&amp;',
                         '<': '&lt;',
@@ -710,13 +709,13 @@ var Tempo = (function (tempo) {
                     }[c] || c;
                 });
             },
-            'encodeURI': function(value, args) {
-                return encodeURI(value);
+            'encodeURI': function (value, args) {
+                return encodeURI(value.toString());
             },
-            'decodeURI': function(value, args) {
-                return decodeURI(value);
+            'decodeURI': function (value, args) {
+                return decodeURI(value.toString());
             },
-            'truncate':function (value, args) {
+            'truncate': function (value, args) {
                 if (value !== undefined) {
                     var len = 0;
                     var rep = '...';
@@ -732,7 +731,7 @@ var Tempo = (function (tempo) {
                     return value;
                 }
             },
-            'format':function (value, args) {
+            'format': function (value, args) {
                 if (value !== undefined) {
                     if (args.length === 1) {
                         value = parseFloat(value + '').toFixed(parseInt(args[0], 10));
@@ -748,13 +747,13 @@ var Tempo = (function (tempo) {
                     return x1 + x2;
                 }
             },
-            'upper':function (value, args) {
+            'upper': function (value, args) {
                 return value.toUpperCase();
             },
-            'lower':function (value, args) {
+            'lower': function (value, args) {
                 return value.toLowerCase();
             },
-            'titlecase':function (value, args) {
+            'titlecase': function (value, args) {
                 var blacklist = [];
                 if (args !== undefined && args.length == 1) {
                     blacklist = args[0].split(' ');
@@ -766,34 +765,34 @@ var Tempo = (function (tempo) {
                     return m;
                 });
             },
-            'trim':function (value, args) {
+            'trim': function (value, args) {
                 return utils.trim(value);
             },
-            'replace':function (value, args) {
+            'replace': function (value, args) {
                 if (value !== undefined && args.length === 2) {
                     return value.replace(new RegExp(args[0], 'g'), args[1]);
                 }
                 return value;
             },
-            'append':function (value, args) {
+            'append': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return value + '' + args[0];
                 }
                 return value;
             },
-            'prepend':function (value, args) {
+            'prepend': function (value, args) {
                 if (value !== undefined && args.length === 1) {
                     return args[0] + '' + value;
                 }
                 return value;
             },
-            'join':function (value, args) {
+            'join': function (value, args) {
                 if (args.length === 1 && value !== undefined && utils.typeOf(value) === 'array') {
                     return value.join(args[0]);
                 }
                 return value;
             },
-            'default':function (value, args) {
+            'default': function (value, args) {
                 if (value !== undefined && value !== null) {
                     return value;
                 }
@@ -802,7 +801,7 @@ var Tempo = (function (tempo) {
                 }
                 return value;
             },
-            'date':function (value, args) {
+            'date': function (value, args) {
                 if (value !== undefined && args.length >= 1 && args.length <= 2) {
                     var date = new Date(value);
                     var format = args[0];
@@ -819,68 +818,68 @@ var Tempo = (function (tempo) {
                         var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                         var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         var DATE_PATTERNS = {
-                            'YYYY':function (date) {
+                            'YYYY': function (date) {
                                 return (isUTC ? date.getUTCFullYear() : date.getFullYear());
                             },
-                            'YY':function (date) {
+                            'YY': function (date) {
                                 return (isUTC ? date.getUTCFullYear() : date.getFullYear()).toFixed().substring(2);
                             },
-                            'MMMM':function (date) {
+                            'MMMM': function (date) {
                                 return MONTHS[(isUTC ? date.getUTCMonth() : date.getMonth())];
                             },
-                            'MMM':function (date) {
+                            'MMM': function (date) {
                                 return MONTHS[(isUTC ? date.getUTCMonth() : date.getMonth())].substring(0, 3);
                             },
-                            'MM':function (date) {
+                            'MM': function (date) {
                                 return utils.pad(((isUTC ? date.getUTCMonth() : date.getMonth()) + 1).toFixed(), '0', 2);
                             },
-                            'M':function (date) {
+                            'M': function (date) {
                                 return (isUTC ? date.getUTCMonth() : date.getMonth()) + 1;
                             },
-                            'DD':function (date) {
+                            'DD': function (date) {
                                 return utils.pad((isUTC ? date.getUTCDate() : date.getDate()).toFixed(), '0', 2);
                             },
-                            'D':function (date) {
+                            'D': function (date) {
                                 return (isUTC ? date.getUTCDate() : date.getDate());
                             },
-                            'EEEE':function (date) {
+                            'EEEE': function (date) {
                                 return DAYS[(isUTC ? date.getUTCDay() : date.getDay())];
                             },
-                            'EEE':function (date) {
+                            'EEE': function (date) {
                                 return DAYS[(isUTC ? date.getUTCDay() : date.getDay())].substring(0, 3);
                             },
-                            'E':function (date) {
+                            'E': function (date) {
                                 return (isUTC ? date.getUTCDay() : date.getDay());
                             },
-                            'HH':function (date) {
+                            'HH': function (date) {
                                 return utils.pad((isUTC ? date.getUTCHours() : date.getHours()).toFixed(), '0', 2);
                             },
-                            'H':function (date) {
+                            'H': function (date) {
                                 return (isUTC ? date.getUTCHours() : date.getHours());
                             },
-                            'h':function (date) {
+                            'h': function (date) {
                                 var hours = (isUTC ? date.getUTCHours() : date.getHours());
                                 return hours < 13 ? (hours === 0 ? 12 : hours) : hours - 12;
                             },
-                            'mm':function (date) {
+                            'mm': function (date) {
                                 return utils.pad((isUTC ? date.getUTCMinutes() : date.getMinutes()).toFixed(), '0', 2);
                             },
-                            'm':function (date) {
+                            'm': function (date) {
                                 return (isUTC ? date.getUTCMinutes() : date.getMinutes());
                             },
-                            'ss':function (date) {
+                            'ss': function (date) {
                                 return utils.pad((isUTC ? date.getUTCSeconds() : date.getSeconds()).toFixed(), '0', 2);
                             },
-                            's':function (date) {
+                            's': function (date) {
                                 return (isUTC ? date.getUTCSeconds() : date.getSeconds());
                             },
-                            'SSS':function (date) {
+                            'SSS': function (date) {
                                 return utils.pad((isUTC ? date.getUTCMilliseconds() : date.getMilliseconds()).toFixed(), '0', 3);
                             },
-                            'S':function (date) {
+                            'S': function (date) {
                                 return (isUTC ? date.getUTCMilliseconds() : date.getMilliseconds());
                             },
-                            'a':function (date) {
+                            'a': function (date) {
                                 return (isUTC ? date.getUTCHours() : date.getHours()) < 12 ? 'AM' : 'PM';
                             }
                         };
@@ -931,13 +930,13 @@ var Tempo = (function (tempo) {
     };
 
     tempo.exports = {
-        'templates':Templates
+        'templates': Templates
     };
 
     tempo.test = {
-        'utils':utils,
-        'templates':new Templates({}),
-        'renderer':new Renderer(new Templates({}))
+        'utils': utils,
+        'templates': new Templates({}),
+        'renderer': new Renderer(new Templates({}))
     };
 
 
