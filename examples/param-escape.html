@@ -1,0 +1,24 @@
+
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<script>
+    var data = [
+        {'name': 'snow <h3>white</h3> & the seven dwarfs'}
+    ];
+
+    window.onload = function() {
+        Tempo.prepare('list-escaped').render(data);
+        Tempo.prepare('list-unescaped', {'escape': false}).render(data);
+    }
+</script>
+
+<h1>Escaped (default)</h1>
+<ol id="list-escaped">
+    <li data-template>{{name}}</li>
+</ol>
+
+<h1>Unescaped</h1>
+<ol id="list-unescaped">
+    <li data-template>{{name}}</li>
+</ol>

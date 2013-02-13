@@ -317,6 +317,13 @@ template<em>.into('yet-another-alternative-container')</em>.render( data_2 );
     </ol>
 </div>
 
+<h4>Values are escaped by default</h4>
+<p>All values are escaped by default. To disable automatic escaping pass in the <code>'escape': false</code> parameter:</p>
+<pre>
+    Tempo.prepare('marx-brothers', <em>{'escape': false}</em>).render(data);
+</pre>
+<p>If you disable escaping you can control this at individual value level using the <code><a href="#filter-functions">escape</a></code> and <code><a href="#filter-functions">encodeURI</a></code> filters.</p>
+
 <a id="nested-templates"></a>
 <h4>Nested data-templates</h4>
 <p>Data templates can even be nested within other data templates. Multiple nested templates are supported.</p>

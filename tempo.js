@@ -212,6 +212,7 @@ var Tempo = (function (tempo) {
 
         this.nestedItem = nestedItem !== undefined ? nestedItem : null;
 
+        this.escape = true;
         this.var_brace_left = '\\{\\{';
         this.var_brace_right = '\\}\\}';
         this.tag_brace_left = '\\{%';
@@ -446,11 +447,13 @@ var Tempo = (function (tempo) {
                                 filter = filter.substring(0, filter.indexOf(' '));
                             }
                             val = renderer.filters[filter](val, filter_args);
-
                         }
                     }
 
                     if (val !== undefined) {
+                        if (self.templates.escape) {
+                            val = self.filters.escape(val, {});
+                        }
                         return val;
                     }
                 } catch (err) {
