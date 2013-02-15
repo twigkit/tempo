@@ -466,7 +466,19 @@ Tempo.prepare('marx-brothers'<em>, <a href="#configurable-syntax">{}</a>, functi
     </ul>
 </div>
 
-<a id="filter-functions"></a>
+<a id="template-before-after"></a>
+<h4>Preserving other elements in the template container</h4>
+<p>If the template container contains other elements that should be preserved or ignored you can mark these with the <code>data-before-template</code> and <code>data-after-template</code> attributes:</p>
+
+<pre>
+&lt;ol id=&quot;marx-brothers&quot;&gt;
+    &lt;li <em>data-before-template</em>&gt;...&lt;/li&gt;
+    &lt;li data-template&gt;{{name.first}} {{name.last}}</em>&lt;/li&gt;
+    &lt;li <em>data-after-template</em>&gt;...&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+
+>id="filter-functions"></a>
 <h4>Filter and Formatting Functions</h4>
 <p>Tempo supports a number of filter functions to modify individual values before they are rendered. Filters can be chained to apply multiple ones to the same value.</p>
 
