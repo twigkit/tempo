@@ -149,6 +149,9 @@ var Tempo = (function (tempo) {
         removeAttr: function (el, name) {
             if (el !== undefined) {
                 el.setAttribute(name, '');
+                if (el.removeAttribute) {
+                    el.removeAttribute(name);
+                }
             }
         },
 
@@ -533,6 +536,7 @@ var Tempo = (function (tempo) {
             var memberRegex = new RegExp('(?:__[\\.]?)((_tempo|\\[|' + utils.memberRegex(i) + '|this)([A-Za-z0-9$\\._\\[\\]]+)?)', 'g');
             var template = renderer.templates.templateFor(i);
             var tempo_info = utils.merge(_tempo_info, renderer.templates.attributes);
+
             // Clear attributes in case of recursive nesting (TODO: Probably need to clear more)
             if (utils.hasAttr(template, 'data-template-for')) {
                 utils.removeAttr(template, 'data-template-for');
@@ -647,7 +651,23 @@ var Tempo = (function (tempo) {
 
             var fragment = this._createFragment(data);
             if (fragment !== null && this.templates.container !== null) {
-                this.templates.container.appendChild(fragment);
+                if (fragment !== null) {
+                    var ref = null;
+                    for (var i = this.templates.container.childNodes.length; i >= 0; i--) {
+
+                        if (this.templates.container.childNodes[i] !== undefined && this.templates.container.childNodes[i].getAttribute !== undefined && this.templates.container.childNodes[i].getAttribute('data-after-template') !== null) {
+                            ref = this.templates.container.childNodes[i];
+                        }
+                    }
+                    if (ref === null) {
+                        ref = this.templates.container.lastChild;
+                    }
+                    if (ref === null || ref.nextSibling === null) {
+                        this.templates.container.appendChild(fragment);
+                    } else {
+                        this.templates.container.insertBefore(fragment, ref);
+                    }
+                }
             }
 
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
@@ -663,7 +683,23 @@ var Tempo = (function (tempo) {
 
             var fragment = this._createFragment(data);
             if (fragment !== null) {
-                this.templates.container.insertBefore(fragment, this.templates.container.firstChild);
+                var ref = null;
+                for (var i = 0; i < this.templates.container.childNodes.length; i++) {
+                    if (this.templates.container.childNodes[i] !== undefined && this.templates.container.childNodes[i].getAttribute !== undefined && this.templates.container.childNodes[i].getAttribute('data-before-template') !== null) {
+                        ref = this.templates.container.childNodes[i];
+                    }
+                }
+                if (ref === null) {
+                    ref = this.templates.container.firstChild;
+                }
+                if (ref !== null) {
+                    if (ref.nextSibling !== null && ref.getAttribute && ref.getAttribute('data-before-template') !== null) {
+                        ref = ref.nextSibling;
+                    }
+                    this.templates.container.insertBefore(fragment, ref);
+                } else {
+                    this.templates.container.appendChild(fragment);
+                }
             }
 
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
