@@ -662,10 +662,13 @@ var Tempo = (function (tempo) {
                     if (ref === null) {
                         ref = this.templates.container.lastChild;
                     }
-                    if (ref === null || ref.nextSibling === null) {
-                        this.templates.container.appendChild(fragment);
-                    } else {
+                    if (ref !== null) {
+                        if (ref.nextSibling !== null && ref.getAttribute && ref.getAttribute('data-before-template') !== null) {
+                            ref = ref.nextSibling;
+                        }
                         this.templates.container.insertBefore(fragment, ref);
+                    } else {
+                        this.templates.container.appendChild(fragment);
                     }
                 }
             }
