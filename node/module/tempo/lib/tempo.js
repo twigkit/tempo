@@ -966,7 +966,8 @@ var Tempo = (function (tempo) {
     };
 
     tempo.exports = {
-        'templates': Templates
+        'templates': Templates,
+        'utils': utils
     };
 
     tempo.test = {
