@@ -554,7 +554,10 @@ var Tempo = (function (tempo) {
                         var nested = nestedDeclaration[p].match(/data-template-for="([^"]+?)"/);
                         if (nested && nested[1]) {
                             var t = new Templates(renderer.templates.params, nested[1]);
-                            t.parse(template, this._renderNestedItem(i, nested[1]));
+                            try {
+                                t.parse(template, this._renderNestedItem(i, nested[1]));
+                            } catch (e) {
+                            }
                         }
                     }
                 }

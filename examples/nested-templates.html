@@ -1,0 +1,24 @@
+
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.js"></script>
+
+<script>
+    var data = [
+        {'parent': 'brangelina', 'bond': {'children': ['roxy', 'foxy', 'doxy']}},
+        {'parent': 'chuck norris'}
+    ];
+
+    window.onload = function() {
+        Tempo.prepare('list').render(data);
+    }
+</script>
+
+<!-- Blacklist argument is optional! -->
+<ol id="list">
+    <li data-template>
+        {{parent}}
+        <ul>
+            <li data-template-for="bond.children">{{.}}</li>
+        </ul>
+    </li>
+</ol>
