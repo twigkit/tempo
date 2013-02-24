@@ -1,0 +1,20 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.js"></script>
+
+<script>
+    var data = {
+        'leonard': 'Leonard Marx',
+        'adolph': 'Adolph Marx',
+        'julius': 'Julius Henry Marx',
+        'milton': 'Milton Marx',
+        'herbert': 'Herbert Marx'
+    };
+
+    window.onload = function () {
+        Tempo.prepare('list').render(data);
+    }
+</script>
+
+<ol id="list">
+    <li data-template data-from-map>{{value}} - {{key | append '@marx.com'}}</li>
+</ol>

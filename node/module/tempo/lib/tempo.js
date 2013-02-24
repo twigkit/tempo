@@ -602,7 +602,7 @@ var Tempo = (function (tempo) {
                     if (this.templates.dataIsMap) {
                         var mapped = [];
                         for (var member in data) {
-                            if (data.hasOwnProperty(member)) {
+                            if (data.hasOwnProperty(member) && member !== '_parent') {
                                 var pair = {};
                                 pair.key = member;
                                 pair.value = data[member];

@@ -317,10 +317,32 @@ template<em>.into('yet-another-alternative-container')</em>.render( data_2 );
     </ol>
 </div>
 
+<a id="data-from-map"></a>
+<h4>Using data from associative arrays (objects)</h4>
+<p>Normally data being iterated is represented as an array of objects. In some cases however the data is a series of objects in a map:</p>
+
+<pre>
+var data = {
+    'leonard': 'Leonard Marx',
+    'adolph': 'Adolph Marx',
+    'julius': 'Julius Henry Marx',
+    'milton': 'Milton Marx',
+    'herbert': Herbert Marx'
+};
+</pre>
+
+<p>In this case you can iterate all the elements using the <code>data-from-map</code> attribute where the key name can be accessed with <code>{{key}}</code> and the value object via <code>{{value}}</code>:</p>
+
+<pre>
+&lt;ol id=&quot;list&quot;&gt;
+    &lt;li data-template <em>data-from-map</em>&gt;{{<em>value</em>}} - {{<em>key</em> | append '@marx.com'}}&lt;/li&gt;
+&lt;/ol&gt;
+</pre>
+
 <h4>Values are escaped by default</h4>
 <p>All values are escaped by default. To disable automatic escaping pass in the <code>'escape': false</code> parameter:</p>
 <pre>
-    Tempo.prepare('marx-brothers', <em>{'escape': false}</em>).render(data);
+Tempo.prepare('marx-brothers', <em>{'escape': false}</em>).render(data);
 </pre>
 <p>If you disable escaping you can control this at individual value level using the <code><a href="#filter-functions">escape</a></code> and <code><a href="#filter-functions">encodeURI</a></code> filters.</p>
 
