@@ -13,11 +13,11 @@
 </head>
 <body>
 
-<div id="feed" data-template style="display: none;">
+<div id="feed" class="{{feed.author.name.label}}" data-template style="display: none;">
     <h1>{{feed.author.name.label}}</h1>
 
     <ul>
-        <li data-template-for="feed.entry" data-label="{{feed.author.name.label}}" data-year="2012">{{_tempo.index}}. {{title.label}} (<b>{{_tempo.label}} {{_tempo.year}}</b>)</li>
+        <li data-template-for="feed.entry" data-label="{{title.label}}" data-year="2012">{{_tempo.index}}. {{title.label}} (<b>{{_tempo.label}} {{_tempo.year}}</b>)</li>
     </ul>
 </div>
 
