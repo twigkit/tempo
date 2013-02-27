@@ -349,7 +349,7 @@ If the value of this field is longer than 25 characters, then truncate to the le
 Currently only formats numbers like 100000.25 by adding commas: 100,000.25. You can optionally specify the number of decimals to use.
 
 ##### `{{ field | default 'default value' }}`
-If the field is undefined, or null, then show the default value specified.
+If the field is `undefined`, or `null`, then show the default value specified.
 
 ##### `{{ field | date 'preset or pattern like HH:mm, DD-MM-YYYY'[, 'UTC'] }}`
 Creates a date object from the field value, and formats according to presets, or using a date pattern. Available presets are localedate, localetime, date and time. The following pattern elements are supported:
@@ -382,10 +382,10 @@ Change any upper case characters in the value to lower case.
 Format strings to title case, with an optional blacklist of words that should not be titled (unless first in string e.g. 'the last of the mohicans' to 'The Last of the Mohicans').
 
 ##### `{{ field | append '&nbsp;some suffix' }}`
-If the field value is not empty, then append the string to the value. Helpful if you don't want the suffix to show up in the template if the field is undefined or null. Use `&nbsp;` if you need before or after the suffix.
+If the field value is not empty, then append the string to the value. Helpful if you don't want the suffix to show up in the template if the field is `undefined` or `null`. Use `&nbsp;` if you need before or after the suffix.
 
 ##### `{{ field | prepend 'some prefix&nbsp;' }}`
-If the field value is not empty, then prepend the string to the value. Helpful if you don't want the prefix to show up in the template if the field is undefined or null. Use `&nbsp;` if you need before or after the prefix.
+If the field value is not empty, then prepend the string to the value. Helpful if you don't want the prefix to show up in the template if the field is `undefined` or `null`. Use `&nbsp;` if you need before or after the prefix.
 
 ##### `{{ field | join 'separator' }}`
 If the field is an array joins the elements into a string using the supplied separator.
