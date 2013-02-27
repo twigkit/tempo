@@ -524,18 +524,24 @@ var Tempo = (function (tempo) {
         _renderNestedItem: function (i, nested) {
             return function (templates) {
                 var r = new Renderer(templates);
-                var data = eval('i.' + nested);
-                if (data) {
-                    if (utils.typeOf(data) === 'array') {
-                        for (var s = 0; s < data.length; s++) {
-                            data[s]._parent = function () {
-                                return i;
-                            }()
+                var data = null;
+                if (i.hasOwnProperty(nested.split('.')[0])) {
+                    data = eval('i.' + nested);
+                    if (data) {
+                        try {
+                            if (utils.typeOf(data) === 'array') {
+                                for (var s = 0; s < data.length; s++) {
+                                    data[s]._parent = function () {
+                                        return i;
+                                    }()
+                                }
+                            } else {
+                                data._parent = function () {
+                                    return i;
+                                }();
+                            }
+                        } catch (e) {
                         }
-                    } else {
-                        data._parent = function () {
-                            return i;
-                        }();
                     }
                 }
                 r.render(data);
@@ -561,7 +567,7 @@ var Tempo = (function (tempo) {
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
                         var nested = nestedDeclaration[p].match(/data-template-for="([^"]+?)"/);
-                        if (nested && nested[1] && i.hasOwnProperty(nested[1].split('.')[0])) {
+                        if (nested && nested[1]) {
                             var t = new Templates(renderer.templates.params, nested[1]);
                             try {
                                 t.parse(template, this._renderNestedItem(i, nested[1]));
