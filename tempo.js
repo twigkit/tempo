@@ -460,6 +460,7 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
+
                 }
 
                 return '';
@@ -479,6 +480,7 @@ var Tempo = (function (tempo) {
                         }
                     }
                 } catch (err) {
+
                 }
 
                 return undefined;
@@ -524,9 +526,17 @@ var Tempo = (function (tempo) {
                 var r = new Renderer(templates);
                 var data = eval('i.' + nested);
                 if (data) {
-                    data._parent = function () {
-                        return i;
-                    }();
+                    if (utils.typeOf(data) === 'array') {
+                        for (var s = 0; s < data.length; s++) {
+                            data[s]._parent = function () {
+                                return i;
+                            }()
+                        }
+                    } else {
+                        data._parent = function () {
+                            return i;
+                        }();
+                    }
                 }
                 r.render(data);
             };
@@ -547,12 +557,11 @@ var Tempo = (function (tempo) {
 
             if (template && i) {
                 utils.notify(this.listener, new TempoEvent(TempoEvent.Types.ITEM_RENDER_STARTING, i, template));
-
                 var nestedDeclaration = template.innerHTML.match(/data-template-for="([^"]+?)"/g);
                 if (nestedDeclaration) {
                     for (var p = 0; p < nestedDeclaration.length; p++) {
                         var nested = nestedDeclaration[p].match(/data-template-for="([^"]+?)"/);
-                        if (nested && nested[1]) {
+                        if (nested && nested[1] && i.hasOwnProperty(nested[1].split('.')[0])) {
                             var t = new Templates(renderer.templates.params, nested[1]);
                             try {
                                 t.parse(template, this._renderNestedItem(i, nested[1]));

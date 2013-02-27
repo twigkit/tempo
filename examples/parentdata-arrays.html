@@ -1,0 +1,40 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {
+                'level': 1, 'children': [
+                    {'level': 2, 'children': [
+                        {'level': 3, 'children': null}
+                    ]}
+                ]
+            }
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare("template").render(data);
+        });
+    </script>
+</head>
+<body>
+<h1>Hello</h1>
+<ul id="template">
+    <li data-template>
+        {{level}} ({{level._parent | default 'no parent'}})
+        <ul>
+            <li data-template-for="children">
+                {{_parent.level}} > {{level}}
+                <ul>
+                    <li data-template-for="children">{{_parent._parent.level}} > {{_parent.level}} > {{level}}</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</body>
+</html>
