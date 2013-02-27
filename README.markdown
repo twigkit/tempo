@@ -434,12 +434,12 @@ After preparing a template you can register one or more event listeners by provi
 > ##### `type`
 > The type of the event. Constant values are defined in TempoEvent.Types.
 
-> * TempoEvent.Types.RENDER_STARTING: Indicates that rendering has started, or been manually triggered by calling starting() on the renderer object.
-> * TempoEvent.Types.ITEM_RENDER_STARTING: Indicates that the rendering of a given individual item is starting.
-> * TempoEvent.Types.ITEM_RENDER_COMPLETE: Indicates that the rendering of a given individual item has completed.
-> * TempoEvent.Types.RENDER_COMPLETE: Indicates that the rendering of all items is completed.
-> * TempoEvent.Types.BEFORE_CLEAR: Fires before the container is cleared of all elements.
-> * TempoEvent.Types.AFTER_CLEAR: Fires after the container is cleared of all elements.
+> * `TempoEvent.Types.RENDER_STARTING`: Indicates that rendering has started, or been manually triggered by calling starting() on the renderer object.
+> * `TempoEvent.Types.ITEM_RENDER_STARTING`: Indicates that the rendering of a given individual item is starting.
+> * `TempoEvent.Types.ITEM_RENDER_COMPLETE`: Indicates that the rendering of a given individual item has completed.
+> * `TempoEvent.Types.RENDER_COMPLETE`: Indicates that the rendering of all items is completed.
+> * `TempoEvent.Types.BEFORE_CLEAR`: Fires before the container is cleared of all elements.
+> * `TempoEvent.Types.AFTER_CLEAR`: Fires after the container is cleared of all elements.
 
 > ##### `handler`
 > The handler function to call when the specified event fires.
