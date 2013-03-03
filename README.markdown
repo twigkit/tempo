@@ -6,7 +6,7 @@
 ### Why use Tempo?
 
 * Clear separation of concerns: no HTML in your JavaScript files, and no JavaScript in your HTML
-* Makes working with AJAX/JSON concernsontent a piece of cake
+* Makes working with AJAX/JSON content a piece of cake
 * Works in Safari, Chrome, FireFox, Opera, and Internet Explorer 6+
 
 
