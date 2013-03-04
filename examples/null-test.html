@@ -1,0 +1,46 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {"name": 'guice'},
+            {"name": null},
+            {"name": null},
+                null,
+                null,
+            {"name": 'django'}
+        ];
+
+        var data_2 = {
+            "street1": "test1",
+                "street2": "test2",
+                "street3": null,
+                "street4": null
+        };
+
+        $(document).ready(function () {
+            Tempo.prepare('list').render(data);
+            Tempo.prepare('form').render(data_2);
+        });
+    </script>
+</head>
+<body>
+<h1>Null test</h1>
+
+<ul id="list">
+    <li data-template>{{name | default 'i am null'}}</li>
+</ul>
+
+<form id="form" data-template>
+    <input name="streetName1" type="tel" value="{{street1 | default 'HCA'}}"/>
+    <input name="streetName2" value="{{street2}}"/>
+    <input name="streetName3" value="{{street3 | default 'HCA3'}}"/>
+    <input name="streetName4" value="{{street4 | default 'HCA4'}}"/>
+</form>
+
+</body>
+</html>
