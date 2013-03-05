@@ -1,0 +1,34 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.min.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+            {"name": 'guice'},
+            {"name": null},
+            {"name": null},
+            null,
+            null,
+            {"name": 'django'}
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare('list').errors(function (err) {
+                console.log('Whoa! something happened!');
+                console.log(err);
+            }).render(data);
+        });
+    </script>
+</head>
+<body>
+<h1>Null test</h1>
+
+<ul id="list">
+    <li data-template>{{name | default 'i am null'}} {{hello | ping}}</li>
+</ul>
+
+</body>
+</html>

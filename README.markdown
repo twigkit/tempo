@@ -106,6 +106,18 @@ The `prepend(data)` function will render the data you pass in and insert it befo
 The `clear()` function will empty the container, allowing you to e.g. render the data again.
 
 	Tempo.prepare('marx-brothers').render( data ).clear();
+	
+#### template.errors(errorHandler)
+
+Tempo will attempt to deal with errors and failures silently but you can pass in your own handler for exceptions:
+
+> #### `errorHandler`
+> A function which will be called with the error object from the `try/catch` block.
+
+	Tempo.prepare('list').errors(function (err) {
+        console.log('Whoa! something happened!');
+        console.log(err);
+    }).render(data);
 
 
 #### template.into(container)

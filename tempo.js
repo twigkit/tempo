@@ -401,6 +401,7 @@ var Tempo = (function (tempo) {
         this.varRegex = new RegExp(this.templates.var_brace_left + '[ ]?([A-Za-z0-9$\\._\\[\\]]*?)([ ]?\\|[ ]?.*?)?[ ]?' + this.templates.var_brace_right, 'g');
         this.tagRegex = new RegExp(this.templates.tag_brace_left + '[ ]?([\\s\\S]*?)( [\\s\\S]*?)?[ ]?' + this.templates.tag_brace_right + '(([\\s\\S]*?)(?=' + this.templates.tag_brace_left + '[ ]?end\\1[ ]?' + this.templates.tag_brace_right + '))?', 'g');
         this.filterSplitter = new RegExp('\\|[ ]?(?=' + utils.memberRegex(this.filters) + ')', 'g');
+        this.errorHandler = null;
         return this;
     }
 
@@ -460,7 +461,7 @@ var Tempo = (function (tempo) {
                         return val;
                     }
                 } catch (err) {
-
+                    self._onError.call(self, err);
                 }
 
                 return '';
@@ -480,7 +481,7 @@ var Tempo = (function (tempo) {
                         }
                     }
                 } catch (err) {
-
+                    self._onError.call(self, err);
                 }
 
                 return undefined;
@@ -522,6 +523,7 @@ var Tempo = (function (tempo) {
         },
 
         _renderNestedItem: function (i, nested) {
+            var self = this;
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = null;
@@ -541,6 +543,7 @@ var Tempo = (function (tempo) {
                                 }();
                             }
                         } catch (e) {
+                            self._onError.call(self, err);
                         }
                     }
                 }
@@ -571,7 +574,8 @@ var Tempo = (function (tempo) {
                             var t = new Templates(renderer.templates.params, nested[1]);
                             try {
                                 t.parse(template, this._renderNestedItem(i, nested[1]));
-                            } catch (e) {
+                            } catch (err) {
+                                this._onError.call(this, err);
                             }
                         }
                     }
@@ -723,6 +727,17 @@ var Tempo = (function (tempo) {
             utils.notify(this.listener, new TempoEvent(TempoEvent.Types.RENDER_COMPLETE, data, this.templates.container));
 
             return this;
+        },
+
+        errors: function(errorHandler) {
+            this.errorHandler = errorHandler;
+            return this;
+        },
+
+        _onError: function(err) {
+            if (this.errorHandler !== null) {
+                this.errorHandler.call(this, err);
+            }
         },
 
         clear: function () {

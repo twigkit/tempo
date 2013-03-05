@@ -228,6 +228,17 @@ Tempo.prepare('marx-brothers').render( data )<em>.prepend( brothers_we_didnt_kno
 Tempo.prepare('marx-brothers').render( data )<em>.clear()</em>;
 </pre>
 
+<h4>template.errors(errorHandler)</h4>
+<p>Tempo will attempt to deal with errors and failures silently but you can pass in your own handler for exceptions:</p>
+<h5>errorHandler</h5>
+<p class="h5">A function which will be called with the error object from the <code>try/catch</code> block.</p>
+<pre>
+Tempo.prepare('list').errors(function (err) {
+    console.log('Whoa! something happened!');
+    console.log(err);
+}).render(data);
+</pre>
+
 <h4>template.into(container)</h4>
 <p>The <code>into(element)</code> function will allow you to render the original template to one or more different containers specified. The method will return a new template on which you can call the other template methods such as <code>render()</code> or <code>append()</code>.</p>
 
