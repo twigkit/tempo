@@ -542,7 +542,7 @@ var Tempo = (function (tempo) {
                                     return i;
                                 }();
                             }
-                        } catch (e) {
+                        } catch (err) {
                             self._onError.call(self, err);
                         }
                     }
