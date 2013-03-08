@@ -1,4 +1,3 @@
-;
 var Tempo = (function (tempo) {
     'use strict';
 
@@ -197,4 +196,4 @@ var Tempo = (function (tempo) {
     };
 
     return tempo;
-})({});
+})(Tempo || {});
