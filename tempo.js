@@ -15,7 +15,7 @@ var Tempo = (function (tempo) {
         utils.childrenByAttribute = function (el, attr, all) {
             var elements = [];
             if (el.nodeType === 1) {
-                // Looking for matching nodes at the 1st level
+                // Looking for an element by attribute in all child elements
                 var children = el.childNodes;
                 if (el.hasChildNodes()) {
                     var child = el.firstChild;
@@ -23,12 +23,17 @@ var Tempo = (function (tempo) {
                         if (child.nodeType === 1) {
                             if (child.getAttribute(attr) !== null) {
                                 elements.push(child);
+                                // If a match is found and I do not need all then return
                                 if (!all) {
                                     return elements;
                                 }
                             } else {
+                                // Child element did not have the attribute I need, checking grandchildren
+                                // TODO is it more efficient to scan all child nodes first?
+                                // TODO Maybe I am needlessly traversing too far down the tree?
                                 children = utils.childrenByAttribute(child, attr, all);
                                 if (children.length > 0) {
+                                    // If I need all, then add matches for this level to the array
                                     if (all) {
                                         elements = elements.concat(children);
                                     } else {
@@ -161,25 +166,13 @@ var Tempo = (function (tempo) {
             // Shallow clone of the template node to get the element and all attributes
             var el = this.template.cloneNode(false);
             // Use the innerHTML of the template itself (to leave it untouched) and add to the clone
+            // TODO If IE and template is a TBODY/TABLE then we need to wrap it first!
             el.innerHTML = this._replaceVariables(this.template.innerHTML, item);
             fragment.appendChild(el);
         }
 
         // Add the rendered fragment to the parent
         parent.appendChild(fragment);
-
-        return this;
-    };
-
-    /**
-     * Clear the cached template (and nested templates).
-     *
-     * @returns {*}
-     */
-    Template.prototype.clear = function () {
-        if (this.name !== undefined) {
-            utils.clear(this.container);
-        }
 
         return this;
     };
