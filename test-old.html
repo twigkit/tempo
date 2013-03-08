@@ -14,8 +14,8 @@
         window.onload = function () {
             var start = new Date();
             var template = Tempo.prepare(document.getElementById('container'));
-
             for (var i = 0; i < 25; i++) {
+                data[0].cast[0].other_movies[0].name = 'Apocalypse Now ' + (i + 1);
                 data[0].movie = 'The Godfather I';
                 template.append(data);
                 data[0].movie = 'The Godfather II';
@@ -23,7 +23,6 @@
                 data[0].movie = 'The Godfather III';
                 template.append(data);
             }
-
             console.log(new Date() - start);
         };
     </script>
