@@ -4,16 +4,6 @@ var Tempo = (function (tempo) {
 
     var utils = function (utils) {
 
-        utils.childIterator = function(el, handler) {
-            if (el.hasChildNodes()) {
-                var child = el.firstChild;
-                while (child) {
-                    handler.call(this, child);
-                    child = child.nextSibling;
-                }
-            }
-        };
-
         /**
          * Get elements by attribute.
          *
@@ -31,22 +21,13 @@ var Tempo = (function (tempo) {
                 if (el.hasChildNodes()) {
                     var child = el.firstChild;
                     while (child) {
-                        if (child.nodeType === 1 && child.getAttribute(attr) !== null) {
-                            elements.push(child);
-                            if (!all) {
-                                return elements;
-                            }
-                        }
-                        child = child.nextSibling;
-                    }
-                }
-
-                // If none were found, recursively nodes at the next level
-                if (elements.length === 0) {
-                    if (el.hasChildNodes()) {
-                        child = el.firstChild;
-                        while (child) {
-                            if (child.nodeType === 1) {
+                        if (child.nodeType === 1) {
+                            if (child.getAttribute(attr) !== null) {
+                                elements.push(child);
+                                if (!all) {
+                                    return elements;
+                                }
+                            } else {
                                 children = utils.childrenByAttribute(child, attr, all);
                                 if (children.length > 0) {
                                     if (all) {
@@ -56,8 +37,8 @@ var Tempo = (function (tempo) {
                                     }
                                 }
                             }
-                            child = child.nextSibling;
                         }
+                        child = child.nextSibling;
                     }
                 }
             }
@@ -88,20 +69,18 @@ var Tempo = (function (tempo) {
      * @constructor
      */
     function Template(el, name) {
-        if (el !== null) {
-            this.template = el;
-            if (name !== null) {
-                this.name = name;
-                this.container = this.template.parentNode;
-            } else {
-                this.container = el.parentNode;
-            }
-
-            this.nestedTemplates = [];
-
-            // Parsing template
-            this._parse(this.template);
+        this.template = el;
+        if (name !== null) {
+            this.name = name;
+            this.container = this.template.parentNode;
+        } else {
+            this.container = el.parentNode;
         }
+
+        this.nestedTemplates = [];
+
+        // Parsing template
+        this._parse(this.template);
     }
 
     Template.DATA_TEMPLATE = 'data-template';
@@ -148,7 +127,7 @@ var Tempo = (function (tempo) {
      */
     Template.prototype.render = function (data) {
         utils.clear(this.container);
-        this._render(this.container, data);
+        this.append(data);
     };
 
     /**
@@ -180,11 +159,14 @@ var Tempo = (function (tempo) {
                 this.nestedTemplates[t].render(item[this.nestedTemplates[t].name]);
             }
 
+            // Shallow clone of the template node to get the element and all attributes
             var el = this.template.cloneNode(false);
+            // Use the innerHTML of the template itself (to leave it untouched) and add to the clone
             el.innerHTML = this._replaceVariables(this.template.innerHTML, item);
             fragment.appendChild(el);
         }
 
+        // Add the rendered fragment to the parent
         parent.appendChild(fragment);
 
         return this;
@@ -211,11 +193,7 @@ var Tempo = (function (tempo) {
      */
     tempo.prepare = function (el) {
         var template = utils.childrenByAttribute(el, Template.DATA_TEMPLATE, false);
-
-        if (template.length > 0) {
-            return new Template(template[0], null);
-        }
-        return new Template(null, null);
+        return new Template(template[0], null);
     };
 
     return tempo;
