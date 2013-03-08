@@ -1,3 +1,9 @@
+/**
+ * Tempo 3.0 Prototype
+ *
+ * http://twitter.com/mrolafsson
+ *
+ */
 var Tempo = (function (tempo) {
     'use strict';
 
@@ -20,6 +26,7 @@ var Tempo = (function (tempo) {
                 if (el.hasChildNodes()) {
                     var child = el.firstChild;
                     while (child) {
+                        // Only looking in element nodes
                         if (child.nodeType === 1) {
                             if (child.getAttribute(attr) !== null) {
                                 elements.push(child);
@@ -35,6 +42,7 @@ var Tempo = (function (tempo) {
                                 if (children.length > 0) {
                                     // If I need all, then add matches for this level to the array
                                     if (all) {
+                                        // Combining any grandchildren found with the main array to return
                                         elements = elements.concat(children);
                                     } else {
                                         return children;
@@ -75,9 +83,12 @@ var Tempo = (function (tempo) {
     function Template(el, name) {
         this.template = el;
         if (name !== null) {
+            // Nested templates have a name
             this.name = name;
             this.container = this.template.parentNode;
         } else {
+            // For main template preserving link to the node that contains the template
+            // TODO Is this definitely different from this.template.parentNode?
             this.container = el.parentNode;
         }
 
@@ -156,6 +167,8 @@ var Tempo = (function (tempo) {
         var fragment = document.createDocumentFragment();
 
         for (var i = 0; i < data.length; i++) {
+            // Processing each element in the data (assuming array)
+            // TODO Allow for non-array objects to be rendered
             var item = data[i];
 
             // First render the nested templates
@@ -184,6 +197,7 @@ var Tempo = (function (tempo) {
      * @returns {Template}
      */
     tempo.prepare = function (el) {
+        // Finding the template - and element marked with attribute data-template
         var template = utils.childrenByAttribute(el, Template.DATA_TEMPLATE, false);
         return new Template(template[0], null);
     };
