@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tempo 3 Test Suite</title>
+    <script type="text/javascript" src="tempo.min.js"></script>
+    <script>
+        window.sharedVariables = {
+            header: "Header",
+            header2: "Header2",
+            header3: "Header3",
+            header4: "Header4",
+            header5: "Header5",
+            header6: "Header6",
+            list: ['1000000000', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        };
+        window.onload = function () {
+            var start = new Date();
+
+            var tempo = Tempo.prepare(document.getElementById('template'));
+            tempo.render([window.sharedVariables]);
+
+            console.log(new Date() - start);
+        };
+    </script>
+</head>
+<body>
+<div id="template" style="">
+    <div data-template>
+        <h1 class='header'>{{header}}</h1>
+        <h2 class='header2'>{{header2}}</h2>
+        <h3 class='header3'>{{header3}}</h3>
+        <h4 class='header4'>{{header4}}</h4>
+        <h5 class='header5'>{{header5}}</h5>
+        <h6 class='header6'>{{header6}}</h6>
+        <ul>
+            <li data-template-for='list' class='item'>{{.}}</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

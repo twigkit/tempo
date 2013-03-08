@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tempo 3 Test Suite</title>
+    <script type="text/javascript" src="tempo.js"></script>
+    <script>
+        var data = [
+            {'movie': 'The Godfather I', 'tags': ['crime', 'drama'], 'cast': [
+                {'name': 'Marlon Brando', 'other_movies': [
+                    {'name': 'Apocalypse Now', 'tags': ['war', 'drama', 'vietnam', 'soldier', 'helicopter']}
+                ]}
+            ]}
+        ];
+        window.onload = function () {
+            var start = new Date();
+            var template = Tempo.prepare(document.getElementById('container'));
+            for (var i = 0; i < 25; i++) {
+                data[0].cast[0].other_movies[0].name = 'Apocalypse Now ' + (i + 1);
+                data[0].movie = 'The Godfather I';
+                template.append(data);
+                data[0].movie = 'The Godfather II';
+                template.append(data);
+                data[0].movie = 'The Godfather III';
+                template.append(data);
+            }
+            console.log(new Date() - start);
+        };
+    </script>
+</head>
+<body>
+<div id="container">
+    <ol>
+        <li data-template>
+            <h1>{{movie}}</h1>
+
+            <div>
+                <div>
+                    <div>
+                        <ul>
+                            <li data-template-for="cast">
+                                <h4>{{name}}</h4>
+                                <ul>
+                                    <li data-template-for="other_movies">
+                                        {{name}}
+                                        <ul>
+                                            <li data-template-for="tags"><b>{{.}}</b></li>
+                                        </ul>
+                                        <ul>
+                                            <li data-template-for="tags"><i>{{.}}</i></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <ul>
+                        <li data-template-for="tags">{{.}}</li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ol>
+</div>
+</body>
+</html>
