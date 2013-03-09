@@ -6,7 +6,7 @@ In an effort to solve this Tempo 3.0 is a clean-slate effort to provide the same
 
 
 ## Current status
-There is a working prototype which supports infinitely nested templates with basic variables.
+There is a working prototype which supports infinitely nested templates with basic variables. While the code is still small and easy to read peer-reviews and suggestions are most welcome. Please fork and send pull requests for any improvements you might find.
 
 ## Aims for Tempo 3.0
 
@@ -14,7 +14,7 @@ There is a working prototype which supports infinitely nested templates with bas
 Tempo 3.0 is currently approximately *60x faster* than 2.0. It recursively processes and caches templates in a single pass on prepare and efficiently renders data. The aim is to be *as fast as possible* whilst staying true to the methodology of semantically oriented templates that minimise the use of lower-level type code expressions.
 
 1. ### Size
-The current working prototype is only *1.5kb*. The core should remain lean with additional features such as filter, tags, and partials should be pluggable.
+The current working prototype is only *1.5kb*. The core should remain lean with additional features such as filter, tags, and partials available as optional plugins.
 
 1. ### Test coverage
 Since this is a clean start but with a clear direction before progressing on features each function and subcomponent should have full test coverage.
