@@ -1,0 +1,23 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<script>
+    var data = [
+        [1,2,3],
+        [4,5,6]
+    ];
+
+    window.onload = function () {
+        Tempo.prepare('list').errors(function () {
+            console.log(err)
+        }).render(data);
+    }
+</script>
+
+<ol id="list">
+    <li data-template>
+        <ul>
+            <li data-template-for="*">{{.}}</li>
+        </ul>
+    </li>
+</ol>

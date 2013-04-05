@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 2.0
+ * Tempo Template Engine 2.1
  *
  * http://tempojs.com/
  */
@@ -204,6 +204,51 @@ var Tempo = (function (tempo) {
             } else {
                 return array.indexOf(obj) > -1;
             }
+        },
+        childrenByAttribute: function (el, attr, all) {
+            var elements = [];
+            if (el.nodeType === 1) {
+                // Looking for an element by attribute in all child elements
+                var children = el.childNodes;
+                if (el.hasChildNodes()) {
+                    var child = el.firstChild;
+                    while (child) {
+                        // Only looking in element nodes
+                        if (child.nodeType === 1) {
+                            var attributes = attr.split(',');
+                            var found = false;
+                            for (var i = 0; i < attributes.length; i++) {
+                                if (child.getAttribute(attributes[i]) !== null) {
+                                    found = true;
+                                    elements.push(child);
+                                    // If a match is found and I do not need all then return
+                                    if (!all) {
+                                        return elements;
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                // Child element did not have the attribute I need, checking grandchildren
+                                // TODO is it more efficient to scan all child nodes first?
+                                // TODO Maybe I am needlessly traversing too far down the tree?
+                                children = utils.childrenByAttribute(child, attr, all);
+                                if (children.length > 0) {
+                                    // If I need all, then add matches for this level to the array
+                                    if (all) {
+                                        // Combining any grandchildren found with the main array to return
+                                        elements = elements.concat(children);
+                                    } else {
+                                        return children;
+                                    }
+                                }
+                            }
+                        }
+                        child = child.nextSibling;
+                    }
+                }
+            }
+
+            return elements;
         }
     };
 
@@ -281,7 +326,12 @@ var Tempo = (function (tempo) {
 
         parse: function (container, callback) {
             this.container = container;
-            var children = container.getElementsByTagName('*');
+            var children;
+            if (this.nestedItem) {
+                children = utils.childrenByAttribute(container, 'data-template-for', true);
+            } else {
+                children = utils.childrenByAttribute(container, 'data-template,data-template-fallback', true);
+            }
 
             var ready = true;
 
@@ -303,14 +353,11 @@ var Tempo = (function (tempo) {
 
             // Parsing
             if (ready) {
-                var foundTemplates = {};
                 for (var s = 0; s < children.length; s++) {
                     if (children[s].getAttribute !== undefined) {
-                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for') && !foundTemplates[this.nestedItem]) {
+                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for')) {
                             // Nested template
                             this.createTemplate(children[s]);
-                            // Guards against recursion when child template has same name!
-                            foundTemplates[this.nestedItem] = true;
                         } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
                             // Normal template
                             this.createTemplate(children[s]);
@@ -527,15 +574,23 @@ var Tempo = (function (tempo) {
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = null;
-                if (i.hasOwnProperty(nested.split('.')[0])) {
-                    data = eval('i.' + nested);
+
+                if (nested === '*' || i.hasOwnProperty(nested.split('.')[0])) {
+                    if (nested === '*') {
+                        data = i;
+                    } else {
+                        data = eval('i.' + nested);
+                    }
+
                     if (data) {
                         try {
                             if (utils.typeOf(data) === 'array') {
                                 for (var s = 0; s < data.length; s++) {
-                                    data[s]._parent = function () {
-                                        return i;
-                                    }()
+                                    if (utils.typeOf(data[s]) === 'object') {
+                                        data[s]._parent = function () {
+                                            return i;
+                                        }()
+                                    }
                                 }
                             } else {
                                 data._parent = function () {
@@ -729,12 +784,12 @@ var Tempo = (function (tempo) {
             return this;
         },
 
-        errors: function(errorHandler) {
+        errors: function (errorHandler) {
             this.errorHandler = errorHandler;
             return this;
         },
 
-        _onError: function(err) {
+        _onError: function (err) {
             if (this.errorHandler !== null) {
                 this.errorHandler.call(this, err);
             }

@@ -1,0 +1,126 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.js"></script>
+
+<!-- This example uses jQuery's ajax() method to retrieve data from Solr -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script>
+    var data = [
+        {
+            "title": "Places",
+            "details": [
+                {
+                    "places": [
+                        {
+                            "country": "USA",
+                            "date": "20140101"
+                        },
+                        {
+                            "country": "Germany",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany3",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany4",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany5",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany6",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany7",
+                            "date": "20140102"
+                        }
+                    ]
+                }
+            ]
+        },
+            {
+            "title": "Places",
+            "details": [
+                {
+                    "places": [
+                        {
+                            "country": "USA - 2",
+                            "date": "20140101"
+                        },
+                        {
+                            "country": "Germany - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany2 - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany3 - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany4 - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany5 - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany6 - 2",
+                            "date": "20140102"
+                        },
+                        {
+                            "country": "Germany7 - 2",
+                            "date": "20140102"
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
+    $(document).ready(function () {
+        Tempo.prepare('template').errors(function (err) {
+            console.log(err)
+        }).render(data);
+    });
+</script>
+<div id="template" data-template>
+    <h1>{{title}}</h1>
+
+    <div>
+        <div data-template-for="details">
+            {% if places.length > 0 %}
+            boing
+            {% endif %}
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Country Name</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-template-for="places">
+                    {% if places.length > 0 %}
+            boing
+            {% endif %}
+                    <td>{{country}}</td>
+                    <td>{{date}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

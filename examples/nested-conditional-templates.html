@@ -1,0 +1,35 @@
+<!-- Import Tempo -->
+<script type="text/javascript" src="../tempo.min.js"></script>
+
+<script>
+    var data = [
+        {'parent': 'brangelina', 'bond': {'children': [
+            {'name': 'roxy', 'boy': false},
+            {'name': 'foxy', 'boy': true},
+            {'name': 'doxy', 'boy': true},
+            {'name': 'moxy', 'boy': false}
+        ]
+        }},
+        {'parent': 'chuck norris'}
+    ];
+
+    window.onload = function () {
+        Tempo.prepare('just-children').render(data[0].bond.children);
+        Tempo.prepare('list').errors(function() {console.log(err)}).render(data);
+    }
+</script>
+
+<ol id="just-children">
+    <li data-template data-if-boy>{{name}} is a boy!</li>
+    <li data-template>{{name}} is a girl</li>
+</ol>
+
+<ol id="list">
+    <li data-template>
+        {{parent}}
+        <ul>
+            <li data-template-for="bond.children" data-if-boy>{{name}} is a boy</li>
+            <li data-template-for="bond.children">{{name}} is a girl</li>
+        </ul>
+    </li>
+</ol>
