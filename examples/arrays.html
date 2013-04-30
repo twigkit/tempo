@@ -1,0 +1,26 @@
+<html>
+<head>
+    <!-- Import Tempo -->
+    <script type="text/javascript" src="../tempo.js"></script>
+
+    <!-- This example uses jQuery's ajax() method to retrieve data from Twitter -->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script>
+        var data = [
+                ['one', '1'],
+                ['two', '2'],
+                ['three', '3']
+        ];
+
+        $(document).ready(function () {
+            Tempo.prepare($('ul')).render(data);
+        });
+    </script>
+</head>
+<body>
+<h1>Hello</h1>
+<ul id="ul">
+    <li data-template>{{[0]}} {{[1]}} First: {{_tempo.first}} Last: {{_tempo.last}}</li>
+</ul>
+</body>
+</html>

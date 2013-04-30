@@ -1,5 +1,5 @@
 /*!
- * Tempo Template Engine 2.0
+ * Tempo Template Engine 2.1
  *
  * http://tempojs.com/
  */
@@ -358,7 +358,6 @@ var Tempo = (function (tempo) {
                         if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for')) {
                             // Nested template
                             this.createTemplate(children[s]);
-                            // Guards against recursion when child template has same name!
                         } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
                             // Normal template
                             this.createTemplate(children[s]);
@@ -575,15 +574,23 @@ var Tempo = (function (tempo) {
             return function (templates) {
                 var r = new Renderer(templates);
                 var data = null;
-                if (i.hasOwnProperty(nested.split('.')[0])) {
-                    data = eval('i.' + nested);
+
+                if (nested === '*' || i.hasOwnProperty(nested.split('.')[0])) {
+                    if (nested === '*') {
+                        data = i;
+                    } else {
+                        data = eval('i.' + nested);
+                    }
+
                     if (data) {
                         try {
                             if (utils.typeOf(data) === 'array') {
                                 for (var s = 0; s < data.length; s++) {
-                                    data[s]._parent = function () {
-                                        return i;
-                                    }()
+                                    if (utils.typeOf(data[s]) === 'object') {
+                                        data[s]._parent = function () {
+                                            return i;
+                                        }()
+                                    }
                                 }
                             } else {
                                 data._parent = function () {
@@ -684,6 +691,8 @@ var Tempo = (function (tempo) {
 
                 for (var i = 0; i < data.length; i++) {
                     tempo_info.index = i;
+                    tempo_info.first = i < 1;
+                    tempo_info.last = i == data.length - 1;
                     this.renderItem(this, tempo_info, data[i], fragment);
                 }
 

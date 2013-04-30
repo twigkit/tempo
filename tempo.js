@@ -691,6 +691,8 @@ var Tempo = (function (tempo) {
 
                 for (var i = 0; i < data.length; i++) {
                     tempo_info.index = i;
+                    tempo_info.first = i < 1;
+                    tempo_info.last = i == data.length - 1;
                     this.renderItem(this, tempo_info, data[i], fragment);
                 }
 

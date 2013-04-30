@@ -545,8 +545,12 @@ The following example adds the iteration count to the class attribute, prefixed 
 This example shows how to access the iteration counter using inline JavaScript injection:
 
 	a href="#" onclick="alert(__._tempo.index); return false;">{{name.last}}</a>
+	
+> ##### `_tempo.first`
 
+True if the item being iterated is the first one in the collection.
 
+> ##### `_tempo.last`
 
-
+True if the item being iterated is the last one in the collection.
 
