@@ -120,7 +120,6 @@ var Tempo = (function (tempo) {
 
     Template.DATA_TEMPLATE = 'data-template';
     Template.DATA_TEMPLATE_FOR = 'data-template-for';
-    Template.VARIABLE_PATTERN = /\{\{(.+?)\}\}/g;
 
     /**
      * Parse the template for variable expressions and nested templates.
@@ -147,7 +146,7 @@ var Tempo = (function (tempo) {
      * @private
      */
     Template.prototype._replaceVariables = function (str, item) {
-        return str.replace(Template.VARIABLE_PATTERN, function (match, variable) {
+        return str.replace(/\{\{(.+?)\}\}/g, function (match, variable) {
             if (variable !== '.') {
                 return utils.member(item, variable);
             } else {
