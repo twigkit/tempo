@@ -50,7 +50,8 @@ Source should have detailed step-by-step inline documentation for maintainabilit
 ## Documentation
 
 ### Variables
-You can refer to variables in the template using either dot, bracket or mixed notation: `{{ name.first }}`, `{{ name['first'] }}` or `{{ name.full['first'] }}`.
+You can refer to variables in the template using either dot, bracket or mixed notation: `{{name.first}}`, `{{name['first']}}` or `{{name['full'].first}}`.
+To refer to the object being iterated use: `{{.}}`.
 
 ### Rendering
 

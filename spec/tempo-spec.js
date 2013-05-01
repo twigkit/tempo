@@ -24,6 +24,14 @@ describe("Tempo 3.0", function () {
 
             expect($(container).children().length).toBe(0);
         });
+
+        it("should return object member using dot, bracket or mixed notation", function () {
+            var data = {person: {name: {first: 'Chuck', last: 'Norris'}}};
+            expect(utils.member(data, 'person.name.first')).toBe(data.person.name.first);
+            expect(utils.member(data, 'person["name"].first')).toBe(data.person.name.first);
+            expect(utils.member(data, 'person["name"]["first"]')).toBe(data.person.name.first);
+            expect(utils.member(data, 'person[\'name\'][\'first\']')).toBe(data.person.name.first);
+        });
     });
 
     describe("Template", function () {
@@ -77,19 +85,19 @@ describe("Tempo 3.0", function () {
             });
 
             it("should render simple array with nested elements", function () {
-                var html = $('<ul><li data-template><h4>{{country}}</h4><ul><li data-template-for="cities">{{.}}</li></ul></li></ul>');
+                var html = $('<ul><li data-template><h4>{{country}}</h4><ul><li data-template-for="cities.main">{{.}}</li></ul></li></ul>');
                 var template = Tempo.prepare(html[0]);
                 var data = [
-                    {country: 'Germany', cities: ['Berlin', 'Stuttgart', 'Hamburg']},
-                    {country: 'United Kingdom', cities: ['London', 'Birmingham']}
+                    {country: 'Germany', cities: {main: ['Berlin', 'Stuttgart', 'Hamburg']}},
+                    {country: 'United Kingdom', cities: {main: ['London', 'Birmingham']}}
                 ];
 
                 template.render(data);
 
                 expect(html.children().length).toBe(data.length);
                 expect(html.children().first().children('h4').html()).toBe(data[0].country);
-                expect(html.children().first().children('ul').children().first().html()).toBe(data[0].cities[0]);
-                expect(html.children().last().children('ul').children().last().html()).toBe(data[1].cities[data[1].cities.length - 1]);
+                expect(html.children().first().children('ul').children().first().html()).toBe(data[0].cities.main[0]);
+                expect(html.children().last().children('ul').children().last().html()).toBe(data[1].cities.main[data[1].cities.main.length - 1]);
             });
         });
     });

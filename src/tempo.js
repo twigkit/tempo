@@ -1,7 +1,7 @@
 /**
  * Tempo 3.0 Prototype
  *
- * http://twitter.com/mrolafsson
+ * @author http://twitter.com/mrolafsson
  *
  */
 var Tempo = (function (tempo) {
@@ -70,6 +70,24 @@ var Tempo = (function (tempo) {
             }
         };
 
+        /**
+         * Return member (nested or otherwise) for a given dot, bracket or mix notation reference.
+         *
+         * @param data
+         * @param reference
+         * @returns {*}
+         */
+        utils.member = function (data, reference) {
+            // Traversing item reference without using eval()
+            var members = reference.match(/[^\['"\]\.]+/g);
+            for (var i = 0; i < members.length; i++) {
+                if (members[i]) {
+                    data = data[members[i]];
+                }
+            }
+            return data;
+        };
+
         return utils;
     }({});
 
@@ -103,7 +121,6 @@ var Tempo = (function (tempo) {
     Template.DATA_TEMPLATE = 'data-template';
     Template.DATA_TEMPLATE_FOR = 'data-template-for';
     Template.VARIABLE_PATTERN = /\{\{(.+?)\}\}/g;
-    Template.NOTATION_PATTERN = /[^\['"\]\.]+/g;
 
     /**
      * Parse the template for variable expressions and nested templates.
@@ -132,14 +149,7 @@ var Tempo = (function (tempo) {
     Template.prototype._replaceVariables = function (str, item) {
         return str.replace(Template.VARIABLE_PATTERN, function (match, variable) {
             if (variable !== '.') {
-                // Traversing item reference without using eval()
-                var members = variable.match(Template.NOTATION_PATTERN);
-                for (var i = 0; i < members.length; i++) {
-                    if (members[i]) {
-                        item = item[members[i]];
-                    }
-                }
-                return item;
+                return utils.member(item, variable);
             } else {
                 return item;
             }
@@ -192,7 +202,7 @@ var Tempo = (function (tempo) {
 
             // First render the nested templates
             for (var t = 0; t < this.nestedTemplates.length; t++) {
-                this.nestedTemplates[t].render(item[this.nestedTemplates[t].name]);
+                this.nestedTemplates[t].render(utils.member(item, this.nestedTemplates[t].name));
             }
 
             // Shallow clone of the template node to get the element and all attributes
