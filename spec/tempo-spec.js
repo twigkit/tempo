@@ -30,37 +30,54 @@ describe("Tempo 3.0", function () {
 
         var template = new Tempo._test.Template();
 
-        it("should replace simple object member", function () {
-            expect(template._replaceVariables('<h4>{{name}}</h4>', {name: 'Chuck Norris'})).toBe('<h4>Chuck Norris</h4>');
+        describe("Variable handling", function () {
+
+            it("should replace reference to object itself", function () {
+                expect(template._replaceVariables('<h4>{{.}}</h4>', 'Chuck Norris')).toBe('<h4>Chuck Norris</h4>');
+            });
+
+            it("should replace simple object member", function () {
+                expect(template._replaceVariables('<h4>{{name}}</h4>', {name: 'Chuck Norris'})).toBe('<h4>Chuck Norris</h4>');
+            });
+
+            it("should replace dot notation reference to nested object member", function () {
+                expect(template._replaceVariables('<h4>{{name.first}}</h4>', {name: {first: 'Chuck', last: 'Norris'}})).toBe('<h4>Chuck</h4>');
+            });
+
+            it("should replace mixed bracket and dot notation references to nested object members", function () {
+                expect(template._replaceVariables('<h4>{{name["full"].first}}</h4>', {name: {full: {first: 'Chuck', last: 'Norris'}}})).toBe('<h4>Chuck</h4>');
+            });
         });
 
-        it("should replace reference to object itself", function () {
-            expect(template._replaceVariables('<h4>{{.}}</h4>', 'Chuck Norris')).toBe('<h4>Chuck Norris</h4>');
-        });
+        describe("Rendering", function () {
 
-        it("should render a simple array of data", function () {
-            var html = $('<ul><li data-template>{{.}}</li></ul>');
-            var template = Tempo.prepare(html[0]);
-            var data = ['Leonard Marx', 'Adolph Marx', 'Julius Henry Marx', 'Milton Marx', 'Herbert Marx'];
+            it("should render a simple array of data", function () {
+                var html = $('<ul><li data-template>{{.}}</li></ul>');
+                var template = Tempo.prepare(html[0]);
+                var data = ['Leonard Marx', 'Adolph Marx', 'Julius Henry Marx', 'Milton Marx', 'Herbert Marx'];
 
-            template.render(data);
+                template.render(data);
 
-            expect(html.children().length).toBe(data.length);
-            expect(html.children().first().html()).toBe(data[0]);
-            expect(html.children().last().html()).toBe(data[data.length - 1]);
-        });
+                expect(html.children().length).toBe(data.length);
+                expect(html.children().first().html()).toBe(data[0]);
+                expect(html.children().last().html()).toBe(data[data.length - 1]);
+            });
 
-        it("should render simple array with nested elements", function () {
-            var html = $('<ul><li data-template><h4>{{country}}</h4><ul><li data-template-for="cities">{{.}}</li></ul></li></ul>');
-            var template = Tempo.prepare(html[0]);
-            var data = [{country: 'Germany', cities: ['Berlin', 'Stuttgart', 'Hamburg']}, {country: 'United Kingdom', cities: ['London', 'Birmingham']}];
+            it("should render simple array with nested elements", function () {
+                var html = $('<ul><li data-template><h4>{{country}}</h4><ul><li data-template-for="cities">{{.}}</li></ul></li></ul>');
+                var template = Tempo.prepare(html[0]);
+                var data = [
+                    {country: 'Germany', cities: ['Berlin', 'Stuttgart', 'Hamburg']},
+                    {country: 'United Kingdom', cities: ['London', 'Birmingham']}
+                ];
 
-            template.render(data);
+                template.render(data);
 
-            expect(html.children().length).toBe(data.length);
-            expect(html.children().first().children('h4').html()).toBe(data[0].country);
-            expect(html.children().first().children('ul').children().first().html()).toBe(data[0].cities[0]);
-            expect(html.children().first().children('ul').children().last().html()).toBe(data[0].cities[data[0].cities.length - 1]);
+                expect(html.children().length).toBe(data.length);
+                expect(html.children().first().children('h4').html()).toBe(data[0].country);
+                expect(html.children().first().children('ul').children().first().html()).toBe(data[0].cities[0]);
+                expect(html.children().last().children('ul').children().last().html()).toBe(data[1].cities[data[1].cities.length - 1]);
+            });
         });
     });
 });

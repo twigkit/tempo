@@ -14,7 +14,7 @@ There is a working prototype which supports infinitely nested templates with bas
 Tempo 3.0 is currently approximately *60x faster* than 2.0. It recursively processes and caches templates in a single pass on prepare and efficiently renders data. The aim is to be *as fast as possible* whilst staying true to the methodology of semantically oriented templates that minimise the use of lower-level type code expressions.
 
 1. ### Size
-The current working prototype is only *1.5kb*. The core should remain lean with additional features such as filter, tags, and partials available as optional plugins.
+The current working prototype is only *1.6kb*. The core should remain lean with additional features such as filter, tags, and partials available as optional plugins.
 
 1. ### Test coverage
 Since this is a clean start but with a clear direction before progressing on features each function and subcomponent should have full test coverage.
@@ -36,7 +36,7 @@ Source should have detailed step-by-step inline documentation for maintainabilit
 				{{movie}}
 				<ol>
 					<li data-template-for="cast">
-						{{name}}
+						{{name.first}}
 					</li>
 				</ol>
 			</li>
@@ -47,3 +47,7 @@ Source should have detailed step-by-step inline documentation for maintainabilit
 
 		var template = Tempo.prepare('container').render(data);
 	
+## Documentation
+
+### Variables
+You can refer to variables in the template using either dot, bracket or mixed notation: `{{ name.first }}`, `{{ name['first'] }}` or `{{ name.full['first'] }}`.

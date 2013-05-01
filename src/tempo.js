@@ -131,7 +131,14 @@ var Tempo = (function (tempo) {
     Template.prototype._replaceVariables = function (str, item) {
         return str.replace(Template.VARIABLE_PATTERN, function (match, variable) {
             if (variable !== '.') {
-                return item[variable];
+                // Traversing item reference without using eval()
+                var members = variable.split(/\.|\[['"]|['"]\]/);
+                for (var i = 0; i < members.length; i++) {
+                    if (members[i]) {
+                        item = item[members[i]];
+                    }
+                }
+                return item;
             } else {
                 return item;
             }
