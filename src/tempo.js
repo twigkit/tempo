@@ -161,7 +161,16 @@ var Tempo = (function (tempo) {
      * @param data
      */
     Template.prototype.append = function (data) {
-        this._render(this.container, data);
+        this.container.appendChild(this._render(this.container, data));
+    };
+
+    /**
+     * Prepend the data to the container.
+     *
+     * @param data
+     */
+    Template.prototype.prepend = function (data) {
+        this.container.insertBefore(this._render(this.container, data), this.container.firstChild);
     };
 
 
@@ -194,10 +203,8 @@ var Tempo = (function (tempo) {
             fragment.appendChild(el);
         }
 
-        // Add the rendered fragment to the parent
-        parent.appendChild(fragment);
-
-        return this;
+        // Return the rendered fragment to the parent
+        return fragment;
     };
 
     /**

@@ -51,3 +51,14 @@ Source should have detailed step-by-step inline documentation for maintainabilit
 
 ### Variables
 You can refer to variables in the template using either dot, bracket or mixed notation: `{{ name.first }}`, `{{ name['first'] }}` or `{{ name.full['first'] }}`.
+
+### Rendering
+
+#### template.render(data);
+Clear the container, and render the data.
+
+#### template.append(data);
+Append the data provided to the container.
+
+#### template.prepend(data);
+Add the data provided at the top of the container.

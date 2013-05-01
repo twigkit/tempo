@@ -51,6 +51,19 @@ describe("Tempo 3.0", function () {
 
         describe("Rendering", function () {
 
+            it("should be able to append and prepend", function () {
+                var html = $('<ul><li data-template>{{.}}</li></ul>');
+                var template = Tempo.prepare(html[0]);
+
+                template.prepend(['Adolph Marx']);
+                template.prepend(['Leonard Marx']);
+                template.append(['Julius Henry Marx', 'Milton Marx', 'Herbert Marx']);
+
+                expect(html.children().length).toBe(5);
+                expect(html.children().first().html()).toBe('Leonard Marx');
+                expect(html.children().last().html()).toBe('Herbert Marx');
+            });
+
             it("should render a simple array of data", function () {
                 var html = $('<ul><li data-template>{{.}}</li></ul>');
                 var template = Tempo.prepare(html[0]);
