@@ -103,7 +103,7 @@ var Tempo = (function (tempo) {
     Template.DATA_TEMPLATE = 'data-template';
     Template.DATA_TEMPLATE_FOR = 'data-template-for';
     Template.VARIABLE_PATTERN = /\{\{(.+?)\}\}/g;
-    Template.NOTATION_PATTERN = /\.|\[['"]|['"]\]/;
+    Template.NOTATION_PATTERN = /[^\['"\]\.]+/g;
 
     /**
      * Parse the template for variable expressions and nested templates.
@@ -133,7 +133,7 @@ var Tempo = (function (tempo) {
         return str.replace(Template.VARIABLE_PATTERN, function (match, variable) {
             if (variable !== '.') {
                 // Traversing item reference without using eval()
-                var members = variable.split(Template.NOTATION_PATTERN);
+                var members = variable.match(Template.NOTATION_PATTERN);
                 for (var i = 0; i < members.length; i++) {
                     if (members[i]) {
                         item = item[members[i]];
