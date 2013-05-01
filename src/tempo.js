@@ -81,21 +81,23 @@ var Tempo = (function (tempo) {
      * @constructor
      */
     function Template(el, name) {
-        this.template = el;
-        if (name !== null) {
-            // Nested templates have a name
-            this.name = name;
-            this.container = this.template.parentNode;
-        } else {
-            // For main template preserving link to the node that contains the template
-            // TODO Is this definitely different from this.template.parentNode?
-            this.container = el.parentNode;
+        if (el) {
+            this.template = el;
+            if (name !== null) {
+                // Nested templates have a name
+                this.name = name;
+                this.container = this.template.parentNode;
+            } else {
+                // For main template preserving link to the node that contains the template
+                // TODO Is this definitely different from this.template.parentNode?
+                this.container = el.parentNode;
+            }
+
+            this.nestedTemplates = [];
+
+            // Parsing template
+            this._parse(this.template);
         }
-
-        this.nestedTemplates = [];
-
-        // Parsing template
-        this._parse(this.template);
     }
 
     Template.DATA_TEMPLATE = 'data-template';
@@ -201,6 +203,8 @@ var Tempo = (function (tempo) {
         var template = utils.childrenByAttribute(el, Template.DATA_TEMPLATE, false);
         return new Template(template[0], null);
     };
+
+    tempo._test = {utils: utils, Template: Template};
 
     return tempo;
 })(Tempo || {});
