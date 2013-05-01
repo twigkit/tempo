@@ -25,12 +25,13 @@ describe("Tempo 3.0", function () {
             expect($(container).children().length).toBe(0);
         });
 
-        it("should return object member using dot, bracket or mixed notation", function () {
-            var data = {person: {name: {first: 'Chuck', last: 'Norris'}}};
+        it("should return object member using dot, bracket or mixed notation including array index references", function () {
+            var data = {person: {name: {first: 'Chuck', last: 'Norris'}}, hero: [['Chuck', 'Norris']]};
             expect(utils.member(data, 'person.name.first')).toBe(data.person.name.first);
             expect(utils.member(data, 'person["name"].first')).toBe(data.person.name.first);
             expect(utils.member(data, 'person["name"]["first"]')).toBe(data.person.name.first);
             expect(utils.member(data, 'person[\'name\'][\'first\']')).toBe(data.person.name.first);
+            expect(utils.member(data, 'hero[0][1]')).toBe(data.hero[0][1]);
         });
     });
 
