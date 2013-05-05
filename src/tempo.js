@@ -10,7 +10,9 @@ var Tempo = (function (tempo) {
     var utils = function (utils) {
 
         /**
-         * Get elements by attribute.
+         * Get elements by attribute. If all, then traverses each child element until it finds an element with that attribute
+         * but once found it will not traverse further down. This is since we normally want all element templates that
+         * for a given object iteration.
          *
          * @param el Iterate child nodes of this element for matches.
          * @param attr Name of attribute to look for.
@@ -86,6 +88,34 @@ var Tempo = (function (tempo) {
                 }
             }
             return data;
+        };
+
+        /**
+         * Attempt to reliably set innerHTML.
+         *
+         * @param el
+         * @param html
+         * @returns {*}
+         */
+        utils.html = function (el, html) {
+            // TODO Replace _test.IE with IE as an initial parameter
+            if (navigator.appVersion.indexOf("MSIE") > -1 || tempo._test.IE) {
+                var div = el.ownerDocument.createElement('div');
+                var table;
+                if (table = html.match(/^<(tbody|tr|td|th|col|colgroup|thead|tfoot)[\s\/>]/i)) {
+                    div.innerHTML = '<table>' + html + '</table>';
+                    div = div.getElementsByTagName(table[1])[0].parentNode;
+                    var j = div.childNodes.length;
+                    while (j--) {
+                        el.appendChild(div.firstChild);
+                    }
+
+                    return el;
+                }
+            }
+
+            el.innerHTML = html;
+            return el;
         };
 
         return utils;
@@ -208,7 +238,7 @@ var Tempo = (function (tempo) {
             var el = this.template.cloneNode(false);
             // Use the innerHTML of the template itself (to leave it untouched) and add to the clone
             // TODO If IE and template is a TBODY/TABLE then we need to wrap it first!
-            el.innerHTML = this._replaceVariables(this.template.innerHTML, item);
+            utils.html(el, this._replaceVariables(this.template.innerHTML, item));
             fragment.appendChild(el);
         }
 
@@ -228,7 +258,7 @@ var Tempo = (function (tempo) {
         return new Template(template[0], null);
     };
 
-    tempo._test = {utils: utils, Template: Template};
+    tempo._test = {utils: utils, Template: Template, IE: false};
 
     return tempo;
 })(Tempo || {});
