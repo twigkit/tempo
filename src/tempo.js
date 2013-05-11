@@ -98,11 +98,11 @@ var Tempo = (function (tempo) {
          * @returns {*}
          */
         utils.html = function (el, html) {
-            // TODO Replace _test.IE with IE as an initial parameter
+            // Check out innerShiv if there's issues with other elements?
             if (navigator.appVersion.indexOf("MSIE") > -1 || tempo._test.IE) {
-                var div = el.ownerDocument.createElement('div');
                 var table;
-                if (table = html.match(/^<(tbody|tr|td|th|col|colgroup|thead|tfoot)[\s\/>]/i)) {
+                if ((table = html.match(/^<(tbody|tr|td|th|col|colgroup|thead|tfoot)[\s\/>]/i))) {
+                    var div = el.ownerDocument.createElement('div');
                     div.innerHTML = '<table>' + html + '</table>';
                     div = div.getElementsByTagName(table[1])[0].parentNode;
                     var j = div.childNodes.length;
@@ -225,20 +225,17 @@ var Tempo = (function (tempo) {
         var fragment = document.createDocumentFragment();
 
         for (var i = 0; i < data.length; i++) {
-            // Processing each element in the data (assuming array)
             // TODO Allow for non-array objects to be rendered
-            var item = data[i];
 
             // First render the nested templates
             for (var t = 0; t < this.nestedTemplates.length; t++) {
-                this.nestedTemplates[t].render(utils.member(item, this.nestedTemplates[t].name));
+                this.nestedTemplates[t].render(utils.member(data[i], this.nestedTemplates[t].name));
             }
 
-            // Shallow clone of the template node to get the element and all attributes
+            // Shallow clone of the template node to get the element and all attributes (don't need the child elements)
             var el = this.template.cloneNode(false);
             // Use the innerHTML of the template itself (to leave it untouched) and add to the clone
-            // TODO If IE and template is a TBODY/TABLE then we need to wrap it first!
-            utils.html(el, this._replaceVariables(this.template.innerHTML, item));
+            utils.html(el, this._replaceVariables(this.template.innerHTML, data[i]));
             fragment.appendChild(el);
         }
 
