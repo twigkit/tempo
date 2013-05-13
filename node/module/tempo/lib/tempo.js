@@ -204,52 +204,7 @@ var Tempo = (function (tempo) {
             } else {
                 return array.indexOf(obj) > -1;
             }
-        },
-        childrenByAttribute: function (el, attr, all) {
-            var elements = [];
-            if (el.nodeType === 1) {
-                // Looking for an element by attribute in all child elements
-                var children = el.childNodes;
-                if (el.hasChildNodes()) {
-                    var child = el.firstChild;
-                    while (child) {
-                        // Only looking in element nodes
-                        if (child.nodeType === 1) {
-                            var attributes = attr.split(',');
-                            var found = false;
-                            for (var i = 0; i < attributes.length; i++) {
-                                if (child.getAttribute(attributes[i]) !== null) {
-                                    found = true;
-                                    elements.push(child);
-                                    // If a match is found and I do not need all then return
-                                    if (!all) {
-                                        return elements;
                                     }
-                                }
-                            }
-                            if (!found) {
-                                // Child element did not have the attribute I need, checking grandchildren
-                                // TODO is it more efficient to scan all child nodes first?
-                                // TODO Maybe I am needlessly traversing too far down the tree?
-                                children = utils.childrenByAttribute(child, attr, all);
-                                if (children.length > 0) {
-                                    // If I need all, then add matches for this level to the array
-                                    if (all) {
-                                        // Combining any grandchildren found with the main array to return
-                                        elements = elements.concat(children);
-                                    } else {
-                                        return children;
-                                    }
-                                }
-                            }
-                        }
-                        child = child.nextSibling;
-                    }
-                }
-            }
-
-            return elements;
-        }
     };
 
     function Templates(params, nestedItem) {
@@ -326,12 +281,7 @@ var Tempo = (function (tempo) {
 
         parse: function (container, callback) {
             this.container = container;
-            var children;
-            if (this.nestedItem) {
-                children = utils.childrenByAttribute(container, 'data-template-for', true);
-            } else {
-                children = utils.childrenByAttribute(container, 'data-template,data-template-fallback', true);
-            }
+            var children = container.getElementsByTagName('*');
 
             var ready = true;
 
@@ -353,11 +303,14 @@ var Tempo = (function (tempo) {
 
             // Parsing
             if (ready) {
+                var foundTemplates = {};
                 for (var s = 0; s < children.length; s++) {
                     if (children[s].getAttribute !== undefined) {
-                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for')) {
+                        if (utils.hasAttr(children[s], 'data-template-for') && children[s].getAttribute('data-template-for').length > 0 && this.nestedItem === children[s].getAttribute('data-template-for') && !foundTemplates[this.nestedItem]) {
                             // Nested template
                             this.createTemplate(children[s]);
+                            // Guards against recursion when child template has same name!
+                            foundTemplates[this.nestedItem] = true;
                         } else if (utils.hasAttr(children[s], 'data-template') && !utils.isNested(children[s])) {
                             // Normal template
                             this.createTemplate(children[s]);
@@ -366,9 +319,9 @@ var Tempo = (function (tempo) {
                 }
 
                 // If there is no default template (data-template) then create one from container
-                if (this.defaultTemplate === null) {
-                    this.createTemplate(container);
-                }
+//                if (this.defaultTemplate === null) {
+//                    this.createTemplate(container);
+//                }
 
                 utils.clearContainer(this.container);
                 if (callback !== undefined) {
@@ -881,7 +834,7 @@ var Tempo = (function (tempo) {
             },
             'titlecase': function (value, args) {
                 var blacklist = [];
-                if (args !== undefined && args.length == 1) {
+                if (args !== undefined && args.length === 1) {
                     blacklist = args[0].split(' ');
                 }
                 return value.replace(/\w[a-z]\S*/g, function (m, i) {
