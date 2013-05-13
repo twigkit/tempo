@@ -366,9 +366,9 @@ var Tempo = (function (tempo) {
                 }
 
                 // If there is no default template (data-template) then create one from container
-                if (this.defaultTemplate === null) {
-                    this.createTemplate(container);
-                }
+//                if (this.defaultTemplate === null) {
+//                    this.createTemplate(container);
+//                }
 
                 utils.clearContainer(this.container);
                 if (callback !== undefined) {
