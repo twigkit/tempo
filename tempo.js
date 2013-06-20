@@ -442,13 +442,13 @@ var Tempo = (function (tempo) {
                     if (args !== undefined && args !== '') {
                         var filters = utils.trim(utils.trim(args).substring(1)).split(self.filterSplitter);
                         for (var p = 0; p < filters.length; p++) {
-                            var filter = utils.trim(filters[p]);
-                            var filter_args = [];
+                            var filter = utils.trim(filters[p]), filter_args, j = filter.indexOf(' ');
                             // If there is a space, there must be arguments
-                            if (filter.indexOf(' ') > -1) {
-                                var f = filter.substring(filter.indexOf(' ')).replace(/^[ ']*|[ ']*$/g, '');
-                                filter_args = f.split(/(?:[\'"])[ ]?,[ ]?(?:[\'"])/);
-                                filter = filter.substring(0, filter.indexOf(' '));
+                            if (~j) {
+                                filter_args = filter.substr(j).replace(/(^ *['"])|(['"] *$)/g, '').split(/['"] *, *['"]/);
+                                filter = filter.substr(0, j);
+                            } else {
+                                filter_args = [];
                             }
                             val = renderer.filters[filter](val, filter_args);
                         }
