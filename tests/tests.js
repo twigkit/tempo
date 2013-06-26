@@ -82,7 +82,8 @@ test('trim', function () {
 test('replace', function () {
 	equal(filters.replace('foot simpson', ['foo', 'bar']), 'bart simpson', 'Replacing simple value');
 	equal(filters.replace('foo 123 bar', ['([0-9]+)', '|$1|']), 'foo |123| bar', 'Replacing value with backreference');
-	equal(filters.replace(undefined, ['([0-9]+)', '|$1|']), undefined, 'Trying to replace in undefined value');
+  equal(filters.replace('http://github.io', ['^http://', '']), 'github.io', 'Replacing with an empty string');
+  equal(filters.replace(undefined, ['([0-9]+)', '|$1|']), undefined, 'Trying to replace in undefined value');
 });
 
 test('append', function() {
@@ -136,11 +137,13 @@ var array = ['foo', 'bar'];
 
 var str = 'Sample {{ $foo }} string.';
 var str2 = 'Sample {{.}} string.';
+var str3 = 'Sample {{$foo | replace  "a+"  ,  \'\'  }} string.';
 
 test('_replaceVariables', function () {
     equal(renderer._replaceVariables(renderer, {}, item, str), 'Sample bar string.');
     equal(renderer._replaceVariables(renderer, {}, item, str2), 'Sample [object Object] string.');
     equal(renderer._replaceVariables(renderer, {}, array, str2), 'Sample foo,bar string.');
+    equal(renderer._replaceVariables(renderer, {}, item, str3), 'Sample br string.');
 });
 
 test('_replaceObjects', function () {
