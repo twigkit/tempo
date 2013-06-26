@@ -355,6 +355,8 @@ var Tempo = (function (tempo) {
                     var val;
                     if (attr.value === '') {
                         val = true;
+                    } else if (attr.value === 'null') {
+                        val = null;
                     } else {
                         val = '\'' + attr.value + '\'';
                     }
