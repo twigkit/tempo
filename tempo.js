@@ -149,9 +149,9 @@ var Tempo = (function (tempo) {
         removeAttr: function (el, name) {
             if (el !== undefined) {
                 el.setAttribute(name, '');
-                if (el.removeAttribute) {
-                    el.removeAttribute(name);
-                }
+//                if (el.removeAttribute) {
+//                    el.removeAttribute(name);
+//                }
             }
         },
 
