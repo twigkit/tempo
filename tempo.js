@@ -884,6 +884,7 @@ var Tempo = (function (tempo) {
             },
             'date': function (value, args) {
                 if (value !== undefined && args.length >= 1 && args.length <= 2) {
+                    value = parseInt(value);
                     var date = new Date(value);
                     var format = args[0];
                     var isUTC = (args.length === 2 && args[1] === 'UTC');
