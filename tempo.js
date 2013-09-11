@@ -204,7 +204,7 @@ var Tempo = (function (tempo) {
             } else {
                 return array.indexOf(obj) > -1;
             }
-                                    }
+        }
     };
 
     function Templates(params, nestedItem) {
@@ -770,10 +770,14 @@ var Tempo = (function (tempo) {
                 var blockRegex = new RegExp(renderer.templates.tag_brace_left + '[ ]?else[ ]?' + renderer.templates.tag_brace_right, 'g');
                 var blocks = body.split(blockRegex);
 
-                if (eval(expr)) {
-                    return blocks[0];
-                } else if (blocks.length > 1) {
-                    return blocks[1];
+                try{
+                    if (eval(expr)) {
+                        return blocks[0];
+                    } else if (blocks.length > 1) {
+                        return blocks[1];
+                    }
+                } catch (err) {
+                    return '';
                 }
 
                 return '';
