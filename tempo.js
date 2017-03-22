@@ -351,7 +351,10 @@ var Tempo = (function (tempo) {
             for (var a = 0; a < element.attributes.length; a++) {
                 var attr = element.attributes[a];
                 // If attribute
-                if (utils.startsWith(attr.name, 'data-if-')) {
+                if (attr.name == 'data-if') {
+					this.namedTemplates[attr.value] = element;
+					nonDefault = true;
+				} else if (utils.startsWith(attr.name, 'data-if-')) {
                     var val;
                     if (attr.value === '') {
                         val = true;
